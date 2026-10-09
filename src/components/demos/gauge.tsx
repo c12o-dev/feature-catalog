@@ -17,7 +17,7 @@ const zone = (v: number) =>
   v >= 80
     ? { name: "高負荷", cls: "text-rose-600 dark:text-rose-400" }
     : v >= 60
-      ? { name: "注意", cls: "text-amber-600 dark:text-amber-400" }
+      ? { name: "注意", cls: "text-amber-700 dark:text-amber-400" }
       : { name: "正常", cls: "text-emerald-600 dark:text-emerald-400" };
 
 export default function Gauge() {

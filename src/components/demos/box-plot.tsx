@@ -120,7 +120,7 @@ export default function BoxPlot() {
         </div>
       </div>
 
-      <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label="拠点別通勤時間の分布図">
+      <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="group" aria-label="拠点別通勤時間の分布図">
         {[0, 30, 60, 90, 120].map((g) => (
           <g key={g}>
             <line x1={L} x2={W - 4} y1={y(g)} y2={y(g)} stroke="currentColor" strokeOpacity={g === 0 ? 0.25 : 0.08} />

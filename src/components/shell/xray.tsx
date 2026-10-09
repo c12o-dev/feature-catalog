@@ -99,7 +99,7 @@ function XrayLegend({ info }: { info: XrayInfo }) {
                     className="flex items-baseline gap-2 rounded px-1.5 py-1 text-xs text-fg-2 hover:bg-bg-3 hover:text-fg-1"
                   >
                     <span className="size-1.5 shrink-0 translate-y-[-1px] self-center rounded-full bg-cat" />
-                    <span className="idx text-[10px] text-fg-4">{i.code}</span>
+                    <span className="idx text-[10px] text-fg-3">{i.code}</span>
                     <span className="truncate">{i.name}</span>
                   </Link>
                 </li>,

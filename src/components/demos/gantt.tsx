@@ -63,7 +63,7 @@ export default function Gantt() {
             ))}
             {/* today */}
             <div aria-hidden className="absolute inset-y-0 z-10 w-px bg-rose-500 dark:bg-rose-400" style={{ left: pct(TODAY + 0.5) }}>
-              <span className="absolute -top-0.5 left-1 whitespace-nowrap rounded bg-rose-500 px-1 text-[9px] text-white dark:bg-rose-400 dark:text-rose-950">今日</span>
+              <span className="absolute -top-0.5 left-1 whitespace-nowrap rounded bg-rose-700 px-1 text-[9px] text-white dark:bg-rose-400 dark:text-rose-950">今日</span>
             </div>
             {/* dependency connectors */}
             <svg aria-hidden className="pointer-events-none absolute inset-0 h-full w-full" viewBox={`0 0 ${DAYS} ${tasks.length * ROW}`} preserveAspectRatio="none">

@@ -93,13 +93,14 @@ export default function Sankey() {
         <span className="font-medium">サイト訪問者の流れ（9 月）</span>
         <span className="text-xs text-muted-foreground tabular-nums">訪問 {fmt(colTotals[0])} 人</span>
       </figcaption>
-      <svg viewBox={`-2 -4 ${W + 4} ${H + 8}`} className="h-auto w-full overflow-visible" role="img" aria-label="流入元から商品閲覧・直帰を経て購入・カート放棄・離脱に至る流れ">
+      <svg viewBox={`-2 -4 ${W + 4} ${H + 8}`} className="h-auto w-full overflow-visible" role="group" aria-label="流入元から商品閲覧・直帰を経て購入・カート放棄・離脱に至る流れ">
         <g>
           {BANDS.map((b) => (
             <path
               key={b.key}
               d={b.d}
               tabIndex={0}
+              role="img"
               aria-label={`${label(b.s)}から${label(b.t)}へ ${fmt(b.v)} 人`}
               onMouseEnter={() => setFocus(b.key)}
               onMouseLeave={() => setFocus(null)}
@@ -121,6 +122,7 @@ export default function Sankey() {
             <g
               key={n.id}
               tabIndex={0}
+              role="img"
               aria-label={`${n.label} ${fmt(p.v)} 人`}
               onMouseEnter={() => setFocus(n.id)}
               onMouseLeave={() => setFocus(null)}

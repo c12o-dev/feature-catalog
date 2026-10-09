@@ -8,7 +8,7 @@ export default function LogoWall() {
       <div className="text-xs text-muted-foreground uppercase tracking-wider">Trusted by</div>
       <div className="grid grid-cols-4 gap-3 items-center">
         {logos.map((l) => (
-          <div key={l} className="text-sm font-bold tracking-tight text-muted-foreground/70 hover:text-foreground transition-colors">{l}</div>
+          <div key={l} className="text-sm font-bold tracking-tight text-muted-foreground hover:text-foreground transition-colors">{l}</div>
         ))}
       </div>
     </div>

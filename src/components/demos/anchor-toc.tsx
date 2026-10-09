@@ -64,7 +64,7 @@ export default function AnchorToc() {
           })}
         </ul>
       </nav>
-      <div ref={scrollRef} className="relative min-h-0 space-y-5 overflow-y-auto rounded-lg border bg-card p-4">
+      <div ref={scrollRef} role="region" aria-label="本文" tabIndex={0} className="relative min-h-0 space-y-5 overflow-y-auto rounded-lg border bg-card p-4">
         {sections.map((s) => (
           <section key={s.id} data-section={s.id} tabIndex={-1} aria-labelledby={`toc-${s.id}`} className="outline-none">
             <h3 id={`toc-${s.id}`} className="text-sm font-semibold">{s.title}</h3>

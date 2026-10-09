@@ -105,6 +105,7 @@ export default function StreetView() {
 
   return (
     <div className="w-full space-y-2">
+      <div className="relative h-[200px]">
       <div
         role="slider"
         tabIndex={0}
@@ -133,7 +134,7 @@ export default function StreetView() {
         onPointerCancel={() => {
           drag.current = null;
         }}
-        className="relative h-[200px] cursor-grab touch-pan-y select-none overflow-hidden rounded-lg border outline-none focus-visible:ring-2 focus-visible:ring-ring active:cursor-grabbing"
+        className="absolute inset-0 cursor-grab touch-pan-y select-none overflow-hidden rounded-lg border outline-none focus-visible:ring-2 focus-visible:ring-ring active:cursor-grabbing"
       >
         {/* centre the view: the strip is drawn twice so it wraps seamlessly */}
         <div className="absolute left-1/2 top-0 flex will-change-transform" style={{ transform: `translateX(${offset - PANO_W}px)` }}>
@@ -153,6 +154,7 @@ export default function StreetView() {
           </div>
           <Navigation className="absolute left-1/2 top-1/2 size-3.5 -translate-x-1/2 -translate-y-1/2 fill-current text-foreground" />
         </div>
+      </div>
 
         <button
           type="button"

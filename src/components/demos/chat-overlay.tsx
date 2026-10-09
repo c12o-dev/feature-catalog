@@ -11,7 +11,7 @@ const msgs = [
 export default function ChatOverlay() {
   return (
     <div className="grid grid-cols-3 h-44 rounded-md border bg-zinc-900 text-white overflow-hidden">
-      <div className="col-span-2 grid place-items-center text-zinc-500 text-xs border-r border-zinc-800">[ 配信動画 ]</div>
+      <div className="col-span-2 grid place-items-center text-zinc-400 text-xs border-r border-zinc-800">[ 配信動画 ]</div>
       <div className="p-2 text-xs space-y-1 overflow-y-auto">
         {msgs.map((m, i) => (
           <div key={i}><span className={`font-semibold ${m.c}`}>{m.u}:</span> {m.t}</div>

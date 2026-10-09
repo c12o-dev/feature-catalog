@@ -8,9 +8,9 @@ type Rect = Item & { x: number; y: number; w: number; h: number };
 
 // ストレージ使用量 (GB)。color は 1 色相の濃淡で、値が大きいほど濃い。
 const data: Item[] = [
-  { name: "動画", v: 48, color: "bg-teal-700 text-white dark:bg-teal-600" },
-  { name: "写真", v: 31, color: "bg-teal-600 text-white dark:bg-teal-700" },
-  { name: "アプリ", v: 18, color: "bg-teal-500 text-white dark:bg-teal-800" },
+  { name: "動画", v: 48, color: "bg-teal-900 text-white dark:bg-teal-700" },
+  { name: "写真", v: 31, color: "bg-teal-800 text-white dark:bg-teal-800" },
+  { name: "アプリ", v: 18, color: "bg-teal-700 text-white dark:bg-teal-800" },
   { name: "書類", v: 12, color: "bg-teal-400 text-teal-950 dark:bg-teal-900 dark:text-teal-50" },
   { name: "音楽", v: 9, color: "bg-teal-300 text-teal-950 dark:bg-teal-900/80 dark:text-teal-50" },
   { name: "メール", v: 5, color: "bg-teal-200 text-teal-950 dark:bg-teal-950 dark:text-teal-100" },
@@ -110,7 +110,7 @@ export default function Treemap() {
                 {!small && (
                   <>
                     <span className="truncate text-xs font-semibold">{r.name}</span>
-                    <span className="truncate text-[10px] opacity-80 tabular-nums">{r.v} GB</span>
+                    <span className="truncate text-[10px] opacity-90 tabular-nums">{r.v} GB</span>
                   </>
                 )}
               </button>

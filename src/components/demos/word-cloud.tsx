@@ -6,7 +6,13 @@ const words = [
   { t: "AI", w: 4.5 }, { t: "Recharts", w: 2 }, { t: "Sonner", w: 2 }, { t: "cmdk", w: 2.5 },
   { t: "PWA", w: 2 }, { t: "RSC", w: 3 }, { t: "Edge", w: 2.5 }, { t: "Cloudflare", w: 2 },
 ];
-const colors = ["text-blue-600", "text-emerald-600", "text-purple-600", "text-amber-600", "text-rose-600"];
+const colors = [
+  "text-blue-700 dark:text-blue-400",
+  "text-emerald-700 dark:text-emerald-400",
+  "text-purple-700 dark:text-purple-400",
+  "text-amber-700 dark:text-amber-400",
+  "text-rose-700 dark:text-rose-400",
+];
 
 export default function WordCloud() {
   return (

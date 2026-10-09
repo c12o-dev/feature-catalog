@@ -34,7 +34,7 @@ function Row({ label, desc, checked, onChange }: { label: string; desc: string; 
       <span className="w-6 text-right text-xs text-muted-foreground tabular-nums" aria-hidden>
         {checked ? "ON" : "OFF"}
       </span>
-      <Switch id={id} checked={checked} onCheckedChange={onChange} aria-describedby={`${id}-desc`} />
+      <Switch id={id} aria-label={label} checked={checked} onCheckedChange={onChange} aria-describedby={`${id}-desc`} />
     </div>
   );
 }

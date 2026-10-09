@@ -8,7 +8,7 @@ import { MousePointer2 } from "lucide-react";
 const peers = [
   { name: "佐藤", color: "#e11d48", path: [[0.18, 0.3], [0.42, 0.26], [0.36, 0.55], [0.18, 0.3]], dur: 7 },
   { name: "Mika", color: "#2563eb", path: [[0.7, 0.2], [0.82, 0.48], [0.6, 0.62], [0.7, 0.2]], dur: 8.5 },
-  { name: "田中", color: "#059669", path: [[0.5, 0.78], [0.25, 0.72], [0.62, 0.4], [0.5, 0.78]], dur: 9.5 },
+  { name: "田中", color: "#047857", path: [[0.5, 0.78], [0.25, 0.72], [0.62, 0.4], [0.5, 0.78]], dur: 9.5 },
 ] as const;
 
 const notes = [

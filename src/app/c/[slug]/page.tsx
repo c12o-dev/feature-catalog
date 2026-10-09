@@ -40,17 +40,17 @@ export default async function CategoryPage({ params }: PageProps<"/c/[slug]">) {
             <h1 className="fade-up text-[length:var(--fs-display)] leading-[1] tracking-[-0.02em] text-fg-1" style={{ animationDelay: "80ms" }}>
               {category.name}
             </h1>
-            <p className="fade-up mt-4 font-serif text-2xl text-fg-4 italic sm:text-3xl" style={{ animationDelay: "160ms" }}>
+            <p className="fade-up mt-4 font-serif text-2xl text-fg-3 italic sm:text-3xl" style={{ animationDelay: "160ms" }}>
               {category.en}
             </p>
           </div>
           <dl className="fade-up flex gap-10 font-mono text-sm" style={{ animationDelay: "240ms" }}>
             <div>
-              <dt className="text-[10px] tracking-[0.16em] text-fg-4 uppercase">Patterns</dt>
+              <dt className="text-[10px] tracking-[0.16em] text-fg-3 uppercase">Patterns</dt>
               <dd className="mt-1 text-3xl text-fg-1">{list.length}</dd>
             </div>
             <div>
-              <dt className="text-[10px] tracking-[0.16em] text-fg-4 uppercase">Demos</dt>
+              <dt className="text-[10px] tracking-[0.16em] text-fg-3 uppercase">Demos</dt>
               <dd className="mt-1 text-3xl text-fg-1">{list.filter((e) => e.demo).length}</dd>
             </div>
           </dl>
@@ -71,13 +71,13 @@ export default async function CategoryPage({ params }: PageProps<"/c/[slug]">) {
       <nav aria-label="前後のカテゴリ" className="mx-auto mt-16 grid max-w-[1440px] gap-px border-y border-line-1 bg-line-1 px-0 sm:grid-cols-2 sm:px-8">
         {prev ? (
           <Link href={`/c/${prev.slug}`} data-hue={prev.hue} className="group flex flex-col gap-2 bg-bg-0 px-4 py-8 transition-colors hover:bg-bg-1 sm:px-6">
-            <span className="flex items-center gap-2 text-xs text-fg-4"><ArrowLeft className="size-3.5" /> 前のカテゴリ</span>
+            <span className="flex items-center gap-2 text-xs text-fg-3"><ArrowLeft className="size-3.5" /> 前のカテゴリ</span>
             <span className="font-serif text-2xl text-fg-1">{prev.name}</span>
           </Link>
         ) : <span className="bg-bg-0" />}
         {next ? (
           <Link href={`/c/${next.slug}`} data-hue={next.hue} className="group flex flex-col items-end gap-2 bg-bg-0 px-4 py-8 text-right transition-colors hover:bg-bg-1 sm:px-6">
-            <span className="flex items-center gap-2 text-xs text-fg-4">次のカテゴリ <ArrowRight className="size-3.5" /></span>
+            <span className="flex items-center gap-2 text-xs text-fg-3">次のカテゴリ <ArrowRight className="size-3.5" /></span>
             <span className="font-serif text-2xl text-fg-1">{next.name}</span>
           </Link>
         ) : <span className="bg-bg-0" />}

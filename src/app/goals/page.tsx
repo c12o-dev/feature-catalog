@@ -24,7 +24,7 @@ export default function GoalsPage() {
         {themes.map((t, ti) => (
           <section key={t.slug} aria-labelledby={`t-${t.slug}`} className="reveal grid gap-6 lg:grid-cols-[16rem_minmax(0,1fr)] lg:gap-16">
             <div>
-              <p className="idx text-xs text-fg-4">{String(ti + 1).padStart(2, "0")}</p>
+              <p className="idx text-xs text-fg-3">{String(ti + 1).padStart(2, "0")}</p>
               <h2 id={`t-${t.slug}`} className="mt-2 text-3xl text-fg-1">
                 <Link href={`/g/${t.slug}`} className="hover:text-brand">{t.name}</Link>
               </h2>
@@ -34,8 +34,8 @@ export default function GoalsPage() {
                 <li key={g.title} className="border-b border-line-1">
                   <Link href={`/g/${t.slug}#g${i}`} className="group flex items-baseline gap-4 py-5 transition-colors hover:bg-bg-1 sm:px-4">
                     <span className="flex-1 font-serif text-xl leading-snug text-fg-1 transition-colors group-hover:text-brand sm:text-2xl">{g.title}</span>
-                    <span className="shrink-0 font-mono text-xs text-fg-4">{g.patterns.length} 件</span>
-                    <ArrowRight className="size-4 shrink-0 self-center text-fg-4 transition-transform group-hover:translate-x-1" />
+                    <span className="shrink-0 font-mono text-xs text-fg-3">{g.patterns.length} 件</span>
+                    <ArrowRight className="size-4 shrink-0 self-center text-fg-3 transition-transform group-hover:translate-x-1" />
                   </Link>
                 </li>
               ))}

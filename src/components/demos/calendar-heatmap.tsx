@@ -24,7 +24,7 @@ const LEVELS = [
   { min: 0, label: "0", cls: "bg-muted" },
   { min: 1, label: "1–2", cls: "bg-emerald-200 dark:bg-emerald-900" },
   { min: 3, label: "3–4", cls: "bg-emerald-400 dark:bg-emerald-700" },
-  { min: 5, label: "5–6", cls: "bg-emerald-600 text-white dark:bg-emerald-500 dark:text-emerald-950" },
+  { min: 5, label: "5–6", cls: "bg-emerald-700 text-white dark:bg-emerald-500 dark:text-emerald-950" },
   { min: 7, label: "7+", cls: "bg-emerald-800 text-white dark:bg-emerald-300 dark:text-emerald-950" },
 ];
 const level = (n: number) => [...LEVELS].reverse().find((l) => n >= l.min)!;

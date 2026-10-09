@@ -15,7 +15,7 @@ export default function VirtualList() {
   return (
     <div className="space-y-2">
       <div className="text-xs text-muted-foreground">{TOTAL.toLocaleString()} 行を windowing で描画 (実描画 {rows.length})</div>
-      <div ref={ref} onScroll={(e) => setScroll((e.target as HTMLDivElement).scrollTop)} className="rounded-md border bg-background h-52 overflow-y-auto font-mono text-xs">
+      <div ref={ref} role="region" aria-label="仮想リスト" tabIndex={0} onScroll={(e) => setScroll((e.target as HTMLDivElement).scrollTop)} className="rounded-md border bg-background h-52 overflow-y-auto font-mono text-xs">
         <div style={{ height: TOTAL * ROW_H, position: "relative" }}>
           {rows.map((i) => (
             <div key={i} style={{ position: "absolute", top: i * ROW_H, height: ROW_H }} className="px-3 flex items-center w-full">

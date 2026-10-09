@@ -21,7 +21,7 @@ export function NotFoundSearch({ items }: { items: SearchItem[] }) {
         onChange={(e) => setQ(e.target.value)}
         placeholder="探していたものを入力（例: トースト、skeleton）"
         autoComplete="off"
-        className="h-14 w-full rounded-full border border-line-2 bg-bg-1 px-6 text-base text-fg-1 outline-none placeholder:text-fg-4 focus:border-brand"
+        className="h-14 w-full rounded-full border border-line-2 bg-bg-1 px-6 text-base text-fg-1 outline-none placeholder:text-fg-3 focus:border-brand"
       />
       <p aria-live="polite" className="sr-only">{q ? `${hits.length} 件` : ""}</p>
       {hits.length > 0 && (
@@ -36,7 +36,7 @@ export function NotFoundSearch({ items }: { items: SearchItem[] }) {
           ))}
         </ul>
       )}
-      {q && hits.length === 0 && <p className="mt-4 text-sm text-fg-4">見つかりませんでした。別の言い方で試してください。</p>}
+      {q && hits.length === 0 && <p className="mt-4 text-sm text-fg-3">見つかりませんでした。別の言い方で試してください。</p>}
     </div>
   );
 }

@@ -17,7 +17,7 @@ export default function Sparkline() {
       <div className="space-y-1">
         <div className="text-xs text-muted-foreground">MRR</div>
         <div className="text-2xl font-semibold tabular-nums">¥{Math.round(last * 100).toLocaleString()}</div>
-        <div className="text-xs text-emerald-600">+{delta.toFixed(1)}%</div>
+        <div className="text-xs text-emerald-700 dark:text-emerald-400">+{delta.toFixed(1)}%</div>
       </div>
       <div className="flex-1 h-12">
         <ResponsiveContainer width="100%" height="100%">

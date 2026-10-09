@@ -40,7 +40,7 @@ export function Toc({ items }: { items: { slug: string; name: string; code: stri
           <span className="block h-px origin-left bg-cat transition-transform duration-500 ease-[var(--ease-out-expo)]" style={{ transform: `scaleX(${(idx + 1) / items.length})` }} />
         </Xray>
       </div>
-      <p className="mb-3 font-mono text-[10px] tracking-[0.16em] text-fg-4 uppercase">
+      <p className="mb-3 font-mono text-[10px] tracking-[0.16em] text-fg-3 uppercase">
         {String(idx + 1).padStart(2, "0")} / {String(items.length).padStart(2, "0")}
       </p>
       <ol ref={listRef} aria-label="このカテゴリのパターン" className="max-h-[calc(100dvh-12rem)] space-y-0.5 overflow-y-auto overscroll-contain pr-2 [scrollbar-width:thin]">
@@ -54,7 +54,7 @@ export function Toc({ items }: { items: { slug: string; name: string; code: stri
                 active === i.slug ? "bg-cat-dim text-fg-1" : "text-fg-3 hover:text-fg-1",
               )}
             >
-              <span className={cn("idx shrink-0 text-[10px]", active === i.slug ? "text-cat" : "text-fg-4")}>{i.code.slice(-2)}</span>
+              <span className={cn("idx shrink-0 text-[10px]", active === i.slug ? "text-cat" : "text-fg-3")}>{i.code.slice(-2)}</span>
               <span className="line-clamp-2">{i.name}</span>
             </a>
           </li>

@@ -60,7 +60,7 @@ export default async function PatternPage({ params }: PageProps<"/p/[slug]">) {
         <header className="mt-10 mb-10 sm:mb-14">
           <p className="idx fade-up mb-4 text-sm text-cat">
             {entry.code}
-            <span className="ml-3 text-fg-4">{entry.category.en}</span>
+            <span className="ml-3 text-fg-3">{entry.category.en}</span>
           </p>
           <ViewTransition name={`title-${entry.slug}`}>
             <h1 className="text-[length:var(--fs-h1)] leading-[1.08] tracking-[-0.01em] text-fg-1">{entry.name}</h1>
@@ -82,7 +82,7 @@ export default async function PatternPage({ params }: PageProps<"/p/[slug]">) {
 
         <div className="mt-14 grid gap-12 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] lg:gap-16">
           <section aria-labelledby="notes-h">
-            <h2 id="notes-h" className="mb-4 font-mono text-[11px] font-normal tracking-[0.18em] text-fg-4 uppercase">実装のポイント</h2>
+            <h2 id="notes-h" className="mb-4 font-mono text-[11px] font-normal tracking-[0.18em] text-fg-3 uppercase">実装のポイント</h2>
             <p className="font-serif text-2xl leading-[1.6] text-fg-1 sm:text-[26px]">{entry.notes ?? entry.description}</p>
             {alias && (
               <p className="mt-6 text-sm text-fg-3">
@@ -131,13 +131,13 @@ export default async function PatternPage({ params }: PageProps<"/p/[slug]">) {
 
         {goals.length > 0 && (
           <section aria-labelledby="goals-h" className="mt-20">
-            <h2 id="goals-h" className="mb-5 font-mono text-[11px] font-normal tracking-[0.18em] text-fg-4 uppercase">このパターンが効く目的</h2>
+            <h2 id="goals-h" className="mb-5 font-mono text-[11px] font-normal tracking-[0.18em] text-fg-3 uppercase">このパターンが効く目的</h2>
             <ul className="border-t border-line-1">
               {goals.map(({ theme, goal, index }) => (
                 <li key={`${theme.slug}-${index}`} className="border-b border-line-1">
                   <Link href={`/g/${theme.slug}#g${index}`} className="group flex items-baseline justify-between gap-4 py-5 transition-colors hover:text-fg-1">
                     <span className="font-serif text-xl text-fg-1">{goal.title}</span>
-                    <span className="flex shrink-0 items-center gap-2 text-xs text-fg-4">
+                    <span className="flex shrink-0 items-center gap-2 text-xs text-fg-3">
                       {theme.name} <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
                     </span>
                   </Link>
@@ -150,13 +150,13 @@ export default async function PatternPage({ params }: PageProps<"/p/[slug]">) {
         <nav aria-label="前後のパターン" className="mt-20 grid gap-px border-y border-line-1 bg-line-1 sm:grid-cols-2">
           {prev ? (
             <Link href={`/p/${prev.slug}`} className="flex flex-col gap-2 bg-bg-0 py-8 pr-4 transition-colors hover:bg-bg-1 sm:pr-6">
-              <span className="flex items-center gap-2 text-xs text-fg-4"><ArrowLeft className="size-3.5" /> {prev.code}</span>
+              <span className="flex items-center gap-2 text-xs text-fg-3"><ArrowLeft className="size-3.5" /> {prev.code}</span>
               <span className="font-serif text-xl text-fg-1">{prev.name}</span>
             </Link>
           ) : <span className="bg-bg-0" />}
           {next ? (
             <Link href={`/p/${next.slug}`} className="flex flex-col items-end gap-2 bg-bg-0 py-8 pl-4 text-right transition-colors hover:bg-bg-1 sm:pl-6">
-              <span className="flex items-center gap-2 text-xs text-fg-4">{next.code} <ArrowRight className="size-3.5" /></span>
+              <span className="flex items-center gap-2 text-xs text-fg-3">{next.code} <ArrowRight className="size-3.5" /></span>
               <span className="font-serif text-xl text-fg-1">{next.name}</span>
             </Link>
           ) : <span className="bg-bg-0" />}
@@ -169,7 +169,7 @@ export default async function PatternPage({ params }: PageProps<"/p/[slug]">) {
 function Meta({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="grid gap-2 border-t border-line-1 pt-4">
-      <dt className="font-mono text-[10px] tracking-[0.16em] text-fg-4 uppercase">{label}</dt>
+      <dt className="font-mono text-[10px] tracking-[0.16em] text-fg-3 uppercase">{label}</dt>
       <dd>{children}</dd>
     </div>
   );

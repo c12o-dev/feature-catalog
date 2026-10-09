@@ -63,7 +63,7 @@ export default async function ThemePage({ params }: PageProps<"/g/[slug]">) {
                   </li>
                 ))}
               </ul>
-              {g.external && <p className="mt-8 font-mono text-xs text-fg-4">参考: {g.external}</p>}
+              {g.external && <p className="mt-8 font-mono text-xs text-fg-3">参考: {g.external}</p>}
             </section>
           );
         })}

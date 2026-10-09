@@ -45,7 +45,7 @@ export default function BadgeCounter() {
               {n > 0 && (
                 <span
                   aria-hidden
-                  className="absolute -top-0.5 -right-0.5 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-red-600 px-1 text-[10px] font-semibold text-white tabular-nums ring-2 ring-background dark:bg-red-500"
+                  className="absolute -top-0.5 -right-0.5 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-red-600 px-1 text-[10px] font-semibold text-white tabular-nums ring-2 ring-background"
                 >
                   {display(n)}
                 </span>

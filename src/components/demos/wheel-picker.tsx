@@ -100,7 +100,7 @@ function Wheel({
               onClick={() => scrollToIdx(i)}
               className={cn(
                 "grid snap-center cursor-pointer place-items-center font-mono tabular-nums transition-[color,opacity,transform] duration-150",
-                d === 0 ? "text-xl font-semibold text-foreground" : d === 1 ? "scale-90 text-base text-muted-foreground" : "scale-75 text-base text-muted-foreground/60"
+                d === 0 ? "text-xl font-semibold text-foreground" : d === 1 ? "scale-90 text-base text-muted-foreground" : "scale-75 text-sm text-muted-foreground"
               )}
               style={{ height: ITEM_H }}
             >

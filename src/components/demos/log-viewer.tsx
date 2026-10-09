@@ -78,7 +78,7 @@ export default function LogViewer() {
         <label className="flex min-w-0 flex-1 basis-36 items-center gap-1.5 rounded-md bg-zinc-900 px-2 py-1 focus-within:ring-2 focus-within:ring-sky-500/50">
           <Search aria-hidden className="size-3.5 shrink-0 text-zinc-500" />
           <span className="sr-only">ログを検索</span>
-          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="検索（例: 500, ETIMEDOUT）" className="min-w-0 flex-1 bg-transparent text-xs text-zinc-100 outline-none placeholder:text-zinc-500" />
+          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="検索（例: 500, ETIMEDOUT）" className="min-w-0 flex-1 bg-transparent text-xs text-zinc-100 outline-none placeholder:text-zinc-400" />
         </label>
         <select aria-label="レベルで絞り込み" value={lvl} onChange={(e) => setLvl(e.target.value as Lvl | "all")} className="rounded-md border-0 bg-zinc-900 px-2 py-1 text-xs text-zinc-100 outline-none focus:ring-2 focus:ring-sky-500/50">
           <option value="all">すべて</option>
@@ -109,14 +109,14 @@ export default function LogViewer() {
       >
         {shown.map((l) => (
           <div key={l.id} className="flex gap-2 whitespace-nowrap">
-            <span className="text-zinc-500 tabular-nums">{l.t}</span>
+            <span className="text-zinc-400 tabular-nums">{l.t}</span>
             <span className={cn("w-10 shrink-0 font-semibold uppercase", LVL_CLS[l.lvl])}>{l.lvl}</span>
             <span>
               <Hl text={l.msg} q={needle} />
             </span>
           </div>
         ))}
-        {shown.length === 0 && <p className="text-zinc-500">一致する行はありません</p>}
+        {shown.length === 0 && <p className="text-zinc-400">一致する行はありません</p>}
       </div>
       <div className="flex items-center justify-between border-t border-zinc-800 px-3 py-1.5 text-[11px] text-zinc-400">
         <span className="inline-flex items-center gap-1.5">

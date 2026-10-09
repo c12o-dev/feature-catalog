@@ -28,6 +28,7 @@ export default function StreakBadge() {
             <li key={d} className="flex flex-col items-center gap-1">
               <span className="text-[10px] text-muted-foreground">{d}</span>
               <span
+                role="img"
                 aria-label={`${d}曜日 ${done ? "達成" : isToday ? "今日・未達成" : "未来"}`}
                 className={cn(
                   "flex size-7 items-center justify-center rounded-full",

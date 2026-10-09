@@ -95,7 +95,7 @@ export function GlobalCommand({ items, categories, goals }: { items: SearchItem[
               value={query}
               onValueChange={setQuery}
               placeholder="パターン名・カテゴリ・目的で検索…"
-              className="h-14 w-full bg-transparent text-base text-fg-1 outline-none placeholder:text-fg-4"
+              className="h-14 w-full bg-transparent text-base text-fg-1 outline-none placeholder:text-fg-3"
             />
             <kbd className="hidden rounded border border-line-1 px-1.5 py-0.5 font-mono text-[10px] text-fg-3 sm:inline">esc</kbd>
           </div>
@@ -123,9 +123,9 @@ export function GlobalCommand({ items, categories, goals }: { items: SearchItem[
                 {categories.map((c) => (
                   <Item key={c.slug} value={`c:${c.slug}`} keywords={[c.name, c.en]} onSelect={() => go(`/c/${c.slug}`)}>
                     <Dot hue={c.hue} />
-                    <span className="idx w-9 shrink-0 text-[11px] text-fg-4">{c.code}</span>
+                    <span className="idx w-9 shrink-0 text-[11px] text-fg-3">{c.code}</span>
                     <span className="truncate">{c.name}</span>
-                    <span className="ml-auto hidden font-serif text-xs text-fg-4 sm:inline">{c.en}</span>
+                    <span className="ml-auto hidden font-serif text-xs text-fg-3 sm:inline">{c.en}</span>
                   </Item>
                 ))}
               </Group>
@@ -133,7 +133,7 @@ export function GlobalCommand({ items, categories, goals }: { items: SearchItem[
                 {goals.map((g) => (
                   <Item key={g.href} value={`g:${g.href}`} keywords={[g.title, g.theme]} onSelect={() => go(g.href)}>
                     <span className="truncate">{g.title}</span>
-                    <span className="ml-auto shrink-0 text-[11px] text-fg-4">{g.theme}</span>
+                    <span className="ml-auto shrink-0 text-[11px] text-fg-3">{g.theme}</span>
                   </Item>
                 ))}
               </Group>
@@ -153,12 +153,12 @@ export function GlobalCommand({ items, categories, goals }: { items: SearchItem[
                       <Stage demo={selected.k} label={selected.n} size="mini" eager toolbar={false} className="pointer-events-none max-h-full" />
                     </div>
                   )}
-                  <div className="flex items-center gap-1.5 text-[11px] text-fg-4">
+                  <div className="flex items-center gap-1.5 text-[11px] text-fg-3">
                     <CornerDownLeft className="size-3" /> で開く
                   </div>
                 </div>
               ) : (
-                <div className="m-auto max-w-[16rem] text-center text-sm text-fg-4">↑↓ でパターンを選ぶと、ここでデモが動きます</div>
+                <div className="m-auto max-w-[16rem] text-center text-sm text-fg-3">↑↓ でパターンを選ぶと、ここでデモが動きます</div>
               )}
             </div>
           </div>
@@ -172,7 +172,7 @@ function Group({ heading, children }: { heading: string; children: React.ReactNo
   return (
     <CommandPrimitive.Group
       heading={heading}
-      className="mb-2 [&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:pb-1.5 [&_[cmdk-group-heading]]:pt-2 [&_[cmdk-group-heading]]:font-mono [&_[cmdk-group-heading]]:text-[10px] [&_[cmdk-group-heading]]:tracking-[0.14em] [&_[cmdk-group-heading]]:text-fg-4 [&_[cmdk-group-heading]]:uppercase"
+      className="mb-2 [&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:pb-1.5 [&_[cmdk-group-heading]]:pt-2 [&_[cmdk-group-heading]]:font-mono [&_[cmdk-group-heading]]:text-[10px] [&_[cmdk-group-heading]]:tracking-[0.14em] [&_[cmdk-group-heading]]:text-fg-3 [&_[cmdk-group-heading]]:uppercase"
     >
       {children}
     </CommandPrimitive.Group>
@@ -195,7 +195,7 @@ function PatternItem({ item, prefix, onSelect }: { item: SearchItem; prefix?: st
   return (
     <Item value={`p:${item.s}${prefix ? `#${prefix}` : ""}`} keywords={[item.n, item.d, item.cat, item.s]} onSelect={() => onSelect(`/p/${item.s}`)}>
       <Dot hue={item.h} />
-      <span className="idx w-12 shrink-0 text-[11px] text-fg-4">{item.c}</span>
+      <span className="idx w-12 shrink-0 text-[11px] text-fg-3">{item.c}</span>
       <span className="truncate">{item.n}</span>
     </Item>
   );

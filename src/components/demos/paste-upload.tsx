@@ -22,7 +22,7 @@ export default function PasteUpload() {
   };
   return (
     <div className="space-y-2">
-      <Textarea value={text} onChange={(e) => setText(e.target.value)} onPaste={onPaste} rows={3} />
+      <Textarea value={text} onChange={(e) => setText(e.target.value)} onPaste={onPaste} rows={3} aria-label="貼り付け先" />
       <div className="text-xs text-muted-foreground flex items-center gap-1.5">
         <ImageIcon className="size-3.5" />クリップボードから画像を貼り付け可
       </div>
