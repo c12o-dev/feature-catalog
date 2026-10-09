@@ -1,104 +1,81 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronLeft, ExternalLink } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { themes } from "@/data/goals";
-import { categories } from "@/data/categories";
+import { ArrowRight } from "lucide-react";
+import { Breadcrumb } from "@/components/catalog/breadcrumb";
+import { Stage } from "@/components/stage/stage";
+import { categoryList, getCategory, getEntry, getTheme, neighbours, themes } from "@/lib/catalog";
+
+export const dynamicParams = false;
 
 export function generateStaticParams() {
   return themes.map((t) => ({ slug: t.slug }));
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
-  const t = themes.find((t) => t.slug === slug);
-  return t ? { title: `${t.name} — 目的別 — Feature Catalog` } : { title: "Not found" };
+export async function generateMetadata({ params }: PageProps<"/g/[slug]">): Promise<Metadata> {
+  const t = getTheme((await params).slug);
+  if (!t) return {};
+  return {
+    title: `${t.name} — 目的から探す`,
+    description: t.goals.map((g) => g.title).join("、"),
+    alternates: { canonical: `/g/${t.slug}` },
+  };
 }
 
-export default async function ThemePage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
-  const theme = themes.find((t) => t.slug === slug);
+export default async function ThemePage({ params }: PageProps<"/g/[slug]">) {
+  const theme = getTheme((await params).slug);
   if (!theme) notFound();
-
-  // Build a map: pattern name → category for cross-linking
-  const patternToCategory = new Map<string, { id: string; slug: string }>();
-  for (const c of categories) {
-    for (const p of c.patterns) {
-      if (!patternToCategory.has(p.name)) patternToCategory.set(p.name, { id: c.id, slug: c.slug });
-    }
-  }
+  const { prev, next } = neighbours(themes, theme);
 
   return (
-    <div className="mx-auto max-w-4xl px-4 sm:px-6 py-8">
-      <div className="mb-6">
-        <Link href="/goals" className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "-ml-3")}>
-          <ChevronLeft className="size-4" />
-          目的一覧へ
-        </Link>
-      </div>
-      <div className="mb-8">
-        <Badge variant="outline" className="font-mono text-xs mb-2">§{theme.id}</Badge>
-        <h1 className="text-3xl font-semibold tracking-tight">{theme.name}</h1>
-      </div>
-      <div className="space-y-6">
-        {theme.goals.map((g, i) => (
-          <Card key={i} id={`g${i}`} className="scroll-mt-20">
-            <CardHeader>
-              <CardTitle className="text-lg">{g.title}</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <div className="text-xs text-muted-foreground mb-2 uppercase tracking-wide">該当パターン</div>
+    <div className="mx-auto max-w-[1180px] px-4 pt-10 sm:px-8 sm:pt-16">
+      <Breadcrumb items={[{ href: "/goals", label: "目的" }, { label: theme.name }]} />
+      <h1 className="fade-up mt-10 mb-16 text-[length:var(--fs-h1)] leading-[1.05] text-fg-1">{theme.name}</h1>
+      <div className="space-y-24">
+        {theme.goals.map((g, i) => {
+          const list = g.patterns.map((s) => getEntry(s)).filter((e) => !!e);
+          return (
+            <section key={g.title} id={`g${i}`} aria-labelledby={`g${i}-h`} className="scroll-mt-24">
+              <div className="mb-8 flex flex-wrap items-end justify-between gap-4 border-b border-line-1 pb-6">
+                <h2 id={`g${i}-h`} className="max-w-3xl text-[length:var(--fs-h2)] leading-[1.25] text-fg-1">{g.title}</h2>
                 <div className="flex flex-wrap gap-2">
-                  {g.patterns.map((p) => {
-                    const cat = patternToCategory.get(p);
-                    return cat ? (
-                      <Link
-                        key={p}
-                        href={`/c/${cat.slug}#${encodeURIComponent(p)}`}
-                        className="rounded-md border px-2.5 py-1 text-xs hover:bg-accent transition-colors"
-                      >
-                        <span className="text-muted-foreground mr-1.5 font-mono">§{cat.id}</span>
-                        {p}
-                      </Link>
-                    ) : (
-                      <span key={p} className="rounded-md border bg-muted px-2.5 py-1 text-xs text-muted-foreground">
-                        {p}
-                      </span>
-                    );
-                  })}
-                </div>
-              </div>
-              <div className="flex items-center gap-3 text-xs text-muted-foreground pt-1">
-                <span>関連カテゴリ:</span>
-                <div className="flex gap-1.5">
-                  {g.categoryRefs.map((cid) => {
-                    const c = categories.find((c) => c.id === cid);
+                  {g.categoryRefs.map((id) => {
+                    const c = getCategory(themesCategorySlug(id));
                     return c ? (
-                      <Link
-                        key={cid}
-                        href={`/c/${c.slug}`}
-                        className="rounded-md border bg-background px-2 py-0.5 hover:bg-accent transition-colors"
-                      >
-                        §{c.id} {c.name}
+                      <Link key={id} href={`/c/${c.slug}`} data-hue={c.hue} style={{ "--cat-hue": c.hue } as React.CSSProperties} className="rounded-full border border-line-2 px-3 py-1 text-xs text-fg-2 transition-colors hover:border-cat hover:text-fg-1">
+                        <span className="idx mr-1.5 text-cat">{c.code}</span>{c.name}
                       </Link>
                     ) : null;
                   })}
                 </div>
-                {g.external && (
-                  <span className="ml-auto inline-flex items-center gap-1 text-muted-foreground">
-                    外部参照: <span className="text-foreground/70">{g.external}</span>
-                    <ExternalLink className="size-3" />
-                  </span>
-                )}
               </div>
-            </CardContent>
-          </Card>
-        ))}
+              <ul className="grid gap-x-8 gap-y-10 md:grid-cols-2">
+                {list.map((e) => (
+                  <li key={e.slug} data-hue={e.category.hue} style={{ "--cat-hue": e.category.hue } as React.CSSProperties} className="flex flex-col gap-3">
+                    <div className="flex items-baseline justify-between gap-3">
+                      <Link href={`/p/${e.slug}`} className="group">
+                        <span className="idx mr-2 text-[11px] text-cat">{e.code}</span>
+                        <span className="font-serif text-xl text-fg-1 decoration-cat/60 underline-offset-4 group-hover:underline">{e.name}</span>
+                      </Link>
+                    </div>
+                    <p className="text-sm text-fg-3">{e.description}</p>
+                    {e.demo && <Stage demo={e.demo} label={e.name} href={`/p/${e.slug}`} size="mini" />}
+                  </li>
+                ))}
+              </ul>
+              {g.external && <p className="mt-8 font-mono text-xs text-fg-4">参考: {g.external}</p>}
+            </section>
+          );
+        })}
       </div>
+      <nav aria-label="前後のテーマ" className="mt-24 flex justify-between gap-4 border-t border-line-1 pt-8 text-sm">
+        {prev ? <Link href={`/g/${prev.slug}`} className="text-fg-2 hover:text-fg-1">← {prev.name}</Link> : <span />}
+        {next ? <Link href={`/g/${next.slug}`} className="inline-flex items-center gap-1 text-fg-2 hover:text-fg-1">{next.name} <ArrowRight className="size-3.5" /></Link> : <span />}
+      </nav>
     </div>
   );
+}
+
+function themesCategorySlug(id: string) {
+  return categoryList.find((c) => c.id === id)?.slug ?? "";
 }

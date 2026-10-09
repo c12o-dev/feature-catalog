@@ -12,11 +12,15 @@
   },
   "packageManager": "pnpm@10.33.0",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint",
-    "typecheck": "tsc --noEmit"
+    "gen": "node scripts/gen-demos.mjs",
+    "fonts": "node scripts/build-fonts.mjs",
+    "dev": "node scripts/gen-demos.mjs && node scripts/build-fonts.mjs && next dev",
+    "build": "node scripts/gen-demos.mjs && node scripts/build-fonts.mjs && next build",
+    "preview": "wrangler pages dev out",
+    "lint": "eslint --max-warnings 0",
+    "typecheck": "next typegen && tsc --noEmit",
+    "test": "vitest run",
+    "e2e": "playwright test"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",
@@ -28,7 +32,6 @@
     "lucide-react": "^1.11.0",
     "motion": "^12.38.0",
     "next": "16.2.4",
-    "next-themes": "^0.4.6",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "react-hook-form": "^7.74.0",
@@ -40,6 +43,11 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@fontsource-variable/jetbrains-mono": "^5.3.0",
+    "@fontsource/shippori-mincho-b1": "^5.3.0",
+    "@fontsource/zen-kaku-gothic-new": "^5.3.0",
+    "@playwright/test": "^1.64.0",
     "@tailwindcss/postcss": "^4",
     "@types/canvas-confetti": "^1.9.0",
     "@types/node": "^20",
@@ -48,6 +56,8 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.4",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^5.0.3",
+    "wrangler": "^4.149.0"
   }
 }
