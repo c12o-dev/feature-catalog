@@ -70,7 +70,8 @@ http
     }
     res.writeHead(status);
     const stream = fs.createReadStream(target);
-    if (enc === "br") stream.pipe(zlib.createBrotliCompress()).pipe(res);
+    // Quality 5 roughly matches what Cloudflare serves; the zlib default (11) is CPU-heavy per request.
+    if (enc === "br") stream.pipe(zlib.createBrotliCompress({ params: { [zlib.constants.BROTLI_PARAM_QUALITY]: 5 } })).pipe(res);
     else if (enc === "gzip") stream.pipe(zlib.createGzip()).pipe(res);
     else stream.pipe(res);
   })

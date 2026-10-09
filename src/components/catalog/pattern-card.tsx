@@ -12,7 +12,7 @@ export function PatternCard({ entry }: { entry: Entry }) {
     <article
       id={entry.slug}
       aria-labelledby={`${entry.slug}-h`}
-      className="grid scroll-mt-24 gap-6 border-t border-line-1 py-12 xl:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] xl:gap-10"
+      className="pattern-card grid scroll-mt-24 gap-6 border-t border-line-1 py-12 xl:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] xl:gap-10"
     >
       <div className="flex flex-col gap-4">
         <p className="idx text-xs text-cat">{entry.code}</p>
