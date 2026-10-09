@@ -410,3 +410,10 @@
     animation-range: entry 0% entry 40%;
   }
 }
+
+/* Long category pages: skip style/layout/paint for cards far off-screen until they approach.
+   `auto` keeps the last rendered size, so scroll position and the TOC stay stable. */
+.pattern-card {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 520px;
+}
