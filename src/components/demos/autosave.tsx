@@ -30,11 +30,11 @@ export default function Autosave() {
 
   return (
     <div className="space-y-2">
-      <Textarea value={text} onChange={(e) => onChange(e.target.value)} className="resize-none" rows={3} />
-      <div className="flex items-center justify-end gap-1.5 text-xs text-muted-foreground h-5">
+      <Textarea aria-label="メモ" value={text} onChange={(e) => onChange(e.target.value)} className="resize-none" rows={3} />
+      <div role="status" aria-live="polite" className="flex items-center justify-end gap-1.5 text-xs text-muted-foreground h-5">
         {status === "typing" && <span>未保存の変更</span>}
-        {status === "saving" && (<><Loader2 className="size-3 animate-spin" />保存中...</>)}
-        {status === "saved" && (<><Check className="size-3 text-emerald-600" />保存しました</>)}
+        {status === "saving" && (<><Loader2 aria-hidden className="size-3 motion-safe:animate-spin" />保存中...</>)}
+        {status === "saved" && (<><Check aria-hidden className="size-3 text-emerald-600 dark:text-emerald-400" />保存しました</>)}
       </div>
     </div>
   );

@@ -1,29 +1,99 @@
 "use client";
 
-import { useState } from "react";
-import { Copy, Check, Gift } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useEffect, useRef, useState } from "react";
+import { Check, Copy, Gift } from "lucide-react";
+
+const URL_TEXT = "https://app.example.jp/r/haru-x9k4";
+
+const STATS = [
+  { label: "招待済み", value: "3" },
+  { label: "登録完了", value: "2" },
+  { label: "獲得ポイント", value: "2,000" },
+];
+
+const FRIENDS = [
+  { name: "山本 葵", state: "登録完了", reward: "+1,000 P" },
+  { name: "小林 蓮", state: "登録完了", reward: "+1,000 P" },
+  { name: "中村 結衣", state: "招待中", reward: "—" },
+];
 
 export default function Referral() {
-  const [copied, setCopied] = useState(false);
-  const url = "https://example.com/r/c12o-x9k4";
-  const copy = async () => { await navigator.clipboard.writeText(url); setCopied(true); setTimeout(() => setCopied(false), 1200); };
+  const [state, setState] = useState<"idle" | "copied" | "error">("idle");
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => () => {
+    if (timer.current) clearTimeout(timer.current);
+  }, []);
+
+  const copy = async () => {
+    let next: "copied" | "error" = "copied";
+    try {
+      await navigator.clipboard.writeText(URL_TEXT);
+    } catch {
+      next = "error";
+    }
+    setState(next);
+    if (timer.current) clearTimeout(timer.current);
+    timer.current = setTimeout(() => setState("idle"), 2000);
+  };
+
   return (
-    <div className="space-y-3 max-w-md">
-      <div className="rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 text-white p-4">
-        <Gift className="size-6 mb-2" />
-        <div className="font-semibold">友達を招待して 1000 ポイント</div>
-        <div className="text-xs opacity-90">招待された友達も同じく 1000 ポイントゲット</div>
+    <div className="mx-auto w-full max-w-md space-y-3">
+      <div className="flex gap-3 rounded-lg border bg-card p-4">
+        <div className="grid size-10 shrink-0 place-items-center rounded-lg bg-violet-100 text-violet-700 dark:bg-violet-950 dark:text-violet-300">
+          <Gift className="size-5" aria-hidden />
+        </div>
+        <div className="min-w-0">
+          <div className="text-sm font-semibold">友達を招待して 1,000 ポイント</div>
+          <p className="text-xs text-muted-foreground">友達が登録すると、あなたと友達の両方に 1,000 ポイントを付与します</p>
+        </div>
       </div>
-      <div className="flex items-center gap-2 rounded-md border bg-background p-2 pl-3">
-        <code className="flex-1 text-xs text-muted-foreground truncate">{url}</code>
-        <Button size="sm" variant="outline" onClick={copy}>{copied ? <Check className="size-3.5 text-emerald-600" /> : <Copy className="size-3.5" />}</Button>
+
+      <div className="space-y-1.5">
+        <div id="referral-link-label" className="text-xs font-medium">
+          あなたの招待リンク
+        </div>
+        <div className="flex items-center gap-2 rounded-md border bg-background p-1.5 pl-3">
+          <code aria-labelledby="referral-link-label" className="min-w-0 flex-1 truncate text-xs text-muted-foreground">
+            {URL_TEXT}
+          </code>
+          <button
+            type="button"
+            onClick={copy}
+            className="inline-flex h-7 shrink-0 items-center gap-1 rounded-md border bg-background px-2.5 text-xs font-medium hover:bg-muted"
+          >
+            {state === "copied" ? (
+              <Check className="size-3.5 text-emerald-600 dark:text-emerald-400" aria-hidden />
+            ) : (
+              <Copy className="size-3.5" aria-hidden />
+            )}
+            {state === "copied" ? "コピー済み" : "リンクをコピー"}
+          </button>
+        </div>
+        <p aria-live="polite" className="min-h-4 text-xs text-muted-foreground">
+          {state === "copied" && "クリップボードにコピーしました"}
+          {state === "error" && "コピーできませんでした。リンクを選択してコピーしてください"}
+        </p>
       </div>
+
       <div className="grid grid-cols-3 gap-2 text-center">
-        <div className="rounded border p-2"><div className="text-lg font-semibold">3</div><div className="text-[10px] text-muted-foreground">招待済</div></div>
-        <div className="rounded border p-2"><div className="text-lg font-semibold">2</div><div className="text-[10px] text-muted-foreground">登録</div></div>
-        <div className="rounded border p-2"><div className="text-lg font-semibold">2,000</div><div className="text-[10px] text-muted-foreground">獲得 P</div></div>
+        {STATS.map((s) => (
+          <div key={s.label} className="rounded-md border p-2">
+            <div className="text-base font-semibold tabular-nums">{s.value}</div>
+            <div className="text-xs text-muted-foreground">{s.label}</div>
+          </div>
+        ))}
       </div>
+
+      <ul className="divide-y rounded-md border text-sm">
+        {FRIENDS.map((f) => (
+          <li key={f.name} className="flex items-center gap-2 px-3 py-2">
+            <span className="min-w-0 flex-1 truncate">{f.name}</span>
+            <span className="text-xs text-muted-foreground">{f.state}</span>
+            <span className="w-16 text-right text-xs font-medium tabular-nums">{f.reward}</span>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

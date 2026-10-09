@@ -1,0 +1,8 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // Cloudflare Pages project. Production deploys come from GitHub pushes to main;
+  // this file drives `pnpm run preview` (wrangler pages dev) so _headers applies locally.
+  "name": "feature-catalog",
+  "compatibility_date": "2026-10-01",
+  "pages_build_output_dir": "./out"
+}

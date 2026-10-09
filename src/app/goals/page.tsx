@@ -1,49 +1,45 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { themes } from "@/data/goals";
+import { Breadcrumb } from "@/components/catalog/breadcrumb";
+import { stats, themes } from "@/lib/catalog";
 
-export const metadata = { title: "目的別 — Feature Catalog" };
+export const metadata: Metadata = {
+  title: "目的から探す",
+  description: `「フォームの離脱を減らしたい」のような問題文から、効くパターンを逆引き。${stats.themes} テーマ・${stats.goals} の目的。`,
+  alternates: { canonical: "/goals" },
+};
 
 export default function GoalsPage() {
-  const total = themes.reduce((s, t) => s + t.goals.length, 0);
   return (
-    <div className="mx-auto max-w-7xl px-4 sm:px-6 py-10">
-      <div className="mb-8 max-w-2xl">
-        <h1 className="text-3xl font-semibold tracking-tight">目的で探す</h1>
-        <p className="text-muted-foreground mt-2">
-          「フォーム離脱を減らしたい」のような問題ステートメントから関連パターンを逆引き。
-          {themes.length} テーマ・{total} 目的。
+    <div className="mx-auto max-w-[1440px] px-4 pt-10 sm:px-8 sm:pt-16">
+      <Breadcrumb items={[{ label: "目的" }]} />
+      <header className="mt-10 mb-16 grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-end">
+        <h1 className="fade-up text-[length:var(--fs-display)] leading-[1] tracking-[-0.02em] text-fg-1">目的から</h1>
+        <p className="fade-up max-w-md text-sm leading-relaxed text-fg-3 lg:justify-self-end" style={{ animationDelay: "120ms" }}>
+          作りたいものではなく、解きたい困りごとから引く索引です。{stats.themes} のテーマに {stats.goals} の目的があります。
         </p>
-      </div>
-      <div className="space-y-8">
-        {themes.map((t) => (
-          <section key={t.id}>
-            <div className="flex items-baseline gap-3 mb-3">
-              <h2 className="text-xl font-semibold tracking-tight">{t.name}</h2>
-              <Badge variant="outline" className="font-mono text-xs">§{t.id}</Badge>
+      </header>
+      <div className="space-y-20">
+        {themes.map((t, ti) => (
+          <section key={t.slug} aria-labelledby={`t-${t.slug}`} className="reveal grid gap-6 lg:grid-cols-[16rem_minmax(0,1fr)] lg:gap-16">
+            <div>
+              <p className="idx text-xs text-fg-4">{String(ti + 1).padStart(2, "0")}</p>
+              <h2 id={`t-${t.slug}`} className="mt-2 text-3xl text-fg-1">
+                <Link href={`/g/${t.slug}`} className="hover:text-brand">{t.name}</Link>
+              </h2>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <ul className="border-t border-line-1">
               {t.goals.map((g, i) => (
-                <Link key={i} href={`/g/${t.slug}#g${i}`} className="group">
-                  <Card className="h-full transition-colors hover:border-foreground/30">
-                    <CardHeader>
-                      <CardTitle className="flex items-center justify-between text-base">
-                        <span>{g.title}</span>
-                        <ArrowRight className="size-4 text-muted-foreground transition-transform group-hover:translate-x-1" />
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="text-sm text-muted-foreground line-clamp-2">
-                        {g.patterns.slice(0, 4).join(" / ")}
-                        {g.patterns.length > 4 ? ` 他 ${g.patterns.length - 4}` : ""}
-                      </div>
-                    </CardContent>
-                  </Card>
-                </Link>
+                <li key={g.title} className="border-b border-line-1">
+                  <Link href={`/g/${t.slug}#g${i}`} className="group flex items-baseline gap-4 py-5 transition-colors hover:bg-bg-1 sm:px-4">
+                    <span className="flex-1 font-serif text-xl leading-snug text-fg-1 transition-colors group-hover:text-brand sm:text-2xl">{g.title}</span>
+                    <span className="shrink-0 font-mono text-xs text-fg-4">{g.patterns.length} 件</span>
+                    <ArrowRight className="size-4 shrink-0 self-center text-fg-4 transition-transform group-hover:translate-x-1" />
+                  </Link>
+                </li>
               ))}
-            </div>
+            </ul>
           </section>
         ))}
       </div>

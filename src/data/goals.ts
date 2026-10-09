@@ -1,10 +1,9 @@
-// 25 goals across 9 themes — problem-driven reverse lookup. Source: web-components-catalog/ideas/2026-04-26-feature-index-v2.md §3
-// Each goal lists patterns by category §N from categories.ts
+// 9 themes / 28 goals — problem-driven reverse lookup. `patterns` are slugs from ./categories.ts.
 
 export type Goal = {
   title: string;
-  patterns: string[]; // pattern names referencing categories.ts
-  categoryRefs: string[]; // category ids
+  patterns: string[];
+  categoryRefs: string[];
   external?: string;
 };
 
@@ -23,25 +22,25 @@ export const themes: Theme[] = [
     goals: [
       {
         title: "初回起動の体験を整えたい",
-        patterns: ["ウェルカムモーダル", "プロダクトツアー", "チェックリスト / クエスト", "空状態（イラスト付）", "サンプルデータ / デモモード", "アカウント完成度ゲージ"],
+        patterns: ["welcome-modal", "product-tour", "onboarding-checklist", "empty-state", "demo-mode", "completion-meter"],
         categoryRefs: ["2"],
         external: "useronboard.com",
       },
       {
         title: "ロード待ちを快適にしたい",
-        patterns: ["Skeleton loader", "Optimistic UI", "Prefetch on hover", "Suspense fallback", "Shimmer", "FLIP animation"],
+        patterns: ["skeleton-loader", "optimistic-ui", "prefetch-on-hover", "suspense-fallback", "shimmer", "flip-animation"],
         categoryRefs: ["15", "16"],
         external: "web.dev/perf",
       },
       {
         title: "ブランド体験を作りたい",
-        patterns: ["Scroll-driven animation", "View Transitions API", "Hover micro-interaction", "Confetti", "Sticky header / shrink on scroll"],
+        patterns: ["scroll-driven", "view-transition", "hover-micro", "confetti", "sticky-shrink"],
         categoryRefs: ["16"],
         external: "awwwards.com",
       },
       {
         title: "AI を組み込みたい",
-        patterns: ["AI サイドバー / コパイロット panel", "インライン AI suggestion", "\"Ask anything\" 検索", "要約ボタン", "ストリーミング表示", "Citation / 出典リンク"],
+        patterns: ["ai-sidebar", "inline-ai", "ask-anything", "summarize-button", "streaming-text", "citation"],
         categoryRefs: ["3"],
       },
     ],
@@ -53,18 +52,18 @@ export const themes: Theme[] = [
     goals: [
       {
         title: "フォームの離脱を減らしたい",
-        patterns: ["Inline validation", "Autosave (status 表示)", "マルチステップ wizard", "Form 復元 (戻ってきたら入力残ってる)", "Optimistic submit", "Skeleton loader"],
+        patterns: ["inline-validation", "autosave", "multi-step-form", "form-restore", "optimistic-submit", "skeleton-loader"],
         categoryRefs: ["9", "15"],
         external: "baymard.com",
       },
       {
         title: "入力速度を上げたい",
-        patterns: ["Autocomplete (タグ/型)", "Mention picker", "Emoji picker", "タグ入力 (chip 入力)", "リッチテキストエディタ (block)"],
+        patterns: ["autocomplete", "mention-picker", "emoji-picker", "tag-input", "rich-text-editor"],
         categoryRefs: ["9"],
       },
       {
         title: "大量データを編集させたい",
-        patterns: ["テーブル (sortable/filter/group)", "ピボットテーブル", "Tree view", "ドラッグ&ドロップ upload"],
+        patterns: ["data-table", "pivot-table", "tree-view", "dropzone-upload"],
         categoryRefs: ["10", "9"],
       },
     ],
@@ -76,18 +75,18 @@ export const themes: Theme[] = [
     goals: [
       {
         title: "検索を高速にしたい",
-        patterns: ["Command palette (Cmd+K)", "インスタント検索 / typeahead", "ファセット検索", "検索履歴 / 保存検索"],
+        patterns: ["command-palette", "typeahead-search", "faceted-search", "search-history"],
         categoryRefs: ["5"],
         external: "algolia.com",
       },
       {
         title: "ナビ階層を整理したい",
-        patterns: ["breadcrumb", "サイドバー nav", "tab bar", "anchor TOC (sticky)", "jump-to-section チップ"],
+        patterns: ["breadcrumb", "sidebar-nav", "tab-bar", "anchor-toc", "jump-chips"],
         categoryRefs: ["5"],
       },
       {
         title: "モバイルで使いやすくしたい",
-        patterns: ["bottom nav", "Bottom sheet", "Pull to refresh", "Swipe action (リスト)", "Floating action button (FAB)", "Long press menu"],
+        patterns: ["bottom-nav", "bottom-sheet-mobile", "pull-to-refresh", "swipe-action", "fab", "long-press-menu"],
         categoryRefs: ["5", "17"],
         external: "mobbin.com",
       },
@@ -100,18 +99,18 @@ export const themes: Theme[] = [
     goals: [
       {
         title: "ログイン障壁を下げたい",
-        patterns: ["Passkey / WebAuthn", "ソーシャルログイン", "Magic link", "Sign in with Google one-tap"],
+        patterns: ["passkey-button", "social-login", "magic-link", "google-one-tap"],
         categoryRefs: ["4"],
         external: "webauthn.guide",
       },
       {
         title: "アカウント安全性を伝えたい",
-        patterns: ["アクティブセッション一覧 / sign out all", "ログイン履歴 / 不審アクセス通知", "二段階認証 setup wizard", "Trusted device 一覧"],
+        patterns: ["active-sessions", "login-history", "two-factor-wizard", "trusted-device"],
         categoryRefs: ["22"],
       },
       {
         title: "プライバシー透明性を出したい",
-        patterns: ["Cookie 同意バナー (GDPR)", "データ export (GDPR/個情法)", "アカウント削除フロー (確認多段)", "公開範囲設定 (public/friends/private)"],
+        patterns: ["cookie-banner", "data-export", "account-delete", "visibility-scope"],
         categoryRefs: ["22"],
         external: "gdpr.eu",
       },
@@ -124,18 +123,18 @@ export const themes: Theme[] = [
     goals: [
       {
         title: "大量コンテンツを見せたい",
-        patterns: ["無限スクロール", "Virtual list (windowing)", "Masonry グリッド", "ストーリーバー"],
+        patterns: ["infinite-scroll", "virtual-list", "masonry-grid", "story-bar"],
         categoryRefs: ["8"],
       },
       {
         title: "メディアを見せたい",
-        patterns: ["動画プレイヤー (custom controls)", "Picture-in-Picture", "チャプターマーカー", "Waveform 表示", "トランスクリプト追従 (karaoke 風)"],
+        patterns: ["video-player", "picture-in-picture", "chapter-markers", "waveform", "transcript-follow"],
         categoryRefs: ["20"],
         external: "mux.com",
       },
       {
         title: "地図・位置情報を扱いたい",
-        patterns: ["マップ + マーカー (Mapbox/MapLibre)", "マーカークラスタリング", "ルート表示 (polyline)", "描画ツール (polygon/circle)", "isochrone (到達圏)"],
+        patterns: ["map-markers", "marker-cluster", "route-polyline", "map-draw", "isochrone"],
         categoryRefs: ["19"],
         external: "mapbox docs",
       },
@@ -148,17 +147,17 @@ export const themes: Theme[] = [
     goals: [
       {
         title: "コラボさせたい",
-        patterns: ["リアルタイムカーソル", "Presence avatar 集", "インラインコメント", "Mention (@user)", "スレッド discussion", "バージョン履歴 / restore"],
+        patterns: ["live-cursor", "presence-avatars", "inline-comment", "mention-list", "thread", "version-history"],
         categoryRefs: ["6"],
       },
       {
         title: "通知設計したい",
-        patterns: ["In-app notification center", "バッジカウンタ", "トースト / snackbar", "バナー alert", "Push 通知 (Web Push)", "メール digest", "通知設定 matrix"],
+        patterns: ["notification-center", "badge-counter", "toast", "banner-alert", "push-permission", "email-digest", "notification-matrix"],
         categoryRefs: ["7"],
       },
       {
         title: "SNS 共有・拡散を促したい",
-        patterns: ["フォロー / アンフォロー", "シェア / リポスト", "引用 (quote)", "OGP リッチプレビュー", "Embed iframe (X/YT)", "ハッシュタグ"],
+        patterns: ["follow-button", "repost-button", "quote-post", "ogp-preview", "embed-iframe", "hashtag-chip"],
         categoryRefs: ["21"],
       },
     ],
@@ -170,23 +169,23 @@ export const themes: Theme[] = [
     goals: [
       {
         title: "信頼を伝えたい (LP)",
-        patterns: ["Testimonial カード", "ロゴウォール", "数字 hero (\"10,000+ users\")", "レビュースコア (★)", "ステータスページ"],
+        patterns: ["testimonial-card", "logo-wall", "hero-numbers", "review-score", "status-page"],
         categoryRefs: ["11"],
       },
       {
         title: "リピート率を上げたい",
-        patterns: ["Streak (連続)", "達成 / アチーブメント", "レベル / XP", "リーダーボード", "Daily quest", "Recommendation"],
+        patterns: ["streak-badge", "achievement", "xp-bar", "leaderboard", "daily-quest", "recommendation"],
         categoryRefs: ["12", "13"],
         external: "yu-kai chou octalysis",
       },
       {
         title: "パーソナライズしたい",
-        patterns: ["ダーク / ライト切替 (system 追従可)", "レイアウト密度 (comfortable/compact)", "Bookmark / お気に入り", "Recently viewed", "Saved view / smart filter"],
+        patterns: ["theme-toggle", "density-toggle", "favorites", "recently-viewed", "saved-view"],
         categoryRefs: ["13"],
       },
       {
         title: "課金フローを設計したい",
-        patterns: ["Pricing table (toggle 月/年)", "Checkout (Stripe Elements 等)", "サブスク管理 (upgrade/cancel)", "Usage meter", "クーポン / promo code", "トライアル counter"],
+        patterns: ["pricing-table", "checkout", "subscription-manage", "usage-meter", "coupon-input", "trial-counter"],
         categoryRefs: ["14"],
         external: "stripe pricing",
       },
@@ -199,17 +198,17 @@ export const themes: Theme[] = [
     goals: [
       {
         title: "ヘルプ導線を作りたい",
-        patterns: ["ヘルプ widget (右下バブル)", "FAQ アコーディオン", "検索可能ナレッジベース", "Live chat", "Contextual help (?)"],
+        patterns: ["help-widget", "faq-accordion", "knowledge-base", "live-chat", "contextual-help"],
         categoryRefs: ["23"],
       },
       {
         title: "開発者向け公開機能を作りたい",
-        patterns: ["API key 管理 (生成/失効)", "Webhook 設定 + テスト送信", "API playground / cURL builder", "Embed code generator", "Rate limit indicator"],
+        patterns: ["api-key-manager", "webhook-config", "api-playground", "embed-code", "rate-limit"],
         categoryRefs: ["24"],
       },
       {
         title: "システム状態を伝えたい",
-        patterns: ["環境バッジ (staging/dev)", "バージョン表示 (footer)", "接続状態 indicator", "同期 indicator", "最終更新時刻 (relative)"],
+        patterns: ["env-badge", "version-footer", "connection-status", "sync-indicator", "relative-time"],
         categoryRefs: ["25"],
       },
     ],
@@ -221,13 +220,13 @@ export const themes: Theme[] = [
     goals: [
       {
         title: "アクセシビリティを担保したい",
-        patterns: ["Skip to content link", "Visible focus ring", "ARIA live region", "prefers-reduced-motion 尊重", "色覚多様性配慮 (パターン併用)", "キーボードショートカット一覧 (?)"],
+        patterns: ["skip-link", "focus-ring", "aria-live", "reduced-motion", "colorblind-pattern", "shortcuts-help"],
         categoryRefs: ["18"],
         external: "webaim.org",
       },
       {
         title: "データを直感的に見せたい",
-        patterns: ["スパークライン", "草チャート / contribution heatmap", "プログレスリング", "ゲージ / ダイヤル", "状態 badge", "カウンターアニメ"],
+        patterns: ["sparkline", "contribution-heatmap", "progress-ring", "gauge", "status-badge", "counter-tick"],
         categoryRefs: ["1"],
         external: "observablehq.com",
       },

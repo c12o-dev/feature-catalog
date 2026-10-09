@@ -1,48 +1,26 @@
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { categories } from "@/data/categories";
+import type { Metadata } from "next";
+import { CategoryIndex } from "@/components/catalog/category-index";
+import { Breadcrumb } from "@/components/catalog/breadcrumb";
+import { categoryList, stats } from "@/lib/catalog";
 
-export const metadata = { title: "カテゴリ一覧 — Feature Catalog" };
+export const metadata: Metadata = {
+  title: "カテゴリ",
+  description: `UI のかたちで分けた ${stats.categories} カテゴリ・${stats.patterns} パターンの索引。`,
+  alternates: { canonical: "/categories" },
+};
 
 export default function CategoriesPage() {
+  const samples = Object.fromEntries(categoryList.map((c) => [c.slug, c.patterns.slice(0, 4).map((p) => p.name)]));
   return (
-    <div className="mx-auto max-w-7xl px-4 sm:px-6 py-10">
-      <div className="mb-8">
-        <h1 className="text-3xl font-semibold tracking-tight">カテゴリ</h1>
-        <p className="text-muted-foreground mt-2">UI form factor で分類した {categories.length} カテゴリ。</p>
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-        {categories.map((c) => {
-          const demoCount = c.patterns.filter((p) => p.demo).length;
-          return (
-            <Link key={c.id} href={`/c/${c.slug}`} className="group">
-              <Card className="h-full transition-colors hover:border-foreground/30">
-                <CardHeader>
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="text-xs text-muted-foreground font-mono">§{c.id}</span>
-                    {demoCount > 0 && (
-                      <Badge variant="secondary" className="text-[10px]">
-                        デモ {demoCount}
-                      </Badge>
-                    )}
-                  </div>
-                  <CardTitle className="flex items-center justify-between text-base">
-                    {c.name}
-                    <ArrowRight className="size-4 text-muted-foreground transition-transform group-hover:translate-x-1" />
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-sm text-muted-foreground">
-                    {c.patterns.length} パターン
-                  </div>
-                </CardContent>
-              </Card>
-            </Link>
-          );
-        })}
-      </div>
+    <div className="mx-auto max-w-[1440px] px-4 pt-10 sm:px-8 sm:pt-16">
+      <Breadcrumb items={[{ label: "カテゴリ" }]} />
+      <header className="mt-10 mb-14 grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-end">
+        <h1 className="fade-up text-[length:var(--fs-display)] leading-[1] tracking-[-0.02em] text-fg-1">カテゴリ</h1>
+        <p className="fade-up max-w-md text-sm leading-relaxed text-fg-3 lg:justify-self-end" style={{ animationDelay: "120ms" }}>
+          UI のかたちで {stats.categories} に分けました。可視化、フォーム、認証、モーション。似た見た目の機能が同じ棚に並びます。
+        </p>
+      </header>
+      <CategoryIndex categories={categoryList} samples={samples} />
     </div>
   );
 }
