@@ -1,10 +1,10 @@
 "use client";
 
 const envs = [
-  { name: "production", color: "bg-emerald-500" },
-  { name: "staging", color: "bg-amber-500" },
-  { name: "preview", color: "bg-blue-500" },
-  { name: "development", color: "bg-zinc-500" },
+  { name: "production", color: "bg-emerald-700" },
+  { name: "staging", color: "bg-amber-700" },
+  { name: "preview", color: "bg-blue-700" },
+  { name: "development", color: "bg-zinc-600" },
 ];
 
 export default function EnvBadge() {

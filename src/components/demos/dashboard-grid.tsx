@@ -105,7 +105,7 @@ export default function DashboardGrid() {
             </div>
             <div className="mt-1 text-xl font-semibold tabular-nums">{w.v}</div>
             {w.trend && (
-              <div className={cn("text-xs tabular-nums", w.down ? "text-sky-600 dark:text-sky-400" : "text-emerald-600 dark:text-emerald-400")}>
+              <div className={cn("text-xs tabular-nums", w.down ? "text-sky-700 dark:text-sky-400" : "text-emerald-700 dark:text-emerald-400")}>
                 {w.trend}
               </div>
             )}

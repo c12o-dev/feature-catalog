@@ -704,7 +704,7 @@ export const demoMeta: Record<string, DemoMeta> = {
       "lucide-react"
     ],
     "apis": [],
-    "lines": 174
+    "lines": 176
   },
   "Drawer": {
     "file": "src/components/demos/drawer.tsx",
@@ -2088,7 +2088,7 @@ export const demoMeta: Record<string, DemoMeta> = {
     "apis": [
       "SVG"
     ],
-    "lines": 156
+    "lines": 158
   },
   "SavedView": {
     "file": "src/components/demos/saved-view.tsx",
@@ -2400,7 +2400,7 @@ export const demoMeta: Record<string, DemoMeta> = {
       "lucide-react"
     ],
     "apis": [],
-    "lines": 55
+    "lines": 56
   },
   "StreamingText": {
     "file": "src/components/demos/streaming-text.tsx",
@@ -2421,7 +2421,7 @@ export const demoMeta: Record<string, DemoMeta> = {
       "SVG",
       "Pointer Events"
     ],
-    "lines": 181
+    "lines": 183
   },
   "SubscriptionManage": {
     "file": "src/components/demos/subscription-manage.tsx",
@@ -2893,7 +2893,7 @@ export const demoMeta: Record<string, DemoMeta> = {
     "file": "src/components/demos/word-cloud.tsx",
     "libs": [],
     "apis": [],
-    "lines": 22
+    "lines": 28
   },
   "XpBar": {
     "file": "src/components/demos/xp-bar.tsx",

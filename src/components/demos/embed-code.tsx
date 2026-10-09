@@ -111,7 +111,7 @@ export default function EmbedCode() {
             {copy === "ok" ? "コピーしました" : "コピー"}
           </Button>
         </div>
-        <pre className="max-h-56 overflow-auto rounded-md border bg-muted/60 p-3 font-mono text-xs leading-relaxed whitespace-pre">
+        <pre role="region" tabIndex={0} aria-label="埋め込みコード" className="max-h-56 overflow-auto rounded-md border bg-muted/60 p-3 font-mono text-xs leading-relaxed whitespace-pre">
           <code>{snippet}</code>
         </pre>
         <p aria-live="polite" className={`text-xs ${copy === "error" ? "text-destructive" : "text-muted-foreground"}`}>

@@ -4,7 +4,7 @@ import { Xray } from "@/components/shell/xray";
 export function Breadcrumb({ items }: { items: { href?: string; label: string }[] }) {
   return (
     <Xray slug="breadcrumb" as="nav" place="tr" className="inline-block">
-      <ol aria-label="現在地" className="flex flex-wrap items-center gap-2 font-mono text-[11px] tracking-wide text-fg-4">
+      <ol aria-label="現在地" className="flex flex-wrap items-center gap-2 font-mono text-[11px] tracking-wide text-fg-3">
         <li>
           <Link href="/" className="hover:text-fg-1">Home</Link>
         </li>

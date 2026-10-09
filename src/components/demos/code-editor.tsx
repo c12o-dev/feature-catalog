@@ -146,7 +146,7 @@ export default function CodeEditor() {
       </div>
       <div className="max-h-72 overflow-auto">
         <div className="flex min-w-full w-max font-mono text-xs leading-5">
-          <div aria-hidden className="sticky left-0 z-10 select-none bg-zinc-950 py-3 pr-3 pl-3 text-right text-zinc-600">
+          <div aria-hidden className="sticky left-0 z-10 select-none bg-zinc-950 py-3 pr-3 pl-3 text-right text-zinc-400">
             {lines.map((_, i) => (
               <div key={i} className={cn("tabular-nums", sug?.line === i && "text-zinc-300")}>{i + 1}</div>
             ))}

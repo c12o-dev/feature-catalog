@@ -126,7 +126,7 @@ export default function GestureNav() {
     <div className="flex w-full flex-col items-center gap-3">
       <div ref={frame} className="relative h-72 w-full max-w-[240px] overflow-hidden rounded-[1.75rem] border-4 border-foreground/80 bg-muted shadow-sm">
         {depth > 0 && (
-          <motion.div aria-hidden style={{ x: under }} className="absolute inset-0">
+          <motion.div aria-hidden inert style={{ x: under }} className="absolute inset-0">
             <Screen page={pages[depth - 1]} go={() => {}} />
             <motion.div style={{ opacity: shade }} className="absolute inset-0 bg-black" />
           </motion.div>

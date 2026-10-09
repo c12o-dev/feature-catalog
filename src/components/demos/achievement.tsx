@@ -19,11 +19,11 @@ export default function Achievement() {
           <button
             key={it.name}
             onClick={() => setItems((x) => x.map((y, j) => j === i ? { ...y, unlocked: !y.unlocked } : y))}
-            className={`flex items-center gap-2 rounded-md border bg-background p-2 text-left ${it.unlocked ? "" : "opacity-50"}`}
+            className={`flex items-center gap-2 rounded-md border bg-background p-2 text-left ${it.unlocked ? "" : "border-dashed"}`}
           >
-            <div className="text-2xl">{it.unlocked ? it.icon : "🔒"}</div>
+            <div className={`text-2xl ${it.unlocked ? "" : "opacity-50 grayscale"}`}>{it.unlocked ? it.icon : "🔒"}</div>
             <div className="flex-1 min-w-0">
-              <div className="text-xs font-medium flex items-center gap-1">{it.name}{it.unlocked && <Trophy className="size-3 text-amber-500" />}</div>
+              <div className={`text-xs font-medium flex items-center gap-1 ${it.unlocked ? "" : "text-muted-foreground"}`}>{it.name}{it.unlocked && <Trophy className="size-3 text-amber-500" />}</div>
               <div className="text-[10px] text-muted-foreground">{it.desc}</div>
             </div>
           </button>

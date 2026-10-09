@@ -15,8 +15,8 @@ export default function HeatmapMatrix() {
             {row.map((v, j) => (
               <div
                 key={j}
-                className="size-9 grid place-items-center text-[10px] m-0.5 rounded"
-                style={{ background: `hsl(217 91% 60% / ${v})`, color: v > 0.5 ? "white" : "currentColor" }}
+                className={`size-9 grid place-items-center text-[10px] m-0.5 rounded [--cell-l:60%] dark:[--cell-l:45%] ${v > 0.5 ? "text-zinc-950 dark:text-white" : ""}`}
+                style={{ background: `hsl(217 91% var(--cell-l) / ${v})` }}
               >
                 {v.toFixed(2)}
               </div>

@@ -12,7 +12,7 @@ export default function StickyShrink() {
     return () => el.removeEventListener("scroll", on);
   }, []);
   return (
-    <div ref={ref} className="rounded-md border bg-background h-44 overflow-y-auto">
+    <div ref={ref} role="region" aria-label="スクロール領域" tabIndex={0} className="rounded-md border bg-background h-44 overflow-y-auto">
       <header className={`sticky top-0 bg-background border-b transition-all ${shrunk ? "h-10 px-3" : "h-16 px-4"} flex items-center font-semibold`}>
         <span className={shrunk ? "text-sm" : "text-lg"}>Logo</span>
       </header>

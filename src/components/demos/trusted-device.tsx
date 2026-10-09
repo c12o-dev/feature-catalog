@@ -71,7 +71,7 @@ export default function TrustedDevice() {
             className="mt-2 w-full rounded-md border bg-background px-3 py-2 text-center font-mono text-base tracking-[0.4em] tabular-nums outline-none focus-visible:ring-2 focus-visible:ring-ring"
           />
           <label className="mt-3 flex cursor-pointer items-start gap-2 text-xs">
-            <Switch checked={trust} onCheckedChange={setTrust} className="mt-0.5" />
+            <Switch checked={trust} onCheckedChange={setTrust} aria-label="この端末を信頼する" className="mt-0.5" />
             <span>
               この端末を信頼する
               <span className="block text-muted-foreground">30 日間は確認コードを省略します。共有端末ではオフにしてください。</span>

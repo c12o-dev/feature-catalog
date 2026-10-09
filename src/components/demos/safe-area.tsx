@@ -19,7 +19,7 @@ export default function SafeArea() {
   return (
     <div className="space-y-3">
       <label className="flex items-center justify-center gap-2 text-sm">
-        <Switch checked={on} onCheckedChange={setOn} />
+        <Switch checked={on} onCheckedChange={setOn} aria-label="safe area に対応" />
         safe area に対応
       </label>
       <div
@@ -44,7 +44,7 @@ export default function SafeArea() {
           <div aria-hidden className="absolute bottom-1.5 left-1/2 h-1 w-16 -translate-x-1/2 rounded-full bg-foreground/50" />
         </div>
       </div>
-      <pre className={cn("mx-auto max-w-sm overflow-x-auto rounded-md border bg-muted p-2 text-[11px] leading-relaxed", !on && "opacity-50")}>
+      <pre tabIndex={0} role="region" aria-label="safe-area の CSS" className={cn("focus-visible:outline-2 focus-visible:outline-ring mx-auto max-w-sm overflow-x-auto rounded-md border bg-muted p-2 text-[11px] leading-relaxed", !on && "opacity-50")}>
         <code>{`padding-top: max(8px, env(safe-area-inset-top));
 padding-bottom: max(6px, env(safe-area-inset-bottom));`}</code>
       </pre>

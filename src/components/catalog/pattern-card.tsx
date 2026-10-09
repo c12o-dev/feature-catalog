@@ -26,12 +26,12 @@ export function PatternCard({ entry }: { entry: Entry }) {
         <p className="text-[15px] text-fg-2">{entry.description}</p>
         {entry.notes && (
           <p className="border-l border-cat/40 pl-4 text-sm leading-relaxed text-fg-3">
-            <span className="mb-1 block font-mono text-[10px] tracking-[0.16em] text-fg-4 uppercase">実装のポイント</span>
+            <span className="mb-1 block font-mono text-[10px] tracking-[0.16em] text-fg-3 uppercase">実装のポイント</span>
             {entry.notes}
           </p>
         )}
         {alias && (
-          <p className="text-xs text-fg-4">
+          <p className="text-xs text-fg-3">
             デモは
             <Link href={`/p/${alias.slug}`} className="mx-1 text-fg-2 underline decoration-line-2 underline-offset-4 hover:text-fg-1">
               {alias.name}

@@ -25,7 +25,7 @@ export default function DailyQuest() {
             <button onClick={() => setList((l) => l.map((x, j) => j === i ? { ...x, done: !x.done } : x))} className="w-full flex items-center gap-2 rounded-md border bg-background px-3 py-2 text-sm hover:bg-accent">
               {q.done ? <CheckCircle2 className="size-4 text-emerald-500" /> : <Circle className="size-4 text-muted-foreground" />}
               <span className={`flex-1 text-left ${q.done ? "line-through text-muted-foreground" : ""}`}>{q.name}</span>
-              <span className="text-xs text-amber-600 font-medium">{q.reward}</span>
+              <span className="text-xs text-amber-700 font-medium dark:text-amber-400">{q.reward}</span>
             </button>
           </li>
         ))}

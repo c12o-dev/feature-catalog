@@ -88,7 +88,7 @@ export default function Home() {
               <div key={s.k} className={`flex flex-col gap-2 px-1 py-8 sm:px-6 sm:py-10 ${i % 2 ? "border-l border-line-1" : ""} ${i >= 2 ? "border-t border-line-1 lg:border-t-0" : ""} ${i === 2 ? "lg:border-l" : ""}`}>
                 <dt className="order-2 text-sm text-fg-3">
                   {s.k}
-                  <span className="ml-2 font-serif text-fg-4 italic">{s.en}</span>
+                  <span className="ml-2 font-serif text-fg-3 italic">{s.en}</span>
                 </dt>
                 <dd className="order-1 font-mono text-5xl tracking-tight text-fg-1 sm:text-7xl">
                   <CountUp value={s.v} />
@@ -114,14 +114,14 @@ export default function Home() {
           {goals.map((g, i) => (
             <li key={g.href} className={`border-b border-line-1 ${i % 2 === 0 ? "md:border-r" : ""}`}>
               <Link href={g.href} className="group flex h-full items-start gap-5 py-8 transition-colors hover:bg-bg-1 md:px-6">
-                <span className="idx pt-2 text-xs text-fg-4">{String(i + 1).padStart(2, "0")}</span>
+                <span className="idx pt-2 text-xs text-fg-3">{String(i + 1).padStart(2, "0")}</span>
                 <span className="flex-1">
                   <span className="block font-serif text-2xl leading-snug text-fg-1 transition-colors group-hover:text-brand sm:text-[28px]">{g.title}</span>
-                  <span className="mt-2 block text-xs text-fg-4">
+                  <span className="mt-2 block text-xs text-fg-3">
                     {g.theme} · {g.count} パターン
                   </span>
                 </span>
-                <ArrowRight className="mt-2 size-5 shrink-0 text-fg-4 transition-all duration-500 ease-[var(--ease-out-expo)] group-hover:translate-x-1 group-hover:text-brand" />
+                <ArrowRight className="mt-2 size-5 shrink-0 text-fg-3 transition-all duration-500 ease-[var(--ease-out-expo)] group-hover:translate-x-1 group-hover:text-brand" />
               </Link>
             </li>
           ))}
@@ -162,7 +162,7 @@ function SectionHead({ id, no, en, title, lead }: { id: string; no: string; en: 
   return (
     <div className="mb-10 grid gap-4 sm:mb-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-end">
       <div>
-        <p className="mb-3 flex items-center gap-3 font-mono text-[11px] tracking-[0.2em] text-fg-4 uppercase">
+        <p className="mb-3 flex items-center gap-3 font-mono text-[11px] tracking-[0.2em] text-fg-3 uppercase">
           <span className="text-brand">{no}</span> {en}
         </p>
         <h2 id={id} className="text-[length:var(--fs-h1)] leading-[1.08] tracking-[-0.01em] text-fg-1">

@@ -140,7 +140,7 @@ export default function ProductTour() {
             </div>
             <p id="tour-body" className="mb-3 text-xs text-muted-foreground">{cur.body}</p>
             <div className="flex items-center gap-1">
-              <div className="mr-auto flex gap-1" aria-label={`${step + 1} / ${steps.length}`}>
+              <div role="img" className="mr-auto flex gap-1" aria-label={`${step + 1} / ${steps.length}`}>
                 {steps.map((s, i) => (
                   <span key={s.id} className={`h-1.5 rounded-full transition-all ${i === step ? "w-4 bg-primary" : "w-1.5 bg-muted-foreground/30"}`} />
                 ))}

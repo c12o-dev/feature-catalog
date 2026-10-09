@@ -29,9 +29,9 @@ export default function PressLogo() {
               onMouseEnter={() => setActive(i)}
               onFocus={() => setActive(i)}
               className={cn(
-                "rounded px-1.5 py-1 text-sm grayscale transition-opacity",
+                "rounded px-1.5 py-1 text-sm grayscale transition-colors",
                 m.cls,
-                active === i ? "text-foreground opacity-100" : "text-muted-foreground opacity-60 hover:opacity-100",
+                active === i ? "text-foreground opacity-100" : "text-muted-foreground hover:text-foreground",
               )}
             >
               {m.name}

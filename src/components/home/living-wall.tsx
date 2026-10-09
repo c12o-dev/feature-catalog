@@ -17,7 +17,7 @@ export type WallTile = { slug: string; code: string; name: string; hue: number }
 export function LivingWall({ tiles }: { tiles: WallTile[] }) {
   const t = Object.fromEntries(tiles.map((x) => [x.slug, x]));
   return (
-    <div aria-label="動くパターンの見本" className="grid grid-cols-2 gap-2 sm:grid-cols-6 sm:gap-3 [grid-auto-rows:118px] sm:[grid-auto-rows:128px]">
+    <div role="group" aria-label="動くパターンの見本" className="grid grid-cols-2 gap-2 sm:grid-cols-6 sm:gap-3 [grid-auto-rows:118px] sm:[grid-auto-rows:128px]">
       <Tile t={t["contribution-heatmap"]} className="col-span-2 sm:col-span-4"><Heatmap /></Tile>
       <Tile t={t["progress-ring"]} className="sm:col-span-2 sm:row-span-2"><Ring /></Tile>
       <Tile t={t["streaming-text"]} className="col-span-2 sm:col-span-4"><Streaming /></Tile>
@@ -119,7 +119,7 @@ function Streaming() {
   const len = reduced ? SENTENCE.length : Math.min(SENTENCE.length, n % (SENTENCE.length + 40));
   return (
     <span className="w-full self-start text-left">
-      <span className="mb-2 flex items-center gap-1.5 font-mono text-[10px] tracking-widest text-fg-4 uppercase">
+      <span className="mb-2 flex items-center gap-1.5 font-mono text-[10px] tracking-widest text-fg-3 uppercase">
         <span className="size-1.5 rounded-full bg-cat" /> streaming
       </span>
       <span className="block text-sm leading-relaxed text-fg-2 sm:text-[15px]">
@@ -170,7 +170,7 @@ function Live() {
   const viewers = 2481 + ((n * 37) % 120);
   return (
     <span className="flex flex-col items-center gap-2">
-      <span className="flex items-center gap-1.5 rounded-sm bg-[#e5484d] px-2 py-0.5 font-mono text-[11px] font-semibold tracking-widest text-white">
+      <span className="flex items-center gap-1.5 rounded-sm bg-[#d4252b] px-2 py-0.5 font-mono text-[11px] font-semibold tracking-widest text-white">
         <span className="relative flex size-1.5"><span className="absolute inline-flex size-full rounded-full bg-white opacity-75 motion-safe:animate-ping" /><span className="relative inline-flex size-1.5 rounded-full bg-white" /></span>
         LIVE
       </span>

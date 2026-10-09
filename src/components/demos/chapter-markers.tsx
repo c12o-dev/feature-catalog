@@ -71,7 +71,7 @@ export default function ChapterMarkers() {
                 i === currentIdx && "bg-muted font-medium",
               )}
             >
-              <span className="w-10 shrink-0 font-mono text-xs text-red-600 tabular-nums dark:text-red-400">{fmt(c.t)}</span>
+              <span className="w-10 shrink-0 font-mono text-xs text-red-700 tabular-nums dark:text-red-400">{fmt(c.t)}</span>
               <span className="truncate">{c.label}</span>
             </button>
           </li>

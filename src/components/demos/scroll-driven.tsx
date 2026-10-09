@@ -17,7 +17,7 @@ export default function ScrollDriven() {
   return (
     <div className="rounded-md border bg-background overflow-hidden">
       <div className="h-1 bg-muted"><div className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-[width]" style={{ width: `${pct}%` }} /></div>
-      <div ref={ref} className="h-44 overflow-y-auto p-3 text-sm space-y-2">
+      <div ref={ref} role="region" aria-label="スクロール領域" tabIndex={0} className="h-44 overflow-y-auto p-3 text-sm space-y-2">
         {Array.from({ length: 20 }, (_, i) => <p key={i}>スクロールすると上部のバーが進みます — 段落 {i + 1}</p>)}
       </div>
     </div>

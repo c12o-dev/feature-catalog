@@ -43,7 +43,7 @@ export default function DmThread() {
   const [draft, setDraft] = useState("");
   const [typingIn, setTypingIn] = useState<{ thread: string; who: string } | null>(null);
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
-  const listRef = useRef<HTMLOListElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
   const inputId = useId();
   const t = threads.find((x) => x.id === activeId)!;
   const typing = typingIn?.thread === activeId ? typingIn.who : null;
@@ -104,7 +104,8 @@ export default function DmThread() {
       </div>
 
       <div role="tabpanel" aria-label={t.title}>
-      <ol ref={listRef} role="log" aria-live="polite" aria-label={`${t.title} とのメッセージ`} className="h-64 space-y-2 overflow-y-auto p-3">
+      <div ref={listRef} role="log" aria-live="polite" aria-label={`${t.title} とのメッセージ`} tabIndex={0} className="h-64 overflow-y-auto p-3 outline-none focus-visible:ring-2 focus-visible:ring-ring">
+      <ol className="space-y-2">
         {t.msgs.map((m, i) => {
           const mine = m.who === ME;
           const showName = t.group && !mine && t.msgs[i - 1]?.who !== m.who;
@@ -136,6 +137,7 @@ export default function DmThread() {
           </li>
         )}
       </ol>
+      </div>
       </div>
 
       <form

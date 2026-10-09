@@ -27,7 +27,7 @@ export default function Candlestick() {
         <span className="font-medium">EXMP 日足</span>
         <span className="text-muted-foreground">{c.d}</span>
         <span>始 {c.o}</span><span>高 {c.h}</span><span>安 {c.l}</span><span>終 {c.c}</span>
-        <span className={up ? "text-emerald-600 dark:text-emerald-400" : "text-red-600 dark:text-red-400"}>
+        <span className={up ? "text-emerald-700 dark:text-emerald-400" : "text-red-600 dark:text-red-400"}>
           {diff >= 0 ? "+" : ""}{diff} ({((diff / c.o) * 100).toFixed(1)}%)
         </span>
       </div>
@@ -42,7 +42,7 @@ export default function Candlestick() {
         {candles.map((k, i) => {
           const x = L + step * i + step / 2;
           const rise = k.c >= k.o;
-          const cls = rise ? "text-emerald-600 dark:text-emerald-400" : "text-red-600 dark:text-red-400";
+          const cls = rise ? "text-emerald-700 dark:text-emerald-400" : "text-red-600 dark:text-red-400";
           return (
             <g
               key={k.d}

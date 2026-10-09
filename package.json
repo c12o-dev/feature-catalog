@@ -20,7 +20,11 @@
     "lint": "eslint --max-warnings 0",
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
-    "e2e": "playwright test"
+    "e2e": "playwright test --project=smoke --project=a11y --project=stages --project=keyboard",
+    "serve": "node scripts/serve-out.mjs",
+    "shots": "playwright test --project=shots",
+    "lhci": "lhci autorun",
+    "check": "pnpm run lint && pnpm run typecheck && pnpm run test && pnpm run build && pnpm run e2e && pnpm run lhci"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",
@@ -47,6 +51,7 @@
     "@fontsource-variable/jetbrains-mono": "^5.3.0",
     "@fontsource/shippori-mincho-b1": "^5.3.0",
     "@fontsource/zen-kaku-gothic-new": "^5.3.0",
+    "@lhci/cli": "^0.15.1",
     "@playwright/test": "^1.64.0",
     "@tailwindcss/postcss": "^4",
     "@types/canvas-confetti": "^1.9.0",
