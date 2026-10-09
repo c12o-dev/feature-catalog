@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Smile } from "lucide-react";
 
 const groups: Record<string, string[]> = {
   Smileys: ["😀", "😃", "😄", "😁", "😆", "😅", "🤣", "😂"],

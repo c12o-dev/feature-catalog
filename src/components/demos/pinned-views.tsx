@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Pin, Plus } from "lucide-react";
+import { Pin } from "lucide-react";
 
 const initial = [
   { name: "今週の Issue", count: 12, pinned: true },

@@ -2,11 +2,21 @@
   "name": "feature-catalog",
   "version": "0.1.0",
   "private": true,
+  "description": "モダン Web の「ユーザーから見える機能」を動くデモ付きで索引化したカタログ",
+  "author": "Seu (https://c12o.net)",
+  "license": "MIT",
+  "homepage": "https://features.c12o.net",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/c12o-dev/feature-catalog.git"
+  },
+  "packageManager": "pnpm@10.33.0",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",

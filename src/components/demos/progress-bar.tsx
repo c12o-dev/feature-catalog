@@ -6,12 +6,12 @@ import { Button } from "@/components/ui/button";
 export default function ProgressBar() {
   const [v, setV] = useState(0);
   const [running, setRunning] = useState(false);
+  const active = running && v < 100;
   useEffect(() => {
-    if (!running) return;
-    if (v >= 100) { setRunning(false); return; }
+    if (!active) return;
     const id = setTimeout(() => setV((x) => Math.min(100, x + 7)), 200);
     return () => clearTimeout(id);
-  }, [v, running]);
+  }, [v, active]);
   return (
     <div className="space-y-2 max-w-md">
       <div className="flex items-baseline justify-between">

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Check } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 
 export default function TrustedDevice() {
