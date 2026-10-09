@@ -72,8 +72,8 @@ export default function ProductTour() {
           <kbd className="ml-auto hidden rounded border bg-background px-1 font-mono text-[10px] sm:inline">⌘K</kbd>
         </div>
         <span ref={(n) => { targets.current.create = n; }} className="inline-flex">
-          <Button size="sm" tabIndex={active ? -1 : 0}>
-            <Plus /> <span className="hidden sm:inline">新規作成</span>
+          <Button size="sm" tabIndex={active ? -1 : 0} aria-label="新規作成">
+            <Plus /> <span aria-hidden className="hidden sm:inline">新規作成</span>
           </Button>
         </span>
       </header>

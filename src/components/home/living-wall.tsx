@@ -1,8 +1,7 @@
 "use client";
 
-import { ViewTransition } from "react";
+import { ViewTransition, useLayoutEffect, useRef } from "react";
 import Link from "next/link";
-import { motion } from "motion/react";
 import { Xray } from "@/components/shell/xray";
 import { cn } from "@/lib/utils";
 import { useTick } from "./use-tick";
@@ -189,14 +188,36 @@ const ORDERS = [[0, 1, 2, 3], [1, 0, 2, 3], [1, 2, 0, 3], [3, 1, 2, 0], [0, 1, 2
 function Sortable() {
   const { n, reduced } = useTick(1700);
   const order = ORDERS[reduced ? 0 : n % ORDERS.length];
+  const els = useRef(new Map<string, HTMLElement>());
+  const tops = useRef(new Map<string, number>());
+
+  // FLIP: after each reorder, play every row from its old position to its new one.
+  // (Hand-rolled so the home page doesn't ship a motion library for one list.)
+  useLayoutEffect(() => {
+    for (const [id, el] of els.current) {
+      const top = el.offsetTop;
+      const prev = tops.current.get(id);
+      tops.current.set(id, top);
+      if (reduced || prev === undefined || prev === top) continue;
+      el.animate([{ transform: `translateY(${prev - top}px)` }, { transform: "none" }], { duration: 520, easing: "cubic-bezier(0.16, 1, 0.3, 1)" });
+    }
+  }, [order, reduced]);
+
   return (
     <span className="flex w-full flex-col gap-1.5 self-center">
       {order.map((i) => (
-        <motion.span key={ITEMS[i].id} layout={!reduced} transition={{ type: "spring", stiffness: 380, damping: 32 }} className="flex items-center gap-2.5 rounded-md border border-line-1 bg-bg-2 px-3 py-2 text-[13px] text-fg-2">
+        <span
+          key={ITEMS[i].id}
+          ref={(el) => {
+            if (el) els.current.set(ITEMS[i].id, el);
+            else els.current.delete(ITEMS[i].id);
+          }}
+          className="flex items-center gap-2.5 rounded-md border border-line-1 bg-bg-2 px-3 py-2 text-[13px] text-fg-2"
+        >
           <span className="grid grid-cols-2 gap-[2px] opacity-40">{Array.from({ length: 6 }, (_, k) => <span key={k} className="size-[3px] rounded-full bg-fg-2" />)}</span>
           <span className="size-2 rounded-full" style={{ background: ITEMS[i].c }} />
           {ITEMS[i].t}
-        </motion.span>
+        </span>
       ))}
     </span>
   );

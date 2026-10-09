@@ -137,6 +137,11 @@
 
 /* ── Stages: neutral surfaces the demos sit on (v2-launch §3.4) ───── */
 [data-stage] {
+  /* Demos stand in for "some other app": they use the platform UI fonts, which also keeps
+     the self-hosted Japanese subsets limited to the site shell's own text (v2-launch §6.2). */
+  --font-sans: system-ui, -apple-system, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic UI", "Meiryo", "Noto Sans JP", "Noto Sans CJK JP", sans-serif;
+  --font-serif: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", "Noto Serif CJK JP", serif;
+  font-family: var(--font-sans);
   --radius: 0.625rem;
   background: var(--background);
   color: var(--foreground);
@@ -357,10 +362,12 @@
   display: inline-block;
   animation: rise 900ms var(--ease-out-expo) both;
 }
+/* Entrances start at opacity 0.01, not 0: an element at exactly 0 isn't an LCP candidate
+   until its animation reveals it, which pushed LCP past the budget (v2-launch §6.2). */
 @keyframes rise {
   from {
     transform: translateY(105%) rotate(4deg);
-    opacity: 0;
+    opacity: 0.01;
   }
   to {
     transform: none;
@@ -374,6 +381,19 @@
 @keyframes fade-up {
   from {
     transform: translateY(16px);
+    opacity: 0.01;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+/* Below-the-fold sections start fully transparent: they're never the LCP element, and at
+   0.01 axe/Lighthouse would audit their (unreadable) mid-animation contrast. */
+@keyframes reveal {
+  from {
+    transform: translateY(16px);
     opacity: 0;
   }
   to {
@@ -385,7 +405,7 @@
 /* Sections reveal as they scroll in (scroll-driven; no JS, no effect without support) */
 @supports (animation-timeline: view()) {
   .reveal {
-    animation: fade-up linear both;
+    animation: reveal linear both;
     animation-timeline: view();
     animation-range: entry 0% entry 40%;
   }

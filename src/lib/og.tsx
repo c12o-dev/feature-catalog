@@ -52,6 +52,19 @@ async function fontsFor(text: string) {
   return fonts;
 }
 
+/** Replaces glyphs the bundled slices can't draw, which Satori would otherwise try to fetch over the network.
+    Geometric shapes (U+25A0–25FF, e.g. ●) fall inside a slice's unicode-range but have no glyph in these faces. */
+async function coveredText(text: string) {
+  const all = (await Promise.all(FACES.map(slices))).flat();
+  const covered = (cp: number) => all.some((s) => s.ranges.some(([lo, hi]) => cp >= lo && cp <= hi));
+  return Array.from(text)
+    .map((ch) => {
+      const cp = ch.codePointAt(0)!;
+      return /\s/.test(ch) || (covered(cp) && !(cp >= 0x25a0 && cp <= 0x25ff)) ? ch : "・";
+    })
+    .join("");
+}
+
 /** OKLCH → sRGB hex (Satori has no oklch()). */
 export function oklchHex(l: number, c: number, h: number) {
   const hr = (h * Math.PI) / 180;
@@ -75,7 +88,11 @@ export function oklchHex(l: number, c: number, h: number) {
   );
 }
 
-export async function renderOg({ eyebrow, title, sub, hue = 75 }: { eyebrow: string; title: string; sub?: string; hue?: number }) {
+export async function renderOg(input: { eyebrow: string; title: string; sub?: string; hue?: number }) {
+  const { hue = 75 } = input;
+  const eyebrow = await coveredText(input.eyebrow);
+  const title = await coveredText(input.title);
+  const sub = input.sub && (await coveredText(input.sub));
   const accent = oklchHex(0.8, 0.13, hue);
   const glow = oklchHex(0.45, 0.12, hue);
   const footer = "features.c12o.net";

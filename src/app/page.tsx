@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { preload } from "react-dom";
 import { ArrowRight, Command } from "lucide-react";
 import { LivingWall } from "@/components/home/living-wall";
 import { CountUp } from "@/components/home/count-up";
@@ -18,6 +19,9 @@ const FEATURED_GOALS: [string, number][] = [
 ];
 
 export default function Home() {
+  // The hero heading's Mincho slices (v2-launch §3.3); everything else loads via fonts.css.
+  for (const f of ["shippori-mincho-b1-common", "shippori-mincho-b1-home"])
+    preload(`/fonts/${f}.woff2`, { as: "font", type: "font/woff2", crossOrigin: "anonymous" });
   const tiles = LIVING_WALL.flatMap((s) => {
     const e = getEntry(s);
     return e ? [{ slug: s, code: e.code, name: e.name, hue: e.category.hue }] : [];
