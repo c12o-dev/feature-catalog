@@ -67,7 +67,8 @@ export function Stage({ demo, href, source, label, size = "card", eager, toolbar
           "group/stage relative isolate overflow-hidden rounded-[var(--radius-md)] border border-black/5 shadow-[0_1px_0_rgba(255,255,255,0.04)_inset,0_24px_60px_-32px_rgba(0,0,0,0.9)] transition-colors duration-300",
           size === "hero" && "min-h-[22rem]",
           size === "card" && "min-h-[12rem]",
-          size === "mini" && "min-h-[7rem]",
+          // fixed so mounting the demo never shifts the page (CLS); taller demos fade out at the bottom
+          size === "mini" && "h-60",
           className,
         )}
       >
@@ -91,7 +92,7 @@ export function Stage({ demo, href, source, label, size = "card", eager, toolbar
             )}
           </div>
         )}
-        <div className={cn("relative", size === "mini" ? "p-3" : size === "hero" ? "p-6 sm:p-10" : "p-5 sm:p-7", toolbar && size !== "mini" && "pt-12 sm:pt-7")}>
+        <div className={cn("relative", size === "mini" ? "h-full p-3 pt-11 [mask-image:linear-gradient(to_bottom,black_82%,transparent)]" : size === "hero" ? "p-6 sm:p-10" : "p-5 sm:p-7", toolbar && size !== "mini" && "pt-12 sm:pt-7")}>
           {Demo && mounted ? (
             <DemoBoundary key={run} label={label}>
               <Demo />

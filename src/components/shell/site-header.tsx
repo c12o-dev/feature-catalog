@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { GlobalCommand } from "@/components/command/global-command";
 import { Xray, XrayToggle } from "@/components/shell/xray";
-import { categoryList, searchIndex, themes } from "@/lib/catalog";
+import { categoryList, themes } from "@/lib/catalog";
 
 export function SiteHeader() {
   const cats = categoryList.map((c) => ({ slug: c.slug, name: c.name, code: c.code, en: c.en, hue: c.hue }));
@@ -20,7 +20,7 @@ export function SiteHeader() {
           <NavLink href="/goals">目的</NavLink>
         </nav>
         <div className="ml-auto flex items-center gap-2">
-          <GlobalCommand items={searchIndex} categories={cats} goals={goals} />
+          <GlobalCommand categories={cats} goals={goals} />
           <XrayToggle className="hidden sm:inline-flex" />
         </div>
       </div>

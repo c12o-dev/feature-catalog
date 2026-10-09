@@ -1,11 +1,20 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import type { SearchItem } from "@/lib/catalog";
+import { loadSearchIndex } from "@/lib/search-index";
 
-export function NotFoundSearch({ items }: { items: SearchItem[] }) {
+export function NotFoundSearch() {
   const [q, setQ] = useState("");
+  const [items, setItems] = useState<SearchItem[]>([]);
+  useEffect(() => {
+    let live = true;
+    loadSearchIndex().then((list) => live && setItems(list));
+    return () => {
+      live = false;
+    };
+  }, []);
   const hits = useMemo(() => {
     const s = q.trim().toLowerCase();
     if (!s) return [];
