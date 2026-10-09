@@ -450,7 +450,7 @@ export const categories: Category[] = [
       { name: "相互フォロー mark", description: "\"follows you\"", example: "Twitter", demo: "MutualFollow" },
       { name: "DM", description: "1:1 / グループ chat", example: "Twitter, Instagram", demo: "DmThread" },
       { name: "グループチャネル", description: "パブリック多人数", example: "Slack, Discord", demo: "GroupChannel" },
-      { name: "スレッド discussion", description: "親→子返信", example: "Slack, Discord", demo: "SocialThread" },
+      { name: "リプライスレッド", description: "親→子返信", example: "Slack, Discord", demo: "SocialThread" },
       { name: "いいね / リアクション", description: "1-tap 評価", example: "Twitter", demo: "SnsReaction" },
       { name: "シェア / リポスト", description: "拡散", example: "Twitter retweet", demo: "RepostButton" },
       { name: "引用 (quote)", description: "元 + コメント", example: "Twitter QRT", demo: "QuotePost" },

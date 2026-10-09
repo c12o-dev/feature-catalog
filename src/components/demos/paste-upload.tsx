@@ -28,6 +28,7 @@ export default function PasteUpload() {
       </div>
       {imgs.length > 0 && (
         <div className="flex flex-wrap gap-2">
+          {/* eslint-disable-next-line @next/next/no-img-element -- blob: URLs from the clipboard cannot go through next/image */}
           {imgs.map((src, i) => <img key={i} src={src} alt="" className="size-16 object-cover rounded border" />)}
         </div>
       )}

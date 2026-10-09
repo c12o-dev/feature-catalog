@@ -6,14 +6,18 @@ import { Textarea } from "@/components/ui/textarea";
 
 const KEY = "demo-form-restore";
 
+function read() {
+  try { return localStorage.getItem(KEY) ?? ""; } catch { return ""; }
+}
+function write(v: string) {
+  try { if (v) localStorage.setItem(KEY, v); else localStorage.removeItem(KEY); } catch {}
+}
+
 export default function FormRestore() {
-  const [v, setV] = useState("");
-  const [restored, setRestored] = useState(false);
-  useEffect(() => {
-    const saved = localStorage.getItem(KEY);
-    if (saved) { setV(saved); setRestored(true); }
-  }, []);
-  useEffect(() => { localStorage.setItem(KEY, v); }, [v]);
+  const [initial] = useState(() => read());
+  const [v, setV] = useState(initial);
+  const [restored, setRestored] = useState(initial !== "");
+  useEffect(() => { write(v); }, [v]);
   return (
     <div className="space-y-2 max-w-md">
       {restored && (
@@ -22,7 +26,7 @@ export default function FormRestore() {
         </div>
       )}
       <Textarea value={v} onChange={(e) => setV(e.target.value)} placeholder="ここに何か入力してページをリロード..." rows={3} />
-      <Button size="sm" variant="ghost" onClick={() => { setV(""); localStorage.removeItem(KEY); setRestored(false); }}>クリア</Button>
+      <Button size="sm" variant="ghost" onClick={() => { setV(""); write(""); setRestored(false); }}>クリア</Button>
     </div>
   );
 }

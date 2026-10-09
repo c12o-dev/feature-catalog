@@ -8,12 +8,10 @@ const FULL = "Tailwind v4 は CSS-first な設定アプローチを採用し、@
 
 export default function StreamingText() {
   const [text, setText] = useState("");
-  const [streaming, setStreaming] = useState(false);
+  const [streaming, setStreaming] = useState(true);
   const [seed, setSeed] = useState(0);
 
   useEffect(() => {
-    setText("");
-    setStreaming(true);
     let i = 0;
     const id = setInterval(() => {
       i++;
@@ -37,7 +35,7 @@ export default function StreamingText() {
         {text}
         {streaming && <span className="inline-block w-2 h-4 bg-foreground animate-pulse ml-0.5 align-middle" />}
       </div>
-      <Button size="sm" variant="outline" onClick={() => setSeed(s => s + 1)} disabled={streaming}>
+      <Button size="sm" variant="outline" onClick={() => { setText(""); setStreaming(true); setSeed((s) => s + 1); }} disabled={streaming}>
         <RefreshCw className="size-3" />
         再生成
       </Button>

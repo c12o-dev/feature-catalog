@@ -2,15 +2,14 @@ import Link from "next/link";
 import { ArrowRight, LayoutGrid, Compass, Sparkles } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { categories } from "@/data/categories";
 import { themes } from "@/data/goals";
-import { demoRegistry } from "@/components/demos/registry";
 
 export default function Home() {
   const totalPatterns = categories.reduce((sum, c) => sum + c.patterns.length, 0);
-  const demoCount = Object.keys(demoRegistry).length;
+  const demoCount = categories.reduce((sum, c) => sum + c.patterns.filter((p) => p.demo).length, 0);
   const totalGoals = themes.reduce((sum, t) => sum + t.goals.length, 0);
 
   // Featured demos: pick patterns that have demos, dedupe by demo name

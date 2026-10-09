@@ -69,7 +69,7 @@ export function GlobalCommand() {
                 <CommandItem
                   key={`${t.id}-${i}`}
                   value={`${g.title} ${t.name}`}
-                  onSelect={() => go(`/g/${t.slug}#${i}`)}
+                  onSelect={() => go(`/g/${t.slug}#g${i}`)}
                 >
                   <span className="text-muted-foreground mr-2">{t.name}</span>
                   {g.title}

@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Trophy, Lock } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Trophy } from "lucide-react";
 
 const initial = [
   { name: "初投稿", desc: "最初の投稿を作成", unlocked: true, icon: "🎉" },

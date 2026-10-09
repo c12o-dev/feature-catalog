@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Search, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 
 const corpus = [
   { t: "ストライプ的な美しい価格表ページの作り方", topic: "pricing" },

@@ -39,3 +39,16 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# qa artifacts
+/docs/qa/shots/
+/.playwright-mcp/
+/.lighthouseci/
+/test-results/
+/playwright-report/
+
+# generated fonts
+/public/fonts/
+
+# wrangler
+/.wrangler/
