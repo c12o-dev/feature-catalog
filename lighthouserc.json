@@ -9,7 +9,7 @@
         "https://localhost:3200/p/contribution-heatmap",
         "https://localhost:3200/g/experience"
       ],
-      "numberOfRuns": 1,
+      "numberOfRuns": 3,
       "settings": {
         "onlyCategories": [
           "performance",
