@@ -116,7 +116,7 @@ export default function CommandPalette({ open, setOpen, recent, categories, goal
                   <div className="idx text-[11px] text-fg-3" style={{ color: `oklch(0.8 0.13 ${selected.h})` }}>
                     {selected.c} · {selected.cat}
                   </div>
-                  <div className="mt-1 font-serif text-xl leading-snug text-fg-1">{selected.n}</div>
+                  <div className="mt-1 text-xl leading-snug text-fg-1">{selected.n}</div>
                   <p className="mt-1 text-sm text-fg-3">{selected.d}</p>
                 </div>
                 {selected.k && (

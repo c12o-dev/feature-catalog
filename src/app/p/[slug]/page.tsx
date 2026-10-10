@@ -9,6 +9,7 @@ import { TagList } from "@/components/catalog/tag-list";
 import { TrackRecent } from "@/components/pattern/track-recent";
 import { Xray } from "@/components/shell/xray";
 import { SITE, aliasesOf, entries, getEntry, goalsFor, neighbours, sourceUrl } from "@/lib/catalog";
+import { headingFonts } from "@/lib/fonts";
 
 export const dynamicParams = false;
 
@@ -30,6 +31,7 @@ export async function generateMetadata({ params }: PageProps<"/p/[slug]">): Prom
 export default async function PatternPage({ params }: PageProps<"/p/[slug]">) {
   const entry = getEntry((await params).slug);
   if (!entry) notFound();
+  const fonts = headingFonts(`c-${entry.category.slug}`);
   const siblings = entries.filter((e) => e.category.slug === entry.category.slug);
   const { prev, next } = neighbours(siblings, entry);
   const goals = goalsFor(entry.slug);
@@ -51,7 +53,7 @@ export default async function PatternPage({ params }: PageProps<"/p/[slug]">) {
   };
 
   return (
-    <div data-hue={entry.category.hue} style={{ "--cat-hue": entry.category.hue } as React.CSSProperties}>
+    <div data-hue={entry.category.hue} style={{ "--cat-hue": entry.category.hue, ...fonts } as React.CSSProperties}>
       <TrackRecent slug={entry.slug} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="mx-auto max-w-[1180px] px-4 pt-10 sm:px-8 sm:pt-16">
@@ -83,7 +85,7 @@ export default async function PatternPage({ params }: PageProps<"/p/[slug]">) {
         <div className="mt-14 grid gap-12 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] lg:gap-16">
           <section aria-labelledby="notes-h">
             <h2 id="notes-h" className="mb-4 font-mono text-[11px] font-normal tracking-[0.18em] text-fg-3 uppercase">実装のポイント</h2>
-            <p className="font-serif text-2xl leading-[1.6] text-fg-1 sm:text-[26px]">{entry.notes ?? entry.description}</p>
+            <p className="text-2xl leading-[1.6] text-fg-1 sm:text-[26px]">{entry.notes ?? entry.description}</p>
             {alias && (
               <p className="mt-6 text-sm text-fg-3">
                 このデモは
@@ -136,7 +138,7 @@ export default async function PatternPage({ params }: PageProps<"/p/[slug]">) {
               {goals.map(({ theme, goal, index }) => (
                 <li key={`${theme.slug}-${index}`} className="border-b border-line-1">
                   <Link href={`/g/${theme.slug}#g${index}`} className="group flex items-baseline justify-between gap-4 py-5 transition-colors hover:text-fg-1">
-                    <span className="font-serif text-xl text-fg-1">{goal.title}</span>
+                    <span className="text-xl text-fg-1">{goal.title}</span>
                     <span className="flex shrink-0 items-center gap-2 text-xs text-fg-3">
                       {theme.name} <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
                     </span>
@@ -151,13 +153,13 @@ export default async function PatternPage({ params }: PageProps<"/p/[slug]">) {
           {prev ? (
             <Link href={`/p/${prev.slug}`} className="flex flex-col gap-2 bg-bg-0 py-8 pr-4 transition-colors hover:bg-bg-1 sm:pr-6">
               <span className="flex items-center gap-2 text-xs text-fg-3"><ArrowLeft className="size-3.5" /> {prev.code}</span>
-              <span className="font-serif text-xl text-fg-1">{prev.name}</span>
+              <span className="text-xl text-fg-1">{prev.name}</span>
             </Link>
           ) : <span className="bg-bg-0" />}
           {next ? (
             <Link href={`/p/${next.slug}`} className="flex flex-col items-end gap-2 bg-bg-0 py-8 pl-4 text-right transition-colors hover:bg-bg-1 sm:pl-6">
               <span className="flex items-center gap-2 text-xs text-fg-3">{next.code} <ArrowRight className="size-3.5" /></span>
-              <span className="font-serif text-xl text-fg-1">{next.name}</span>
+              <span className="text-xl text-fg-1">{next.name}</span>
             </Link>
           ) : <span className="bg-bg-0" />}
         </nav>

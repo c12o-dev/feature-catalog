@@ -11,7 +11,9 @@
 @custom-variant dark (&:where(:not([data-stage="light"], [data-stage="light"] *)));
 
 @theme {
-  --font-sans: "Zen Kaku Gothic New", "Hiragino Sans", "Noto Sans JP", system-ui, sans-serif;
+  /* Body text uses the platform's Japanese UI face; only the Mincho headings and the mono
+     index figures are self-hosted (docs/qa/assumptions.md A11). */
+  --font-sans: system-ui, -apple-system, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic UI", "Meiryo", "Noto Sans JP", "Noto Sans CJK JP", sans-serif;
   --font-serif: "Shippori Mincho B1", "Hiragino Mincho ProN", "Yu Mincho", serif;
   --font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace;
   --font-heading: var(--font-serif);
@@ -130,9 +132,13 @@
 }
 
 /* tokens.css names the amber `--accent`; shadcn uses `--accent` for hover surfaces.
-   Keep the brand colour reachable under its own name. */
+   Keep the brand colour reachable under its own name. tokens.css also sets the portfolio's
+   body face; this site reads body text in the platform font (docs/qa/assumptions.md A11). */
 :root {
   --brand: #e8b458;
+  --font-sans: system-ui, -apple-system, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic UI", "Meiryo", "Noto Sans JP", "Noto Sans CJK JP", sans-serif;
+  /* The Fallback face (assets/fonts/fonts.css) has Shippori's metrics, so headings don't shift when it arrives. */
+  --font-serif: "Shippori Mincho B1", "Shippori Mincho B1 Fallback", "Hiragino Mincho ProN", "Yu Mincho", serif;
 }
 
 /* ── Stages: neutral surfaces the demos sit on (v2-launch §3.4) ───── */
@@ -141,6 +147,7 @@
      the self-hosted Japanese subsets limited to the site shell's own text (v2-launch §6.2). */
   --font-sans: system-ui, -apple-system, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic UI", "Meiryo", "Noto Sans JP", "Noto Sans CJK JP", sans-serif;
   --font-serif: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", "Noto Serif CJK JP", serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "DejaVu Sans Mono", monospace;
   font-family: var(--font-sans);
   --radius: 0.625rem;
   background: var(--background);
