@@ -17,4 +17,5 @@
 | A8 | ⌘K の「戻る」（G8）は Playwright の `page.goBack()` で検証 | ブラウザ UI のショートカット（Alt+←）は Playwright から発火できない。同じ履歴操作 |
 | A9 | `serve-out.mjs`（e2e / LHCI 用の静的サーバー）は brotli/gzip と `_headers` を適用 | 本番の Cloudflare Pages と同条件で転送量・CSP を測るため |
 | A14 | **本人決定（2026-10-10）**: LCP 予算は見出しページ（/c・/p・/g）2.5s、ホーム 1.8s | 見出しページの LCP は Shippori Mincho の到着時刻で決まり（`optional` の実挙動はフォールバック描画）、simulated 計測では 2.0〜2.4s。`lighthouserc.json` の assertMatrix に反映 |
+| A15 | **本人決定（2026-10-10）**: 「より良いサイトにするうえで読み込み時間が延びるなら許容」。CI の Lighthouse ゲートは Performance ≥ 85、TBT ≤ 600ms に。A11y / BP / SEO ≥ 95、CLS 0、JS・フォント予算は据え置き | 計測値は Perf 86〜97、TBT 170〜540ms（CI でも単発で 170 ↔ 378ms と揺れる）。95 / 200ms は目標として `v2-launch.md` §6.2 に残す |
 | A10 | Lighthouse の CLS 予算は `0.001`（G5 の「0」） | Lighthouse は浮動小数で返すため、実質 0 の判定に許容幅を置いた |
