@@ -202,7 +202,7 @@
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-1: oklch(0.64 0.2 264.376); /* lifted from 0.488 so series read ≥ 3:1 on the dark stage */
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
   --chart-4: oklch(0.627 0.265 303.9);
@@ -325,8 +325,10 @@
 }
 
 /* ── Header: shrinks and gains a backdrop as the page scrolls (scroll-driven, CSS only) ── */
+/* The header keeps one height so nothing below it moves while scrolling (CLS). The "shrink" is
+   carried by transform and the surface settling in — §3.1: only transform/opacity animate. */
 .site-header {
-  height: 76px;
+  height: var(--header-h);
   border-bottom: 1px solid transparent;
 }
 @supports (animation-timeline: scroll()) {
@@ -335,18 +337,29 @@
     animation-timeline: scroll(root);
     animation-range: 0 140px;
   }
+  .site-header > div {
+    animation: header-shrink linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 140px;
+  }
 }
 @supports not (animation-timeline: scroll()) {
   .site-header {
-    height: 64px;
     background: rgb(11 11 12 / 0.8);
     border-bottom-color: var(--line-1);
     backdrop-filter: blur(14px) saturate(1.2);
   }
 }
+@keyframes header-shrink {
+  from {
+    transform: translateY(6px);
+  }
+  to {
+    transform: none;
+  }
+}
 @keyframes header-settle {
   to {
-    height: 60px;
     background: rgb(11 11 12 / 0.78);
     border-bottom-color: var(--line-1);
     backdrop-filter: blur(14px) saturate(1.2);

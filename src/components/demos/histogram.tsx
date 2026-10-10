@@ -36,7 +36,7 @@ export default function Histogram() {
   const mean = SCORES.reduce((a, b) => a + b, 0) / SCORES.length;
 
   return (
-    <div className="w-full space-y-3 text-sky-600 dark:text-sky-400">
+    <div className="w-full space-y-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div className="text-sm font-medium text-foreground">
           模試の得点分布{" "}
@@ -95,7 +95,7 @@ export default function Histogram() {
               formatter={(v) => [`${v} 人`, "度数"]}
               contentStyle={{ background: "var(--popover)", color: "var(--popover-foreground)", border: "1px solid var(--border)", borderRadius: 8, fontSize: 12 }}
             />
-            <Bar dataKey="count" fill="currentColor" stroke="var(--card)" strokeWidth={1} isAnimationActive={false} />
+            <Bar dataKey="count" fill="var(--chart-1)" stroke="var(--card)" strokeWidth={1} isAnimationActive={false} />
           </BarChart>
         </ResponsiveContainer>
       </div>

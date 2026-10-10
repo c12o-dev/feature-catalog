@@ -29,10 +29,10 @@ const UNMOUNT_AFTER_MS = 60_000;
  * Neutral frame a demo plays on (v2-launch §3.4). Mounts the demo when it scrolls near the
  * viewport and unmounts it a minute after it leaves, so timers in off-screen demos stop.
  */
-// Rendered heights of each demo in a hero stage at 390 / 1440 (scripts/measure-demos.mjs). The
+// Rendered heights of each demo at 390 / 1440 (scripts/measure-demos.mjs), reserved by hero and card stages. The
 // stage reserves them before the demo chunk arrives, so the swap from skeleton to demo doesn't
 // move the page (CLS). Unmeasured demos fall back to the skeleton's own height.
-const SIZES = demoSizes as Record<string, { sm: number; lg: number }>;
+const SIZES = demoSizes as Record<string, { sm: number; lg: number; csm?: number; clg?: number }>;
 
 export function Stage({ demo, href, source, label, size = "card", eager, toolbar = true, className }: Props) {
   const ref = useRef<HTMLDivElement>(null);
@@ -77,6 +77,7 @@ export function Stage({ demo, href, source, label, size = "card", eager, toolbar
         ref={ref}
         data-stage={theme}
         data-demo={demo}
+        data-size={size}
         style={size === "mini" ? ({ "--mini-h-sm": `${miniSm}px`, "--mini-h-lg": `${miniLg}px` } as React.CSSProperties) : undefined}
         className={cn(
           "group/stage relative isolate overflow-hidden rounded-[var(--radius-md)] border border-black/5 shadow-[0_1px_0_rgba(255,255,255,0.04)_inset,0_24px_60px_-32px_rgba(0,0,0,0.9)] transition-colors duration-300",
@@ -118,8 +119,21 @@ export function Stage({ demo, href, source, label, size = "card", eager, toolbar
         >
           <div
             data-demo-root
-            className={cn(size === "hero" && SIZES[demo] && "min-h-[var(--demo-h-sm)] sm:min-h-[var(--demo-h-lg)]")}
-            style={size === "hero" && SIZES[demo] ? ({ "--demo-h-sm": `${SIZES[demo].sm}px`, "--demo-h-lg": `${SIZES[demo].lg}px` } as React.CSSProperties) : undefined}
+            className={cn(
+              size === "hero" && SIZES[demo] && "min-h-[var(--demo-h-sm)] sm:min-h-[var(--demo-h-lg)]",
+              // cards are measured in place: phone width, and the two-column layout from xl
+              size === "card" && SIZES[demo] && "min-h-[var(--demo-h-csm)] sm:min-h-[var(--demo-h-lg)] xl:min-h-[var(--demo-h-clg)]",
+            )}
+            style={
+              size !== "mini" && SIZES[demo]
+                ? ({
+                    "--demo-h-sm": `${SIZES[demo].sm}px`,
+                    "--demo-h-lg": `${SIZES[demo].lg}px`,
+                    "--demo-h-csm": `${SIZES[demo].csm ?? SIZES[demo].sm}px`,
+                    "--demo-h-clg": `${SIZES[demo].clg ?? SIZES[demo].lg}px`,
+                  } as React.CSSProperties)
+                : undefined
+            }
           >
             {Demo && mounted ? (
               <DemoBoundary key={run} label={label}>

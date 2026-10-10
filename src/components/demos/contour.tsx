@@ -171,7 +171,7 @@ export default function Contour() {
           { label: "店舗", on: showPoints, set: setShowPoints },
         ].map((o) => (
           <label key={o.label} className="inline-flex cursor-pointer items-center gap-1.5">
-            <input type="checkbox" checked={o.on} onChange={(e) => o.set(e.target.checked)} className="size-3.5 accent-rose-600" />
+            <input type="checkbox" checked={o.on} onChange={(e) => o.set(e.target.checked)} className="size-3.5 accent-primary" />
             {o.label}
           </label>
         ))}
@@ -186,7 +186,7 @@ export default function Contour() {
             max={40}
             value={bw}
             onChange={(e) => setBw(Number(e.target.value))}
-            className="min-w-0 flex-1 accent-rose-600"
+            className="min-w-0 flex-1 accent-primary"
           />
           <span className={cn("w-8 text-right tabular-nums text-muted-foreground")}>{bw}</span>
         </div>

@@ -115,7 +115,7 @@ pnpm run lhci           # G4, G5, G6
 進め方:
 1. Phase 0 から順に進め、各 Phase の完了条件を満たしたらコミットする。
 2. Phase 8 では quality-loop.md のラウンドを回す。毎ラウンド、別エージェントに外部採点をさせ、低い方の点を採用する。合格条件（全軸 ≥ 8.5、ゲート全 pass、2 ラウンド連続で新規指摘ゼロ）に達するまで続ける。上限 10 ラウンド。
-3. 判断が要ることは v2-launch.md §11 の仮で進め、質問で止まらない。ドメイン features.c12o.net とリポジトリ公開は確定済み。仮で進めた箇所は docs/qa/assumptions.md に列挙する。
+3. 判断が要ることは v2-launch.md §11 の仮で進め、質問で止まらない。ドメイン feature-catalog.c12o.net とリポジトリ公開は確定済み。仮で進めた箇所は docs/qa/assumptions.md に列挙する。
 4. Node は pnpm を使う。npm / npx は使わない。コミットメッセージに Claude 由来のトレーラーを入れない。
 5. このバージョンの Next.js は学習データと差分がある。node_modules/next/dist/docs/ を先に読む（AGENTS.md）。
 

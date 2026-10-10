@@ -45,7 +45,7 @@
 | D7 | 「代表例」は `verified: true` のものだけ UI に出す。未検証は data に残し UI には出さない。`[unverified]` 表記は廃止 |
 | D8 | 別デモ再利用 19 件は、意味が違うものは固有デモに作り直し、同一でよいものは `aliasOf` を持たせ UI に「〇〇と同じデモ」と明示（§5.3） |
 | D9 | 各パターンに `notes`（実装のポイント 1〜2 文）、`libs`（使用ライブラリ）、`tags` を持たせ、個別ページに出す |
-| D10 | 静的書き出し `output: "export"`。Cloudflare Pages に GitHub 連携でデプロイ。ドメインは `features.c12o.net`（確定） |
+| D10 | 静的書き出し `output: "export"`。Cloudflare Pages に GitHub 連携でデプロイ。ドメインは `feature-catalog.c12o.net`（2026-10-10 変更。当初の確定は `feature-catalog.c12o.net`） |
 | D11 | パッケージマネージャは pnpm。`package-lock.json` を削除し `pnpm-lock.yaml` をコミット。`packageManager` を package.json に明記 |
 | D12 | 外部ネットワークに出るデモは作らない（地図・決済・動画は UI モック）。公開サイトはサードパーティ読み込みゼロ（Cloudflare Web Analytics だけ任意） |
 | D13 | `prefers-reduced-motion` を全演出で尊重。常時動く演出（Living Wall、カウンター、マーキー）は reduce 時に静止画＋手動再生ボタンに落とす |
@@ -132,7 +132,7 @@
 - 上: 索引・名前・説明。shared element はカードの名前とステージ枠。
 - 中: ステージを大きく（最大幅 880px）。ツールバーで light/dark ステージ切替、リセット、「ソースを見る」（§6.7）。
 - 下: `notes`（実装のポイント）、`libs`、`verified` な代表例、このパターンを参照している**目的**の一覧、同カテゴリの前後パターン、`aliasOf` があれば明示。
-- OG 画像を `opengraph-image.tsx` で生成（1200×630、黒地にパターン名を明朝で大きく、右下に `features.c12o.net`。和文フォントは `fs.readFile` でスライスを埋め込む）。
+- OG 画像を `opengraph-image.tsx` で生成（1200×630、黒地にパターン名を明朝で大きく、右下に `feature-catalog.c12o.net`。和文フォントは `fs.readFile` でスライスを埋め込む）。
 
 ### 4.5 目的ページ `/goals` `/g/[slug]`
 
@@ -218,7 +218,7 @@ const nextConfig: NextConfig = {
 ```
 
 - `trailingSlash` は付けない（Pages は `/c/auth` → `c/auth.html` を解決する）。
-- `src/app/sitemap.ts` / `robots.ts` / `opengraph-image.tsx` を静的生成。`metadataBase` は `https://features.c12o.net`。
+- `src/app/sitemap.ts` / `robots.ts` / `opengraph-image.tsx` を静的生成。`metadataBase` は `https://feature-catalog.c12o.net`。
 - `metadata.title` は `{ default: "Feature Catalog", template: "%s · Feature Catalog" }`。
 - JSON-LD: ルートに `WebSite`、`/p/[slug]` に `CreativeWork`（`isPartOf`）。
 - `public/` の Next デフォルト SVG を削除。favicon は SVG（amber の「§」）＋ `apple-touch-icon.png` 180px。
@@ -320,7 +320,7 @@ const nextConfig: NextConfig = {
 | 6 | メタ・OG・sitemap・robots・JSON-LD・favicon・`_headers`・security.txt | Lighthouse SEO 100 |
 | 7 | CI・Playwright・LHCI・Dependabot | CI 緑、予算内 |
 | 8 | 品質ループ（quality-loop.md）を合格まで回す | 合格条件到達 |
-| 9 | Cloudflare Pages 作成、`features.c12o.net` 接続、ポートフォリオ側の項目追加 | 本番 URL で全ゲート合格 |
+| 9 | Cloudflare Pages 作成、`feature-catalog.c12o.net` 接続、ポートフォリオ側の項目追加 | 本番 URL で全ゲート合格 |
 
 Phase 0 と 1 は他に先行する。2〜4 は並行可。8 は 2〜7 の後。
 
@@ -341,7 +341,7 @@ Phase 0 と 1 は他に先行する。2〜4 は並行可。8 は 2〜7 の後。
 
 ## 11. 要確認（本人の判断待ち。決まるまで括弧内の仮で進める）
 
-確定済み（2026-10-09）: ドメインは `features.c12o.net`（D10）、リポジトリは公開（D15）。
+確定済み（2026-10-09）: ドメインは `feature-catalog.c12o.net`（D10）、リポジトリは公開（D15）。
 
 | # | 項目 | 仮 |
 |---|---|---|

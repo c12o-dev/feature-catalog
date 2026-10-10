@@ -5,7 +5,7 @@ import { demoMeta, type DemoMeta } from "@/data/demo-meta.generated";
 
 export const SITE = {
   name: "Feature Catalog",
-  url: "https://features.c12o.net",
+  url: "https://feature-catalog.c12o.net",
   repo: "https://github.com/c12o-dev/feature-catalog",
   author: "Seu (c12o)",
   portal: "https://c12o.net",

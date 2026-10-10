@@ -1,4 +1,4 @@
 Contact: mailto:contact@c12o.net
 Expires: 2027-09-07T00:00:00.000Z
 Preferred-Languages: ja, en
-Canonical: https://features.c12o.net/.well-known/security.txt
+Canonical: https://feature-catalog.c12o.net/.well-known/security.txt

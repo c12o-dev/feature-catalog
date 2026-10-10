@@ -1,4 +1,5 @@
-/* Measures each demo's rendered height in a hero stage (/p pages) at 390 and 1440 and writes
+/* Measures each demo's rendered height at 390 and 1440 — in the hero stage (/p pages: sm, lg) and
+   in place in the category cards (/c pages: csm, clg) — and writes
    src/data/demo-sizes.generated.json, which the Stage uses to reserve the height before the demo
    chunk arrives (no layout shift on swap). Re-run after changing demos:
      pnpm run build && pnpm run measure && pnpm run build
@@ -48,11 +49,50 @@ async function worker() {
   await sm.close();
 }
 await Promise.all(Array.from({ length: 6 }, worker));
+
+// Card stages on category pages: measured in place at phone width and in the two-column layout.
+const catRoutes = [...xml.matchAll(/<loc>https?:\/\/[^/]+(\/c\/[^<]*)<\/loc>/g)].map((m) => m[1]);
+async function measureCards(ctx, route, field) {
+  const page = await ctx.newPage();
+  await page.goto(`http://localhost:${PORT}${route}`, { waitUntil: "load" });
+  await page.evaluate(() => document.querySelectorAll("details").forEach((d) => (d.open = true)));
+  // walk down so every stage comes near the viewport and mounts its demo
+  const h = await page.evaluate(() => document.documentElement.scrollHeight);
+  for (let y = 0; y < h; y += 500) {
+    await page.evaluate((yy) => window.scrollTo(0, yy), y);
+    await page.waitForTimeout(60);
+  }
+  await page.waitForFunction(() => !document.querySelector('[data-size="card"] [data-demo-root] .animate-pulse'), null, { timeout: 15000 }).catch(() => {});
+  await page.waitForTimeout(500);
+  const rows = await page.evaluate(() =>
+    [...document.querySelectorAll('[data-stage][data-size="card"]')].map((s) => {
+      const root = s.querySelector("[data-demo-root]");
+      // measure the demo itself, not the reserved min-height
+      const prev = root.style.minHeight;
+      root.style.minHeight = "0px";
+      root.classList.add("!min-h-0");
+      const h = Math.round(root.getBoundingClientRect().height);
+      root.classList.remove("!min-h-0");
+      root.style.minHeight = prev;
+      return [s.getAttribute("data-demo"), h];
+    }),
+  );
+  await page.close();
+  for (const [key, h] of rows) if (key && sizes[key]) sizes[key][field] = Math.max(sizes[key][field] ?? 0, h);
+}
+const lgCtx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+const smCtx = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+for (const r of catRoutes) {
+  await measureCards(lgCtx, r, "clg");
+  await measureCards(smCtx, r, "csm");
+}
+await lgCtx.close();
+await smCtx.close();
 await browser.close();
 server.kill();
 
 const keys = Object.keys(sizes).sort();
 const out = Object.fromEntries(keys.map((k) => [k, sizes[k]]));
 fs.writeFileSync("src/data/demo-sizes.generated.json", JSON.stringify(out, null, 0) + "\n");
-const changed = keys.filter((k) => !prev[k] || prev[k].sm !== out[k].sm || prev[k].lg !== out[k].lg).length;
+const changed = keys.filter((k) => JSON.stringify(prev[k]) !== JSON.stringify(out[k])).length;
 console.log(`[measure] ${keys.length} demos, ${changed} changed`);
