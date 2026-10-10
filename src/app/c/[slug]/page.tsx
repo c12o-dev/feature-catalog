@@ -1,4 +1,3 @@
-import { Suspense } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -68,11 +67,9 @@ export default async function CategoryPage({ params }: PageProps<"/c/[slug]">) {
         </aside>
         <div>
           {list.map((e) => (
-            // Each card is its own hydration boundary: React then hydrates them one at a time,
-            // yielding in between, instead of one long task for the whole list (TBT).
-            <Suspense key={e.slug} fallback={null}>
-              <PatternCard entry={e} />
-            </Suspense>
+            // No Suspense boundary here: in the static HTML it is written as a pending boundary and
+            // swapped in at the end of the document, which paints the cards twice (CLS).
+            <PatternCard key={e.slug} entry={e} />
           ))}
         </div>
       </div>
