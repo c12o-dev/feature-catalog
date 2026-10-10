@@ -8,7 +8,7 @@
  */
 const MINCHO = "Shippori Mincho B1";
 
-export type FontGroup = "home" | "hub" | `c-${string}`;
+export type FontGroup = "home" | "hub" | `c-${string}` | `g-${string}`;
 
 /** The `--font-serif` value for a page in `group`. */
 export function headingFonts(group: FontGroup) {

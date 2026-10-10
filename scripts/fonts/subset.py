@@ -13,7 +13,8 @@ common slice (characters may repeat across groups). Each group is its own font f
 then the base family (src/lib/fonts.ts), so a page loads exactly: common + its group + mono.
   common   characters on >= 30% of pages, plus ASCII and basic punctuation   (base family)
   home     the home page                                                     (own family)
-  hub      /categories, /goals, /g/*, 404                                    (own family)
+  hub      /categories, /goals, 404                                          (own family)
+  g-<slug> each goal theme page                                              (own family)
   c-<slug> each category page with its /p/* pages                            (own family)
   rest     what only ⌘K / X-ray still need                                   (base family)
 The mono face keeps exclusive slices (it is font-display: optional, so scatter costs nothing
@@ -68,9 +69,10 @@ def consumer_of(route, cats):
     m = re.match(r"^/p/([^/]+)$", route)
     if m:
         return f"c-{cats[m.group(1)]}"
-    if route.startswith("/g/") or route == "/does-not-exist":
-        return "g"
-    return route.strip("/") or "home"
+    m = re.match(r"^/g/([^/]+)$", route)
+    if m:
+        return f"g-{m.group(1)}"
+    return "hub"
 
 
 def plan_slices(real, extra, drawable, cats):
@@ -120,7 +122,7 @@ def plan_groups(real, extra, drawable, cats):
     groups = defaultdict(set)
     for route, chars in real.items():
         c = consumer_of(route, cats)
-        groups[c if c == "home" or c.startswith("c-") else "hub"] |= chars - common
+        groups[c] |= chars - common
     rest = extra - common - set().union(*groups.values())
     out = {"common": common, **{k: v for k, v in groups.items() if v}}
     if rest:
