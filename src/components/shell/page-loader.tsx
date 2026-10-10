@@ -27,7 +27,7 @@ type Phase = "loading" | "complete" | "out" | "gap" | "gone";
 const NEXT = { loading: "complete", complete: "out", out: "gap", gap: "gone" } as const;
 
 /*
- * Loading screen for pages with demos (/c, /g, /p). It is in the static HTML, so nothing shows
+ * Loading screen for pages with many demos (/c, /g; a pattern page has one, so it has none). It is in the static HTML, so nothing shows
  * until the page's preloading stages have loaded and painted their demos and the fonts are in;
  * scrolling afterwards no longer loads or renders demos mid-scroll. Removed from the DOM once it
  * has faded; tests and tooling wait for [data-page-loader] to disappear.

@@ -10,7 +10,6 @@ import { Xray } from "@/components/shell/xray";
 import { SITE, aliasesOf, entries, getEntry, goalsFor, neighbours, sourceUrl } from "@/lib/catalog";
 import { headingFonts } from "@/lib/fonts";
 import { TintHue } from "@/components/shell/tint-hue";
-import { PageLoader } from "@/components/shell/page-loader";
 
 export const dynamicParams = false;
 
@@ -55,7 +54,6 @@ export default async function PatternPage({ params }: PageProps<"/p/[slug]">) {
 
   return (
     <div data-hue={entry.category.hue} style={{ "--cat-hue": entry.category.hue, ...fonts } as React.CSSProperties}>
-      <PageLoader />
       <TintHue hue={entry.category.hue} />
       <TrackRecent slug={entry.slug} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
@@ -93,7 +91,7 @@ export default async function PatternPage({ params }: PageProps<"/p/[slug]">) {
         {entry.demo && (
           <div className="fade-up" style={{ animationDelay: "350ms" }}>
             <Xray slug="theme-toggle" place="bl" className="max-w-[880px]">
-              <Stage demo={entry.demo} label={entry.name} source={source} size="hero" preload />
+              <Stage demo={entry.demo} label={entry.name} source={source} size="hero" eager />
             </Xray>
           </div>
         )}

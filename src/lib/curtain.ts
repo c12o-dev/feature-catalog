@@ -27,5 +27,5 @@ export const curtainServerSnapshot = () => false;
 /** How long the curtain takes to come down before the navigation starts. */
 export const CURTAIN_IN_MS = 200;
 
-/** Pages that show a loading screen (/c, /g, /p). */
-export const LOADER_PAGE = /^\/(c|g|p)\/[^/]+\/?$/;
+/** Pages that show a loading screen (/c, /g). */
+export const LOADER_PAGE = /^\/(c|g)\/[^/]+\/?$/;
