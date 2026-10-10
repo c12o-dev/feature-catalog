@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { ScrollHint, useScrollHint } from "./_scroll-hint";
 
 type NodeDef = { id: string; label: string; col: number };
 const NODES: NodeDef[] = [
@@ -95,6 +96,7 @@ const fmt = (n: number) => n.toLocaleString("ja-JP");
 
 export default function Sankey() {
   const [focus, setFocus] = useState<string | null>(null);
+  const { hint, scrollProps } = useScrollHint<HTMLDivElement>();
   const active = (b: { s: string; t: string; key: string }) => !focus || focus === b.key || focus === b.s || focus === b.t;
   const focusedBand = BANDS.find((b) => b.key === focus);
   const readout = focusedBand
@@ -109,64 +111,70 @@ export default function Sankey() {
         <span className="font-medium">サイト訪問者の流れ（9 月）</span>
         <span className="text-xs text-muted-foreground tabular-nums">訪問 {fmt(colTotals[0])} 人</span>
       </figcaption>
-      <svg viewBox={`-2 -${PAD_TOP} ${W + 4} ${H + PAD_TOP + 2}`} className="h-auto w-full overflow-visible" role="group" aria-label="流入元から商品閲覧・直帰を経て購入・カート放棄・離脱に至る流れ">
-        <g>
-          {BANDS.map((b) => (
-            <path
-              key={b.key}
-              d={b.d}
-              tabIndex={0}
-              role="img"
-              aria-label={`${label(b.s)}から${label(b.t)}へ ${fmt(b.v)} 人`}
-              onMouseEnter={() => setFocus(b.key)}
-              onMouseLeave={() => setFocus(null)}
-              onFocus={() => setFocus(b.key)}
-              onBlur={() => setFocus(null)}
-              className={cn(
-                "cursor-pointer outline-none transition-opacity",
-                b.t === "buy" ? "fill-emerald-500/45 dark:fill-emerald-400/40" : "fill-primary/20",
-                active(b) ? "opacity-100" : "opacity-25",
-                focus === b.key && "opacity-100 [filter:brightness(1.1)]",
-              )}
-            />
-          ))}
-        </g>
-        {NODES.map((n) => {
-          const p = layout[n.id];
-          const pos = placement(n);
-          const tx = pos === "left" ? p.x - 6 : pos === "right" ? p.x + NW + 6 : p.x + NW / 2;
-          const ty = pos === "above" ? p.y - LABEL_DY : p.y + p.h / 2;
-          return (
-            <g
-              key={n.id}
-              tabIndex={0}
-              role="img"
-              aria-label={`${n.label} ${fmt(p.v)} 人`}
-              onMouseEnter={() => setFocus(n.id)}
-              onMouseLeave={() => setFocus(null)}
-              onFocus={() => setFocus(n.id)}
-              onBlur={() => setFocus(null)}
-              className="cursor-pointer outline-none"
-            >
-              <rect x={p.x} y={p.y} width={NW} height={p.h} rx={2} className={n.id === "buy" ? "fill-emerald-600 dark:fill-emerald-400" : "fill-foreground/80"} />
-              <text
-                x={tx}
-                y={ty}
-                dominantBaseline="middle"
-                textAnchor={pos === "left" ? "end" : pos === "right" ? "start" : "middle"}
-                fontSize={12}
-                className="fill-foreground stroke-background [paint-order:stroke]"
-                strokeWidth={3}
-              >
-                {n.label}
-                <tspan className="fill-muted-foreground" dx={4}>
-                  {fmt(p.v)}
-                </tspan>
-              </text>
+      {/* At least 380px wide so the 12-unit labels render ≥ 12px; a phone stage (~310px) scrolls sideways with a hint. */}
+      <div className="relative">
+        <div {...scrollProps} className="overflow-x-auto overflow-y-hidden">
+          <svg viewBox={`-2 -${PAD_TOP} ${W + 4} ${H + PAD_TOP + 2}`} className="block h-auto w-full min-w-[380px] overflow-visible" role="group" aria-label="流入元から商品閲覧・直帰を経て購入・カート放棄・離脱に至る流れ">
+            <g>
+              {BANDS.map((b) => (
+                <path
+                  key={b.key}
+                  d={b.d}
+                  tabIndex={0}
+                  role="img"
+                  aria-label={`${label(b.s)}から${label(b.t)}へ ${fmt(b.v)} 人`}
+                  onMouseEnter={() => setFocus(b.key)}
+                  onMouseLeave={() => setFocus(null)}
+                  onFocus={() => setFocus(b.key)}
+                  onBlur={() => setFocus(null)}
+                  className={cn(
+                    "cursor-pointer outline-none transition-opacity",
+                    b.t === "buy" ? "fill-emerald-500/45 dark:fill-emerald-400/40" : "fill-primary/20",
+                    active(b) ? "opacity-100" : "opacity-25",
+                    focus === b.key && "opacity-100 [filter:brightness(1.1)]",
+                  )}
+                />
+              ))}
             </g>
-          );
-        })}
-      </svg>
+            {NODES.map((n) => {
+              const p = layout[n.id];
+              const pos = placement(n);
+              const tx = pos === "left" ? p.x - 6 : pos === "right" ? p.x + NW + 6 : p.x + NW / 2;
+              const ty = pos === "above" ? p.y - LABEL_DY : p.y + p.h / 2;
+              return (
+                <g
+                  key={n.id}
+                  tabIndex={0}
+                  role="img"
+                  aria-label={`${n.label} ${fmt(p.v)} 人`}
+                  onMouseEnter={() => setFocus(n.id)}
+                  onMouseLeave={() => setFocus(null)}
+                  onFocus={() => setFocus(n.id)}
+                  onBlur={() => setFocus(null)}
+                  className="cursor-pointer outline-none"
+                >
+                  <rect x={p.x} y={p.y} width={NW} height={p.h} rx={2} className={n.id === "buy" ? "fill-emerald-600 dark:fill-emerald-400" : "fill-foreground/80"} />
+                  <text
+                    x={tx}
+                    y={ty}
+                    dominantBaseline="middle"
+                    textAnchor={pos === "left" ? "end" : pos === "right" ? "start" : "middle"}
+                    fontSize={12}
+                    className="fill-foreground stroke-background [paint-order:stroke]"
+                    strokeWidth={3}
+                  >
+                    {n.label}
+                    <tspan className="fill-muted-foreground" dx={4}>
+                      {fmt(p.v)}
+                    </tspan>
+                  </text>
+                </g>
+              );
+            })}
+          </svg>
+        </div>
+        <ScrollHint show={hint} className="from-background" />
+      </div>
       <p aria-live="polite" className="min-h-5 text-xs text-muted-foreground tabular-nums">
         {readout}
       </p>

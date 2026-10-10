@@ -47,6 +47,8 @@ export type Entry = Pattern & {
   /** §01-03 */
   code: string;
   notes?: string;
+  /** 使いどころ: what it does for the user and when it earns its place */
+  when?: string;
   tags: Tag[];
   meta?: DemoMeta;
 };
@@ -66,6 +68,7 @@ export const entries: Entry[] = categoryList.flatMap((c) =>
     index: i,
     code: `§${pad(c.id)}-${pad(i + 1)}`,
     notes: patternNotes[p.slug]?.notes,
+    when: patternNotes[p.slug]?.when,
     tags: patternNotes[p.slug]?.tags ?? [],
     meta: p.demo ? demoMeta[p.demo] : undefined,
   })),

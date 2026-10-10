@@ -289,7 +289,7 @@
 | `social-login` | ✓ | ✓ | – | ✓ | ✓ | ✓ | ✓ | ✓ | – |
 | `soft-paywall` | ✓ | ✓ | – | – | – | ✓ | ✓ | ✓ | – |
 | `sortable-list` | ✓ | ✓ | – | – | – | ✓ | ✓ | ✓ | – |
-| `sparkline` | ✓ | ✓ | – | – | – | ✓ | ✓ | ✓ | ✓ |
+| `sparkline` | ✓ | ✓ | – | – | – | ✓ | ✓ | ✓ | – |
 | `spinner` | ✓ | ✓ | – | ✓ | ✓ | ✓ | ✓ | ✓ | – |
 | `split-view` | ✓ | ✓ | – | – | – | ✓ | ✓ | ✓ | – |
 | `spring-scroll` | ✓ | ✓ | – | – | ✓ | ✓ | ✓ | ✓ | – |
@@ -373,7 +373,7 @@
 | 6 | 333 | 0 | 0 |
 | 7 | 333 | 0 | 0 |
 | 8 | 333 | 0 | 0 |
-| 9 | 6 | 0 | 327 |
+| 9 | 5 | 0 | 328 |
 
 - ✗ 合計: 0 件（0 デモ）
 - 項目 5 で `motion-safe:` を書かず globals.css の D13 グローバル規則（`prefers-reduced-motion: reduce` で全要素の animation/transition を停止）に依存している CSS-only デモ: 43 件

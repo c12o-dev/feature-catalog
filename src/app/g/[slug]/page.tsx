@@ -61,7 +61,7 @@ export default async function ThemePage({ params }: PageProps<"/g/[slug]">) {
                         <span className="text-xl text-fg-1 decoration-cat/60 underline-offset-4 group-hover:underline">{e.name}</span>
                       </Link>
                       <p className="text-sm text-fg-2">{e.description}</p>
-                      {e.notes && <p className="border-l border-cat/40 pl-4 text-sm leading-relaxed text-fg-3">{e.notes}</p>}
+                      {(e.when ?? e.notes) && <p className="border-l border-cat/40 pl-4 text-sm leading-relaxed text-fg-3">{e.when ?? e.notes}</p>}
                       <span className="text-[11px] text-fg-3">{e.category.name}</span>
                     </div>
                     {e.demo && <Stage demo={e.demo} label={e.name} href={`/p/${e.slug}`} size="mini" />}

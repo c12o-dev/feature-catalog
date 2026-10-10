@@ -53,14 +53,14 @@ async function fontsFor(text: string) {
 }
 
 /** Replaces glyphs the bundled slices can't draw, which Satori would otherwise try to fetch over the network.
-    Geometric shapes (U+25A0–25FF, e.g. ●) fall inside a slice's unicode-range but have no glyph in these faces. */
+    Geometric shapes and symbols (U+25A0–27BF, e.g. ● ★) fall inside a slice's unicode-range but have no glyph in these faces. */
 async function coveredText(text: string) {
   const all = (await Promise.all(FACES.map(slices))).flat();
   const covered = (cp: number) => all.some((s) => s.ranges.some(([lo, hi]) => cp >= lo && cp <= hi));
   return Array.from(text)
     .map((ch) => {
       const cp = ch.codePointAt(0)!;
-      return /\s/.test(ch) || (covered(cp) && !(cp >= 0x25a0 && cp <= 0x25ff)) ? ch : "・";
+      return /\s/.test(ch) || (covered(cp) && !(cp >= 0x25a0 && cp <= 0x27bf)) ? ch : "・";
     })
     .join("");
 }
