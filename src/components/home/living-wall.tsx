@@ -1,6 +1,6 @@
 "use client";
 
-import { ViewTransition, useLayoutEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import Link from "next/link";
 import { Xray } from "@/components/shell/xray";
 import { cn } from "@/lib/utils";
@@ -11,7 +11,7 @@ export type WallTile = { slug: string; code: string; name: string; hue: number }
 /*
  * Living Wall (v2-launch §4.1): twelve tiny, self-running renditions of catalog patterns.
  * Built in the shell's own visual language rather than by shrinking the full demos.
- * Every tile is a link that morphs into its pattern page (shared-element view transition).
+ * Every tile links to its pattern page (through the transition curtain).
  */
 export function LivingWall({ tiles }: { tiles: WallTile[] }) {
   const t = Object.fromEntries(tiles.map((x) => [x.slug, x]));
@@ -43,11 +43,9 @@ function Tile({ t, className, children }: { t?: WallTile; className?: string; ch
         style={{ "--cat-hue": t.hue } as React.CSSProperties}
         className="group/tile relative flex w-full overflow-hidden rounded-xl border border-line-1 bg-bg-1/80 transition-[border-color,transform,background-color] duration-500 ease-[var(--ease-out-expo)] hover:-translate-y-0.5 hover:border-cat/50 hover:bg-bg-2 focus-visible:border-cat"
       >
-        <ViewTransition name={`stage-${t.slug}`}>
-          <span aria-hidden className="absolute inset-0 flex items-center justify-center p-4">
-            {children}
-          </span>
-        </ViewTransition>
+        <span aria-hidden className="absolute inset-0 flex items-center justify-center p-4">
+          {children}
+        </span>
         <span className="pointer-events-none absolute inset-x-0 bottom-0 flex translate-y-1 items-center gap-2 bg-gradient-to-t from-bg-0/95 via-bg-0/70 to-transparent px-3 pt-6 pb-2 text-[11px] opacity-0 transition-all duration-300 group-hover/tile:translate-y-0 group-hover/tile:opacity-100 group-focus-visible/tile:translate-y-0 group-focus-visible/tile:opacity-100">
           <span className="idx text-cat">{t.code}</span>
           <span className="truncate text-fg-1">{t.name}</span>

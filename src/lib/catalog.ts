@@ -136,7 +136,7 @@ export const LIVING_WALL = [
 
 export const XRAY_SLUGS = [
   "sticky-shrink", "command-palette", "version-footer", "skip-link", "cursor-follower", "ambient-orb",
-  "counter-tick", "anchor-toc", "view-transition", "empty-state", "scroll-driven", "hover-micro",
+  "counter-tick", "anchor-toc", "empty-state", "scroll-driven", "hover-micro",
   "focus-ring", "theme-toggle", "skeleton-loader", "breadcrumb", "progress-bar", "recently-viewed",
   "prefetch-on-hover", "typeahead-search", "reduced-motion", ...LIVING_WALL,
 ];

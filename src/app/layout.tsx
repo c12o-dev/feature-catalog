@@ -3,6 +3,7 @@ import "./globals.css";
 import { SiteHeader } from "@/components/shell/site-header";
 import { SiteFooter } from "@/components/shell/site-footer";
 import { CursorLight } from "@/components/shell/cursor-light";
+import { TransitionCurtain } from "@/components/shell/transition-curtain";
 import { XrayProvider, type XrayInfo } from "@/components/shell/xray";
 import { Toaster } from "@/components/ui/sonner";
 import { SITE, XRAY_SLUGS, getEntry } from "@/lib/catalog";
@@ -69,6 +70,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             {children}
           </main>
           <SiteFooter />
+          <TransitionCurtain />
           <Toaster position="bottom-center" />
         </XrayProvider>
       </body>

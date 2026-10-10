@@ -322,6 +322,11 @@
   ::view-transition-new(*) {
     animation: none !important;
   }
+  /* the loading screen and curtain still crossfade, briefly, so the page doesn't cut in */
+  .loader-fade {
+    transition-duration: 150ms !important;
+    transition-delay: 0ms !important;
+  }
 }
 
 /* ── Header: shrinks and gains a backdrop as the page scrolls (scroll-driven, CSS only) ── */
@@ -415,6 +420,29 @@
   to {
     transform: none;
     opacity: 1;
+  }
+}
+
+/* Entrances wait behind the loading screen and the transition curtain: held at their first frame
+   while [data-page-loader] exists, they all start (with their own delays) once it has gone. */
+html:has([data-page-loader]) :is(.fade-up, .fade-in, .rise-char) {
+  animation-play-state: paused;
+}
+
+/* Opacity only: for wrappers holding position: fixed children (a transform would capture them). */
+.fade-in {
+  animation: fade-in 900ms var(--ease-out-expo) both;
+}
+@keyframes fade-in {
+  from {
+    opacity: 0.01;
+  }
+}
+
+/* PageLoader's § and bar arriving behind the transition curtain */
+@keyframes loader-in {
+  from {
+    opacity: 0;
   }
 }
 

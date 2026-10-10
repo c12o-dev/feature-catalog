@@ -45,15 +45,15 @@ export default async function CategoryPage({ params }: PageProps<"/c/[slug]">) {
         <Breadcrumb items={[{ href: "/categories", label: "カテゴリ" }, { label: category.name }]} />
         <div className="mt-10 grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
           <div>
-            <p className="idx fade-up mb-4 text-sm text-cat">{category.code}</p>
-            <h1 className="fade-up text-[length:var(--fs-display)] leading-[1] tracking-[-0.02em] text-fg-1" style={{ animationDelay: "80ms" }}>
+            <p className="idx fade-up mb-4 text-sm text-cat" style={{ animationDelay: "70ms" }}>{category.code}</p>
+            <h1 className="fade-up text-[length:var(--fs-display)] leading-[1] tracking-[-0.02em] text-fg-1" style={{ animationDelay: "140ms" }}>
               {category.name}
             </h1>
-            <p className="fade-up mt-4 font-serif text-2xl text-fg-3 italic sm:text-3xl" style={{ animationDelay: "160ms" }}>
+            <p className="fade-up mt-4 font-serif text-2xl text-fg-3 italic sm:text-3xl" style={{ animationDelay: "210ms" }}>
               {category.en}
             </p>
           </div>
-          <dl className="fade-up flex gap-10 font-mono text-sm" style={{ animationDelay: "240ms" }}>
+          <dl className="fade-up flex gap-10 font-mono text-sm" style={{ animationDelay: "210ms" }}>
             <div>
               <dt className="text-[10px] tracking-[0.16em] text-fg-3 uppercase">Patterns</dt>
               <dd className="mt-1 text-3xl text-fg-1">{list.length}</dd>
@@ -67,14 +67,15 @@ export default async function CategoryPage({ params }: PageProps<"/c/[slug]">) {
       </header>
 
       <div className="mx-auto grid max-w-[1440px] gap-10 px-4 pt-10 sm:px-8 lg:pt-0 lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-16">
-        <aside>
+        {/* opacity only: the phone TOC bar inside is position: fixed */}
+        <aside className="fade-in" style={{ animationDelay: "280ms" }}>
           <Toc items={list.map((e) => ({ slug: e.slug, name: e.name, code: e.code }))} />
         </aside>
         <div>
-          {list.slice(0, FIRST).map((e) => (
+          {list.slice(0, FIRST).map((e, i) => (
             // No Suspense boundary here: in the static HTML it is written as a pending boundary and
             // swapped in at the end of the document, which paints the cards twice (CLS).
-            <PatternCard key={e.slug} entry={e} preload />
+            <PatternCard key={e.slug} entry={e} preload enter={i < 2 ? 280 + i * 70 : undefined} />
           ))}
           {list.length > FIRST && (
             // The rest is folded so long categories don't scroll for 20,000px; its demos load with the page
