@@ -49,12 +49,6 @@
                 "minScore": 0.95
               }
             ],
-            "largest-contentful-paint": [
-              "error",
-              {
-                "maxNumericValue": 1800
-              }
-            ],
             "cumulative-layout-shift": [
               "error",
               {
@@ -83,16 +77,28 @@
               {
                 "maxNumericValue": 184320
               }
+            ],
+            "largest-contentful-paint": [
+              "error",
+              {
+                "maxNumericValue": 1800
+              }
             ]
           }
         },
         {
-          "matchingUrlPattern": "/c/",
+          "matchingUrlPattern": "/(c|p|g)/",
           "assertions": {
             "resource-summary:script:size": [
               "error",
               {
                 "maxNumericValue": 204800
+              }
+            ],
+            "largest-contentful-paint": [
+              "error",
+              {
+                "maxNumericValue": 2500
               }
             ]
           }
