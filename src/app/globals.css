@@ -184,7 +184,7 @@
 [data-stage="dark"] {
   color-scheme: dark;
   border-color: rgba(255, 255, 255, 0.1);
-  --background: oklch(0.21 0 0);
+  --background: oklch(0.24 0 0);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
   --card-foreground: oklch(0.985 0 0);
@@ -220,6 +220,12 @@
     text-rendering: optimizeLegibility;
     line-break: strict;
     scroll-padding-top: calc(var(--header-h) + 16px);
+  }
+  /* category pages on phones carry a table-of-contents bar under the header */
+  @media (width < 64rem) {
+    html:has([data-toc-bar]) {
+      scroll-padding-top: calc(var(--header-h) + 3.25rem);
+    }
   }
   body {
     @apply bg-background text-foreground;
@@ -306,6 +312,7 @@
   ::before,
   ::after {
     animation-duration: 0.001ms !important;
+    animation-delay: 0ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;

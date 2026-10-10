@@ -7,6 +7,8 @@ export default function ScrollDriven() {
   const [pct, setPct] = useState(0);
   useEffect(() => {
     const el = ref.current!;
+    // start a little way in so the progress bar is visible before anyone scrolls
+    el.scrollTop = (el.scrollHeight - el.clientHeight) * 0.25;
     const onScroll = () => {
       const max = el.scrollHeight - el.clientHeight;
       setPct((el.scrollTop / max) * 100);

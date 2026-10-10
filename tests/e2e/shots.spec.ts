@@ -57,6 +57,7 @@ for (const width of [1440, 390]) {
             return b.length;
           });
           if (toggled > 0) {
+            await page.evaluate(() => document.querySelector("[data-stage]")?.scrollIntoView({ block: "center" }));
             await page.waitForTimeout(1500);
             // every stage on the page must actually be light now (G11)
             const notLight = await page.evaluate(() => [...document.querySelectorAll<HTMLElement>("[data-stage]")].filter((s) => s.dataset.stage !== "light").map((s) => s.dataset.demo));

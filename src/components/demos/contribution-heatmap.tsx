@@ -37,11 +37,11 @@ export default function ContributionHeatmap() {
         <div className="text-xs text-muted-foreground">{total} contributions</div>
       </div>
       <div className="overflow-x-auto">
-        <div className="grid grid-flow-col grid-rows-7 gap-[3px] w-fit">
+        <div className="grid w-full min-w-[320px] max-w-2xl auto-cols-fr grid-flow-col grid-rows-7 gap-[3px]">
           {cells.map((level, i) => (
             <div
               key={i}
-              className={`size-3 rounded-[2px] ${levelClass[level]}`}
+              className={`aspect-square w-full rounded-[2px] ${levelClass[level]}`}
               title={`Level ${level}`}
             />
           ))}

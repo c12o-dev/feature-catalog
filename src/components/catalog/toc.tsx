@@ -68,16 +68,17 @@ export function Toc({ items }: { items: { slug: string; name: string; code: stri
   return (
     <>
       {/* Phones / tablets: a pill with the position opens the same list as a sheet. */}
-      <div className="lg:hidden">
+      <div data-toc-bar className="lg:hidden">
         <button
           type="button"
           onClick={() => setOpen((o) => !o)}
           aria-expanded={open}
           aria-controls="toc-sheet"
-          className="fixed bottom-4 left-4 z-[60] inline-flex h-9 items-center gap-2 rounded-full border border-line-2 bg-bg-1/90 px-3 font-mono text-[11px] tracking-[0.14em] text-fg-1 shadow-2xl backdrop-blur"
+          className="fixed inset-x-0 top-[var(--header-h)] z-40 flex h-10 items-center gap-3 border-b border-line-1 bg-bg-0/90 px-4 font-mono text-[11px] tracking-[0.14em] text-fg-1 backdrop-blur"
         >
           <span className="text-cat">{counter}</span>
-          <span className="text-fg-3">目次</span>
+          <span className="truncate text-fg-2">{items[idx]?.name}</span>
+          <span className="ml-auto text-fg-3">目次 ▾</span>
         </button>
         {open && (
           <>

@@ -492,7 +492,7 @@ export const demoMeta: Record<string, DemoMeta> = {
     "apis": [
       "requestAnimationFrame"
     ],
-    "lines": 141
+    "lines": 142
   },
   "CompareSlider": {
     "file": "src/components/demos/compare-slider.tsx",
@@ -2103,7 +2103,7 @@ export const demoMeta: Record<string, DemoMeta> = {
     "file": "src/components/demos/scroll-driven.tsx",
     "libs": [],
     "apis": [],
-    "lines": 26
+    "lines": 28
   },
   "SdkDownload": {
     "file": "src/components/demos/sdk-download.tsx",
