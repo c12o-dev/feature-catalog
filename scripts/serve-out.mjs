@@ -1,6 +1,6 @@
 /* Minimal static server for `out/` that mimics Cloudflare Pages closely enough for tests:
-   clean URLs (/c/auth → c/auth.html), 404.html fallback, brotli/gzip for text like Pages, and the headers from public/_headers
-   (so CSP violations surface as console errors in e2e).
+   clean URLs (/c/auth → c/auth.html), 404.html fallback, brotli/gzip for text like Pages, and the
+   headers from public/_headers (so CSP violations surface as console errors in e2e).
    Usage: node scripts/serve-out.mjs [port] */
 import http from "node:http";
 import fs from "node:fs";
@@ -42,6 +42,20 @@ function parseHeaders() {
 }
 const RULES = parseHeaders();
 
+// Compressed once per file and kept, like an edge cache; so brotli can run at full quality
+// without the CPU cost showing up in the measurements.
+const cache = new Map();
+function compressed(file, enc) {
+  const key = `${enc}:${file}:${fs.statSync(file).mtimeMs}`;
+  let buf = cache.get(key);
+  if (!buf) {
+    const raw = fs.readFileSync(file);
+    buf = enc === "br" ? zlib.brotliCompressSync(raw) : zlib.gzipSync(raw);
+    cache.set(key, buf);
+  }
+  return buf;
+}
+
 function resolve(urlPath) {
   const clean = path.normalize(decodeURIComponent(urlPath)).replace(/^(\.\.[/\\])+/, "");
   const candidates = clean.endsWith("/") ? [path.join(clean, "index.html")] : [clean, `${clean}.html`, path.join(clean, "index.html")];
@@ -69,10 +83,6 @@ http
       res.setHeader("Vary", "Accept-Encoding");
     }
     res.writeHead(status);
-    const stream = fs.createReadStream(target);
-    // Quality 5 roughly matches what Cloudflare serves; the zlib default (11) is CPU-heavy per request.
-    if (enc === "br") stream.pipe(zlib.createBrotliCompress({ params: { [zlib.constants.BROTLI_PARAM_QUALITY]: 5 } })).pipe(res);
-    else if (enc === "gzip") stream.pipe(zlib.createGzip()).pipe(res);
-    else stream.pipe(res);
+    res.end(enc ? compressed(target, enc) : fs.readFileSync(target));
   })
   .listen(PORT, () => console.log(`serving out/ on http://localhost:${PORT}`));

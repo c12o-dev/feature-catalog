@@ -15,7 +15,7 @@
     "gen": "node scripts/gen-demos.mjs",
     "fonts": "node scripts/build-fonts.mjs",
     "dev": "node scripts/gen-demos.mjs && node scripts/build-fonts.mjs && next dev",
-    "build": "node scripts/gen-demos.mjs && node scripts/build-fonts.mjs && next build",
+    "build": "node scripts/gen-demos.mjs && node scripts/build-fonts.mjs && next build && node scripts/inject-font-preloads.mjs",
     "preview": "wrangler pages dev out",
     "lint": "eslint --max-warnings 0",
     "typecheck": "next typegen && tsc --noEmit",

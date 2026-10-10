@@ -5,6 +5,7 @@ import { ArrowRight } from "lucide-react";
 import { Breadcrumb } from "@/components/catalog/breadcrumb";
 import { Stage } from "@/components/stage/stage";
 import { categoryList, getCategory, getEntry, getTheme, neighbours, themes } from "@/lib/catalog";
+import { headingFonts } from "@/lib/fonts";
 
 export const dynamicParams = false;
 
@@ -25,10 +26,11 @@ export async function generateMetadata({ params }: PageProps<"/g/[slug]">): Prom
 export default async function ThemePage({ params }: PageProps<"/g/[slug]">) {
   const theme = getTheme((await params).slug);
   if (!theme) notFound();
+  const fonts = headingFonts("hub");
   const { prev, next } = neighbours(themes, theme);
 
   return (
-    <div className="mx-auto max-w-[1180px] px-4 pt-10 sm:px-8 sm:pt-16">
+    <div className="mx-auto max-w-[1180px] px-4 pt-10 sm:px-8 sm:pt-16" style={fonts}>
       <Breadcrumb items={[{ href: "/goals", label: "目的" }, { label: theme.name }]} />
       <h1 className="fade-up mt-10 mb-16 text-[length:var(--fs-display)] leading-[1] text-fg-1">{theme.name}</h1>
       <div className="space-y-24">
@@ -55,7 +57,7 @@ export default async function ThemePage({ params }: PageProps<"/g/[slug]">) {
                     <div className="flex items-baseline justify-between gap-3">
                       <Link href={`/p/${e.slug}`} className="group">
                         <span className="idx mr-2 text-[11px] text-cat">{e.code}</span>
-                        <span className="font-serif text-xl text-fg-1 decoration-cat/60 underline-offset-4 group-hover:underline">{e.name}</span>
+                        <span className="text-xl text-fg-1 decoration-cat/60 underline-offset-4 group-hover:underline">{e.name}</span>
                       </Link>
                     </div>
                     <p className="text-sm text-fg-3">{e.description}</p>

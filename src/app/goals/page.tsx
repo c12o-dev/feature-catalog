@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Breadcrumb } from "@/components/catalog/breadcrumb";
 import { stats, themes } from "@/lib/catalog";
+import { headingFonts } from "@/lib/fonts";
 
 export const metadata: Metadata = {
   title: "目的から探す",
@@ -11,8 +12,9 @@ export const metadata: Metadata = {
 };
 
 export default function GoalsPage() {
+  const fonts = headingFonts("hub");
   return (
-    <div className="mx-auto max-w-[1440px] px-4 pt-10 sm:px-8 sm:pt-16">
+    <div className="mx-auto max-w-[1440px] px-4 pt-10 sm:px-8 sm:pt-16" style={fonts}>
       <Breadcrumb items={[{ label: "目的" }]} />
       <header className="mt-10 mb-16 grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-end">
         <h1 className="fade-up text-[length:var(--fs-display)] leading-[1] tracking-[-0.02em] text-fg-1">目的から</h1>
@@ -33,7 +35,7 @@ export default function GoalsPage() {
               {t.goals.map((g, i) => (
                 <li key={g.title} className="border-b border-line-1">
                   <Link href={`/g/${t.slug}#g${i}`} className="group flex items-baseline gap-4 py-5 transition-colors hover:bg-bg-1 sm:px-4">
-                    <span className="flex-1 font-serif text-xl leading-snug text-fg-1 transition-colors group-hover:text-brand sm:text-2xl">{g.title}</span>
+                    <span className="flex-1 text-xl leading-snug text-fg-1 transition-colors group-hover:text-brand sm:text-2xl">{g.title}</span>
                     <span className="shrink-0 font-mono text-xs text-fg-3">{g.patterns.length} 件</span>
                     <ArrowRight className="size-4 shrink-0 self-center text-fg-3 transition-transform group-hover:translate-x-1" />
                   </Link>

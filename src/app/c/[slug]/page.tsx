@@ -6,6 +6,7 @@ import { PatternCard } from "@/components/catalog/pattern-card";
 import { Toc } from "@/components/catalog/toc";
 import { Breadcrumb } from "@/components/catalog/breadcrumb";
 import { categoryList, entries, getCategory, neighbours } from "@/lib/catalog";
+import { headingFonts } from "@/lib/fonts";
 
 export const dynamicParams = false;
 
@@ -27,11 +28,12 @@ export async function generateMetadata({ params }: PageProps<"/c/[slug]">): Prom
 export default async function CategoryPage({ params }: PageProps<"/c/[slug]">) {
   const category = getCategory((await params).slug);
   if (!category) notFound();
+  const fonts = headingFonts(`c-${category.slug}`);
   const list = entries.filter((e) => e.category.slug === category.slug);
   const { prev, next } = neighbours(categoryList, category);
 
   return (
-    <div data-hue={category.hue} style={{ "--cat-hue": category.hue } as React.CSSProperties}>
+    <div data-hue={category.hue} style={{ "--cat-hue": category.hue, ...fonts } as React.CSSProperties}>
       <header className="mx-auto max-w-[1440px] px-4 pt-10 pb-12 sm:px-8 sm:pt-16 sm:pb-20">
         <Breadcrumb items={[{ href: "/categories", label: "カテゴリ" }, { label: category.name }]} />
         <div className="mt-10 grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
@@ -72,13 +74,13 @@ export default async function CategoryPage({ params }: PageProps<"/c/[slug]">) {
         {prev ? (
           <Link href={`/c/${prev.slug}`} data-hue={prev.hue} className="group flex flex-col gap-2 bg-bg-0 px-4 py-8 transition-colors hover:bg-bg-1 sm:px-6">
             <span className="flex items-center gap-2 text-xs text-fg-3"><ArrowLeft className="size-3.5" /> 前のカテゴリ</span>
-            <span className="font-serif text-2xl text-fg-1">{prev.name}</span>
+            <span className="text-2xl text-fg-1">{prev.name}</span>
           </Link>
         ) : <span className="bg-bg-0" />}
         {next ? (
           <Link href={`/c/${next.slug}`} data-hue={next.hue} className="group flex flex-col items-end gap-2 bg-bg-0 px-4 py-8 text-right transition-colors hover:bg-bg-1 sm:px-6">
             <span className="flex items-center gap-2 text-xs text-fg-3">次のカテゴリ <ArrowRight className="size-3.5" /></span>
-            <span className="font-serif text-2xl text-fg-1">{next.name}</span>
+            <span className="text-2xl text-fg-1">{next.name}</span>
           </Link>
         ) : <span className="bg-bg-0" />}
       </nav>

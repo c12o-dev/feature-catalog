@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { preload } from "react-dom";
+import { headingFonts } from "@/lib/fonts";
 import { ArrowRight, Command } from "lucide-react";
 import { LivingWall } from "@/components/home/living-wall";
 import { CountUp } from "@/components/home/count-up";
@@ -19,9 +19,7 @@ const FEATURED_GOALS: [string, number][] = [
 ];
 
 export default function Home() {
-  // The hero heading's Mincho slices (v2-launch §3.3); everything else loads via fonts.css.
-  for (const f of ["shippori-mincho-b1-common", "shippori-mincho-b1-home"])
-    preload(`/fonts/${f}.woff2`, { as: "font", type: "font/woff2", crossOrigin: "anonymous" });
+  const fonts = headingFonts("home");
   const tiles = LIVING_WALL.flatMap((s) => {
     const e = getEntry(s);
     return e ? [{ slug: s, code: e.code, name: e.name, hue: e.category.hue }] : [];
@@ -33,7 +31,7 @@ export default function Home() {
   });
 
   return (
-    <>
+    <div style={fonts}>
       {/* ── Hero ── */}
       <section className="relative mx-auto grid max-w-[1440px] gap-12 px-4 pt-10 pb-20 sm:px-8 sm:pt-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-16 lg:pt-24 lg:pb-32">
         <div className="flex flex-col gap-12 [container-type:inline-size] lg:pt-6">
@@ -120,7 +118,7 @@ export default function Home() {
               <Link href={g.href} className="group flex h-full items-start gap-5 py-8 transition-colors hover:bg-bg-1 md:px-6">
                 <span className="idx pt-2 text-xs text-fg-3">{String(i + 1).padStart(2, "0")}</span>
                 <span className="flex-1">
-                  <span className="block font-serif text-2xl leading-snug text-fg-1 transition-colors group-hover:text-brand sm:text-[28px]">{g.title}</span>
+                  <span className="block text-2xl leading-snug text-fg-1 transition-colors group-hover:text-brand sm:text-[28px]">{g.title}</span>
                   <span className="mt-2 block text-xs text-fg-3">
                     {g.theme} · {g.count} パターン
                   </span>
@@ -151,14 +149,14 @@ export default function Home() {
           </div>
           <div className="rounded-2xl border border-line-1 bg-bg-1 p-6 sm:p-8">
             <p className="font-mono text-[11px] tracking-[0.18em] text-brand uppercase">X-ray mode</p>
-            <p className="mt-3 font-serif text-2xl leading-snug text-fg-1">このサイト自体が、カタログのデモです。</p>
+            <p className="mt-3 text-2xl leading-snug text-fg-1">このサイト自体が、カタログのデモです。</p>
             <p className="mt-3 text-sm leading-relaxed text-fg-3">
               ヘッダーの <span className="font-mono text-fg-2">X-ray</span> を押すか、キーボードで <kbd className="rounded border border-line-2 px-1 font-mono text-xs">x</kbd> を 2 回。画面の各部に、使っているパターンの名前が浮かびます。
             </p>
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 }
 

@@ -2,11 +2,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { NotFoundSearch } from "@/components/pattern/not-found-search";
 import { Xray } from "@/components/shell/xray";
+import { headingFonts } from "@/lib/fonts";
 
 export const metadata: Metadata = { title: "ページが見つかりません", robots: { index: false } };
 
 export default function NotFound() {
+  const fonts = headingFonts("hub");
   return (
+    <div style={fonts}>
     <Xray slug="empty-state" as="section" place="tr" className="mx-auto flex min-h-[70dvh] max-w-[1180px] flex-col items-center justify-center px-4 py-24 text-center sm:px-8">
       <p className="font-mono text-[clamp(5rem,22vw,14rem)] leading-none tracking-[-0.06em] text-fg-1/10" aria-hidden>
         404
@@ -20,5 +23,6 @@ export default function NotFound() {
         ホームへ戻る
       </Link>
     </Xray>
+    </div>
   );
 }

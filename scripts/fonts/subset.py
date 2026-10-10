@@ -4,14 +4,22 @@ Fontsource ships each Japanese face as ~120 unicode-range slices cut for general
 page here pulled 40-60 of them (550-790 KB). This rebuilds each face from those slices and
 re-slices it around this site's own text.
 
-Slices, each character in exactly one:
-  common   characters on >= 30% of pages, plus ASCII and basic punctuation
-  home     the home page's remaining characters (the landing page; kept within budget)
-  hub      /categories, /goals, /g/*, 404
-  c-<slug> each category page with its /p/* pages, for what's left
-  rest     characters seen only after interaction (⌘K palette, X-ray)
+Only headings are self-hosted (Shippori Mincho) plus the mono index figures; body text is the
+platform font, so the sets are small.
 
-Output (committed): assets/fonts/*.woff2, assets/fonts/fonts.css, assets/fonts/charset.json
+Mincho is cut per page group, and a group's file holds everything its pages need beyond the
+common slice (characters may repeat across groups). Each group is its own font family —
+"Shippori Mincho B1 c-forms" — and a page points `--font-serif` at its group's family first,
+then the base family (src/lib/fonts.ts), so a page loads exactly: common + its group + mono.
+  common   characters on >= 30% of pages, plus ASCII and basic punctuation   (base family)
+  home     the home page                                                     (own family)
+  hub      /categories, /goals, /g/*, 404                                    (own family)
+  c-<slug> each category page with its /p/* pages                            (own family)
+  rest     what only ⌘K / X-ray still need                                   (base family)
+The mono face keeps exclusive slices (it is font-display: optional, so scatter costs nothing
+visible).
+
+Output (committed): assets/fonts/*.woff2, fonts.css, charset.json (per face), manifest.json (per slice)
 Usage: python3 scripts/fonts/subset.py   (needs fonttools + brotli; run collect-glyphs.mjs first)
 """
 
@@ -31,12 +39,22 @@ OUT = os.path.join(ROOT, "assets", "fonts")
 NM = os.path.join(ROOT, "node_modules")
 
 FACES = {
-    # key in glyphs.json: (css family, weight, slice glob, variable?)
-    "zen-400": ("Zen Kaku Gothic New", "400", "@fontsource/zen-kaku-gothic-new/files/zen-kaku-gothic-new-*-400-normal.woff2"),
-    "mincho-700": ("Shippori Mincho B1", "700", "@fontsource/shippori-mincho-b1/files/shippori-mincho-b1-*-700-normal.woff2"),
-    # the shell uses 400-600 only; the axis is narrowed to that range below
-    "mono": ("JetBrains Mono Variable", "400 600", "@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2"),
+    # key in glyphs.json: (css family, weight, slice glob, font-display)
+    # Both faces are font-display: optional, so nothing ever shifts after first paint; every page
+    # preloads exactly the slices its headings need (src/lib/fonts.ts), so on all but the slowest
+    # first visits they are in hand before render. The fallback face below carries Shippori's
+    # vertical metrics for the case where the platform Mincho is used instead.
+    "mincho-700": ("Shippori Mincho B1", "700", "@fontsource/shippori-mincho-b1/files/shippori-mincho-b1-*-700-normal.woff2", "optional"),
+    # The shell uses mono at 400-600 only; the axis is narrowed to that range below.
+    "mono": ("JetBrains Mono Variable", "400 600", "@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2", "optional"),
 }
+# Local faces that stand in while Shippori loads, with its hhea metrics (1160 / -288 / 0 per 1000).
+MINCHO_FALLBACK = (
+    "@font-face{font-family:'Shippori Mincho B1 Fallback';"
+    "src:local('Hiragino Mincho ProN W6'),local('Hiragino Mincho ProN'),local('Yu Mincho'),local('YuMincho'),"
+    "local('Noto Serif CJK JP'),local('Noto Serif JP'),local('DejaVu Serif');"
+    "ascent-override:116%;descent-override:28.8%;line-gap-override:0%}"
+)
 ALWAYS = "".join(chr(c) for c in range(0x20, 0x7F)) + "、。，．・：；？！ー〜「」『』（）［］【】〈〉《》…‥—–‐“”‘’§·→←↑↓×＋－／％　"
 COMMON_SHARE = 0.3
 
@@ -78,9 +96,6 @@ def plan_slices(real, extra, drawable, cats):
 
     claim("common", ({c for c, k in freq.items() if k >= COMMON_SHARE * n} | set(ALWAYS)) & drawable)
     claim("home", real.get("/", set()))
-    for route, chars in real.items():
-        if route != "/" and not consumer_of(route, cats).startswith("c-"):
-            claim("hub", chars)
     # what's left goes to the category whose pages use it most
     votes = defaultdict(lambda: defaultdict(int))
     for route, chars in real.items():
@@ -90,8 +105,32 @@ def plan_slices(real, extra, drawable, cats):
                 votes[ch][c] += 1
     for ch, v in votes.items():
         claim(max(sorted(v), key=v.get), {ch})
-    claim("rest", extra)
+    claim("rest", extra | set().union(*real.values()))
     return {k: v for k, v in groups.items() if v}
+
+
+def plan_groups(real, extra, drawable, cats):
+    """Mincho: one non-exclusive file per page group on top of a shared common slice."""
+    n = max(1, len(real))
+    freq = defaultdict(int)
+    for chars in real.values():
+        for ch in chars:
+            freq[ch] += 1
+    common = ({c for c, k in freq.items() if k >= COMMON_SHARE * n} | set(ALWAYS)) & drawable
+    groups = defaultdict(set)
+    for route, chars in real.items():
+        c = consumer_of(route, cats)
+        groups[c if c == "home" or c.startswith("c-") else "hub"] |= chars - common
+    rest = extra - common - set().union(*groups.values())
+    out = {"common": common, **{k: v for k, v in groups.items() if v}}
+    if rest:
+        out["rest"] = rest
+    return out
+
+
+# Groups that are their own font family (see module docstring); the others join the base family.
+def family_for(family, group):
+    return family if group in ("common", "rest") else f"{family} {group}"
 
 
 def pattern_categories():
@@ -159,15 +198,17 @@ def main():
     cats = pattern_categories()
     css = ["/* generated by scripts/fonts/subset.py — do not edit */"]
     charset = {}
+    manifest = {}  # slice file → its characters, for per-page <link rel=preload> (src/lib/fonts.ts)
     report = []
 
-    for key, (family, weight, pattern) in FACES.items():
+    css.append(MINCHO_FALLBACK)
+    for key, (family, weight, pattern, display) in FACES.items():
         pages = glyphs.get(key, {})
         face_path = load_face(pattern)
         drawable = cmap_chars(TTFont(face_path))
         real = {r: set(t) & drawable for r, t in pages.items() if not r.startswith("@")}
         extra = set().union(*[set(t) for r, t in pages.items() if r.startswith("@")]) & drawable if pages else set()
-        groups = plan_slices(real, extra, drawable, cats)
+        groups = plan_groups(real, extra, drawable, cats) if key.startswith("mincho") else plan_slices(real, extra, drawable, cats)
         taken = set().union(*groups.values())
         charset[key] = "".join(sorted(taken))
 
@@ -188,10 +229,11 @@ def main():
             fname = f"{base}-{name}.woff2"
             f.save(os.path.join(OUT, fname))
             size = os.path.getsize(os.path.join(OUT, fname))
+            manifest[fname] = "".join(sorted(chars))
             report.append((fname, len(chars), size))
             css.append(
                 "@font-face{"
-                f"font-family:'{family}';font-style:normal;font-display:swap;font-weight:{weight};"
+                f"font-family:'{family_for(family, name) if key.startswith('mincho') else family}';font-style:normal;font-display:{display};font-weight:{weight};"
                 f"src:url(/fonts/{fname}) format('woff2');unicode-range:{ranges(chars)}"
                 "}"
             )
@@ -199,6 +241,7 @@ def main():
 
     open(os.path.join(OUT, "fonts.css"), "w", encoding="utf8").write("\n".join(css) + "\n")
     json.dump(charset, open(os.path.join(OUT, "charset.json"), "w", encoding="utf8"), ensure_ascii=False, indent=0)
+    json.dump(manifest, open(os.path.join(OUT, "manifest.json"), "w", encoding="utf8"), ensure_ascii=False, indent=0)
     total = 0
     for fname, count, size in report:
         total += size
