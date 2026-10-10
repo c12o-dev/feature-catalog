@@ -74,10 +74,20 @@ export default async function PatternPage({ params }: PageProps<"/p/[slug]">) {
           </p>
         </header>
 
+        {!entry.demo && (
+
+          <p className="flex min-h-[7rem] items-center justify-center rounded-[var(--radius-md)] border border-dashed border-line-2 px-6 text-center text-sm text-fg-3">
+
+            このパターンは説明のみ（デモなし）
+
+          </p>
+
+        )}
+
         {entry.demo && (
           <ViewTransition name={`stage-${entry.slug}`}>
             <div>
-              <Xray slug="theme-toggle" place="bl" className="mx-auto max-w-[880px]">
+              <Xray slug="theme-toggle" place="bl" className="max-w-[880px]">
                 <Stage demo={entry.demo} label={entry.name} source={source} size="hero" eager />
               </Xray>
             </div>

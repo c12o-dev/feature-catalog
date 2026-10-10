@@ -63,7 +63,7 @@ export default async function CategoryPage({ params }: PageProps<"/c/[slug]">) {
       </header>
 
       <div className="mx-auto grid max-w-[1440px] gap-10 px-4 sm:px-8 lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-16">
-        <aside className="hidden lg:block">
+        <aside>
           <Toc items={list.map((e) => ({ slug: e.slug, name: e.name, code: e.code }))} />
         </aside>
         <div>

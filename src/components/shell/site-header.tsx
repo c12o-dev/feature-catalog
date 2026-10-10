@@ -21,7 +21,7 @@ export function SiteHeader() {
         </nav>
         <div className="ml-auto flex items-center gap-2">
           <GlobalCommand categories={cats} goals={goals} />
-          <XrayToggle className="hidden sm:inline-flex" />
+          <XrayToggle />
         </div>
       </div>
     </Xray>

@@ -33,7 +33,7 @@ export default async function ThemePage({ params }: PageProps<"/g/[slug]">) {
   return (
     <div className="mx-auto max-w-[1180px] px-4 pt-10 sm:px-8 sm:pt-16" style={fonts}>
       <Breadcrumb items={[{ href: "/goals", label: "目的" }, { label: theme.name }]} />
-      <h1 className="fade-up mt-10 mb-16 text-[length:var(--fs-display)] leading-[1] text-fg-1">{theme.name}</h1>
+      <h1 className="fade-up mt-10 mb-12 text-[length:var(--fs-h2)] leading-[1.1] text-fg-2">{theme.name}</h1>
       <div className="space-y-24">
         {theme.goals.map((g, i) => {
           const list = g.patterns.map((s) => getEntry(s)).filter((e) => !!e);
@@ -52,7 +52,7 @@ export default async function ThemePage({ params }: PageProps<"/g/[slug]">) {
                   })}
                 </div>
               </div>
-              <ul className="grid gap-x-8 gap-y-10 md:grid-cols-2">
+              <ul className="grid gap-x-8 gap-y-10 md:grid-cols-2 md:[&>li:last-child:nth-child(odd)]:col-span-2">
                 {list.map((e) => (
                   <li key={e.slug} data-hue={e.category.hue} style={{ "--cat-hue": e.category.hue } as React.CSSProperties} className="flex flex-col gap-3">
                     <div className="flex items-baseline justify-between gap-3">
