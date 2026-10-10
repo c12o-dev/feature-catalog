@@ -66,7 +66,7 @@ export default function Home() {
               <Link href="/goals" className="inline-flex h-11 items-center rounded-full border border-line-2 px-5 text-sm text-fg-1 transition-colors hover:border-fg-3">
                 目的から探す
               </Link>
-              <OpenCommandButton className="inline-flex h-11 items-center gap-2 rounded-full px-3 text-sm text-fg-3 transition-colors hover:text-fg-1">
+              <OpenCommandButton className="inline-flex h-11 items-center gap-2 rounded-full px-3 text-sm text-fg-3 transition-colors hover:text-fg-1 [@media(pointer:coarse)]:hidden">
                 <Command className="size-3.5" /> K で検索
               </OpenCommandButton>
             </div>

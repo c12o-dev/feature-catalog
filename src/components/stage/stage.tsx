@@ -39,9 +39,11 @@ export function Stage({ demo, href, source, label, size = "card", eager, toolbar
   const [mounted, setMounted] = useState(!!eager);
   const [run, setRun] = useState(0);
   const Demo = demoRegistry[demo];
-  // mini: 44px toolbar band + 12px bottom padding around the measured (phone-width) height
-  const miniHeight = SIZES[demo] ? Math.min(240, SIZES[demo].sm + 56) : 240;
-  const miniClipped = !SIZES[demo] || SIZES[demo].sm + 56 > 240;
+  // mini: 44px toolbar band + 12px bottom padding around the measured heights, capped at 24rem
+  const MINI_MAX = 384;
+  const miniSm = SIZES[demo] ? Math.min(MINI_MAX, SIZES[demo].sm + 56) : 240;
+  const miniLg = SIZES[demo] ? Math.min(MINI_MAX, SIZES[demo].lg + 56) : 240;
+  const miniClipped = !SIZES[demo] || Math.max(SIZES[demo].sm, SIZES[demo].lg) + 56 > MINI_MAX;
 
   useEffect(() => {
     if (eager) return;
@@ -73,14 +75,14 @@ export function Stage({ demo, href, source, label, size = "card", eager, toolbar
         ref={ref}
         data-stage={theme}
         data-demo={demo}
-        style={size === "mini" ? { height: miniHeight } : undefined}
+        style={size === "mini" ? ({ "--mini-h-sm": `${miniSm}px`, "--mini-h-lg": `${miniLg}px` } as React.CSSProperties) : undefined}
         className={cn(
           "group/stage relative isolate overflow-hidden rounded-[var(--radius-md)] border border-black/5 shadow-[0_1px_0_rgba(255,255,255,0.04)_inset,0_24px_60px_-32px_rgba(0,0,0,0.9)] transition-colors duration-300",
           size === "hero" && "flex min-h-[16rem] flex-col justify-center",
           size === "card" && "min-h-[12rem]",
           // sized to the demo (measured) so mounting it never shifts the page; taller demos are
           // clipped with a fade at the bottom
-          size === "mini" && !SIZES[demo] && "h-60",
+          size === "mini" && "h-[var(--mini-h-sm)] sm:h-[var(--mini-h-lg)]",
           className,
         )}
       >

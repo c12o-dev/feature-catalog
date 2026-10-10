@@ -174,14 +174,15 @@ export function XrayToggle({ className }: { className?: string }) {
       aria-pressed={on}
       onClick={() => setXray(!on)}
       title="X-ray: このサイトで使っているパターンを表示（x を 2 回）"
+      aria-label="X-ray モード"
       className={cn(
-        "inline-flex h-8 items-center gap-1.5 rounded-full border px-3 font-mono text-[11px] tracking-wider uppercase transition-colors",
+        "inline-flex h-8 items-center gap-1.5 rounded-full border px-2.5 font-mono text-[11px] tracking-wider uppercase transition-colors sm:px-3",
         on ? "border-brand bg-brand text-black" : "border-line-2 text-fg-2 hover:border-fg-3 hover:text-fg-1",
         className,
       )}
     >
       <span aria-hidden className={cn("size-1.5 rounded-full", on ? "bg-black" : "bg-brand")} />
-      X-ray
+      <span className="hidden sm:inline">X-ray</span>
     </button>
   );
 }

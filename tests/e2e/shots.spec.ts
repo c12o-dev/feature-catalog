@@ -44,7 +44,8 @@ for (const width of [1440, 390]) {
           // cards stay skipped and lazy stages never mount. Grow the viewport to the page instead.
           const docHeight = await page.evaluate(() => document.documentElement.scrollHeight);
           await page.setViewportSize({ width, height: Math.min(docHeight, 12000) });
-          await page.waitForTimeout(1500);
+          await page.waitForFunction(() => !document.querySelector("[data-demo-root] .animate-pulse"), null, { timeout: 15000 }).catch(() => {});
+          await page.waitForTimeout(1200);
           await page.screenshot({ path: `${base}-full.png` });
           await page.setViewportSize({ width, height: width > 800 ? 900 : 844 });
           await page.waitForTimeout(300);

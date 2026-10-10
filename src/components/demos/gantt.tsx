@@ -141,7 +141,7 @@ export default function Gantt() {
             scrolledToEnd && "opacity-0",
           )}
         >
-          <span className="text-[10px] text-muted-foreground">→ スクロール</span>
+          <span className="text-[10px] whitespace-nowrap text-muted-foreground">→ スクロール</span>
         </div>
       </div>
 

@@ -47,6 +47,11 @@ export function PatternCard({ entry }: { entry: Entry }) {
           </Link>
         </div>
       </div>
+      {!entry.demo && (
+        <p className="flex min-h-[7rem] items-center justify-center rounded-[var(--radius-md)] border border-dashed border-line-2 px-6 text-center text-sm text-fg-3">
+          このパターンは説明のみ（デモなし）
+        </p>
+      )}
       {entry.demo && (
         <ViewTransition name={`stage-${entry.slug}`}>
           <div className="min-w-0">

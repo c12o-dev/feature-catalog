@@ -16,7 +16,7 @@ export type WallTile = { slug: string; code: string; name: string; hue: number }
 export function LivingWall({ tiles }: { tiles: WallTile[] }) {
   const t = Object.fromEntries(tiles.map((x) => [x.slug, x]));
   return (
-    <div role="group" aria-label="動くパターンの見本" className="grid grid-cols-2 gap-2 sm:grid-cols-6 sm:gap-3 [grid-auto-rows:118px] sm:[grid-auto-rows:128px]">
+    <div role="group" aria-label="動くパターンの見本" className="grid grid-flow-dense grid-cols-2 gap-2 sm:grid-cols-6 sm:gap-3 [grid-auto-rows:118px] sm:[grid-auto-rows:128px]">
       <Tile t={t["contribution-heatmap"]} className="col-span-2 sm:col-span-4"><Heatmap /></Tile>
       <Tile t={t["progress-ring"]} className="sm:col-span-2 sm:row-span-2"><Ring /></Tile>
       <Tile t={t["streaming-text"]} className="col-span-2 sm:col-span-4"><Streaming /></Tile>
