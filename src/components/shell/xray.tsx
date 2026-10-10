@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useSyncExternalStore, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, useSyncExternalStore, type ReactNode } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
@@ -75,15 +75,29 @@ const GLOBAL_PATTERNS = ["skip-link", "cursor-follower", "view-transition", "foc
 
 function XrayLegend({ info }: { info: XrayInfo }) {
   const on = useXray();
+  // Collapsed by default so the panel never sits on top of the page's own text.
+  const [expanded, setExpanded] = useState(false);
   if (!on) return null;
+  const count = GLOBAL_PATTERNS.filter((s) => info[s]).length;
+  if (!expanded)
+    return (
+      <button
+        type="button"
+        onClick={() => setExpanded(true)}
+        className="fixed right-4 bottom-4 z-[70] inline-flex h-8 items-center gap-2 rounded-full border border-brand bg-bg-1/90 px-3 font-mono text-[10px] tracking-[0.16em] text-fg-1 uppercase shadow-2xl backdrop-blur hover:bg-bg-2"
+      >
+        <span aria-hidden className="size-1.5 rounded-full bg-brand" />
+        X-ray · ページ全体 {count}
+      </button>
+    );
   return (
     <aside
       aria-label="X-ray: ページ全体で使っているパターン"
-      className="fixed bottom-4 left-4 z-[70] w-[min(20rem,calc(100vw-2rem))] rounded-lg border border-line-2 bg-bg-1/90 p-3 shadow-2xl backdrop-blur"
+      className="fixed right-4 bottom-4 z-[70] w-[min(20rem,calc(100vw-2rem))] rounded-lg border border-line-2 bg-bg-1/90 p-3 shadow-2xl backdrop-blur"
     >
       <div className="mb-2 flex items-center justify-between font-mono text-[10px] tracking-[0.16em] text-fg-3 uppercase">
         <span>X-ray · ページ全体</span>
-        <button type="button" onClick={() => setXray(false)} className="rounded px-1 text-fg-3 hover:text-fg-1" aria-label="X-ray を閉じる">
+        <button type="button" onClick={() => setExpanded(false)} className="rounded px-1 text-fg-3 hover:text-fg-1" aria-label="一覧をたたむ">
           ×
         </button>
       </div>
@@ -123,7 +137,8 @@ export function Xray({
   children: ReactNode;
   className?: string;
   as?: "div" | "span" | "section" | "header" | "footer" | "nav";
-  place?: "tl" | "tr" | "bl" | "br";
+  /** Corner of the box the label sits in; "below" hangs it under the box (for the header). */
+  place?: "tl" | "tr" | "bl" | "br" | "below";
 }) {
   const on = useXray();
   const info = useContext(XrayContext)[slug];
@@ -135,8 +150,9 @@ export function Xray({
           href={`/p/${slug}`}
           style={{ "--cat-hue": info.hue } as React.CSSProperties}
           className={cn(
-            "xray-tag absolute z-[70] inline-flex max-w-[16rem] items-center gap-1.5 truncate rounded-sm bg-cat px-1.5 py-0.5 font-mono text-[10px] leading-4 font-medium text-black shadow-lg",
+            "xray-tag absolute z-[70] inline-flex max-w-[calc(100%-0.5rem)] items-center gap-1.5 truncate rounded-sm bg-cat px-1.5 py-0.5 font-mono text-[10px] leading-4 font-medium text-black shadow-lg",
             place === "tl" && "left-1 top-1",
+            place === "below" && "left-1 top-full mt-1 max-w-[16rem]",
             place === "tr" && "right-1 top-1",
             place === "bl" && "bottom-1 left-1",
             place === "br" && "bottom-1 right-1",

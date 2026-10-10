@@ -21,7 +21,19 @@ export function Toc({ items }: { items: { slug: string; name: string; code: stri
     };
     const io = new IntersectionObserver(update, { rootMargin: "-20% 0px -60% 0px" });
     els.forEach((el) => io.observe(el));
-    return () => io.disconnect();
+    // Belt and braces for instant jumps (anchor clicks, "back to top"), where observer
+    // notifications can coalesce: re-derive once per frame while scrolling.
+    let raf = 0;
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(update);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      io.disconnect();
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(raf);
+    };
   }, [items]);
 
   // keep the active row visible inside the scrolling list

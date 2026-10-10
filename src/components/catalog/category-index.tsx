@@ -17,7 +17,7 @@ export function CategoryIndex({ categories, samples }: { categories: CategoryInf
               className="group relative grid grid-cols-[3rem_1fr_auto] items-baseline gap-x-4 gap-y-1 border-b border-line-1 py-5 transition-colors duration-500 hover:bg-cat-dim/40 sm:grid-cols-[4.5rem_minmax(0,1fr)_minmax(0,1fr)_6rem_2rem] sm:py-6"
             >
               <span aria-hidden className="absolute inset-y-0 left-0 w-0.5 origin-top scale-y-0 bg-cat transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:scale-y-100" />
-              <span className="idx pl-3 text-xs text-fg-3 transition-colors group-hover:text-cat">{c.code}</span>
+              <span className="idx pl-3 text-xs text-cat">{c.code}</span>
               <span className="min-w-0">
                 <span className="block font-serif text-xl text-fg-1 sm:text-2xl">{c.name}</span>
                 {samples?.[c.slug] && (

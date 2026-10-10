@@ -19,6 +19,9 @@ async function settle(page: Page) {
     await page.waitForTimeout(80);
   }
   await page.evaluate(() => window.scrollTo(0, 0));
+  // Scroll-driven reveals (animation-timeline: view()) only play as a section enters the
+  // viewport; a full-page capture never scrolls, so show their end state in the stills.
+  await page.addStyleTag({ content: ".reveal{animation:none!important}" });
   await page.waitForTimeout(900);
 }
 
@@ -37,7 +40,14 @@ for (const width of [1440, 390]) {
           await settle(page);
           const base = `${OUT}/${nameOf(route)}-${width}${reduced ? "-reduced" : ""}`;
           await page.screenshot({ path: `${base}.png` });
-          await page.screenshot({ path: `${base}-full.png`, fullPage: true });
+          // Full-page stills: Chromium's fullPage capture doesn't scroll, so content-visibility
+          // cards stay skipped and lazy stages never mount. Grow the viewport to the page instead.
+          const docHeight = await page.evaluate(() => document.documentElement.scrollHeight);
+          await page.setViewportSize({ width, height: Math.min(docHeight, 12000) });
+          await page.waitForTimeout(1500);
+          await page.screenshot({ path: `${base}-full.png` });
+          await page.setViewportSize({ width, height: width > 800 ? 900 : 844 });
+          await page.waitForTimeout(300);
           // Toolbars are hover-revealed and off-screen cards are content-visibility: auto, so
           // click through the DOM rather than waiting for Playwright's actionability checks.
           const toggled = await page.evaluate(() => {

@@ -7,7 +7,7 @@ export function SiteHeader() {
   const cats = categoryList.map((c) => ({ slug: c.slug, name: c.name, code: c.code, en: c.en, hue: c.hue }));
   const goals = themes.flatMap((t) => t.goals.map((g, i) => ({ href: `/g/${t.slug}#g${i}`, title: g.title, theme: t.name })));
   return (
-    <Xray slug="sticky-shrink" as="header" place="bl" className="site-header sticky top-0 z-50">
+    <Xray slug="sticky-shrink" as="header" place="below" className="site-header sticky top-0 z-50">
       <div className="mx-auto flex h-full max-w-[1440px] items-center gap-3 px-4 sm:gap-6 sm:px-8">
         <Link href="/" className="group flex items-baseline gap-2 text-fg-1" aria-label="Feature Catalog ホーム">
           <span aria-hidden className="font-serif text-2xl leading-none text-brand transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:rotate-[-12deg]">
