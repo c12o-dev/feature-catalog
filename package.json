@@ -20,7 +20,7 @@
     "lint": "eslint --max-warnings 0",
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
-    "e2e": "playwright test --project=smoke --project=a11y --project=stages --project=keyboard",
+    "e2e": "playwright test --project=smoke --project=a11y --project=stages --project=keyboard --project=mobile",
     "serve": "node scripts/serve-out.mjs",
     "shots": "playwright test --project=shots",
     "lhci": "lhci autorun",

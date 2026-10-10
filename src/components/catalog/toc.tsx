@@ -11,18 +11,15 @@ export function Toc({ items }: { items: { slug: string; name: string; code: stri
 
   useEffect(() => {
     const els = items.map((i) => document.getElementById(i.slug)).filter((e): e is HTMLElement => !!e);
-    const visible = new Map<string, number>();
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const e of entries) {
-          if (e.isIntersecting) visible.set(e.target.id, e.boundingClientRect.top);
-          else visible.delete(e.target.id);
-        }
-        const first = items.find((i) => visible.has(i.slug));
-        if (first) setActive(first.slug);
-      },
-      { rootMargin: "-20% 0px -60% 0px" },
-    );
+    // Any intersection change re-derives the active item from current positions (the last card
+    // whose top has crossed 40% of the viewport), so jumps and anchor clicks can't leave it stale.
+    const update = () => {
+      const line = window.innerHeight * 0.4;
+      let current = els[0];
+      for (const el of els) if (el.getBoundingClientRect().top <= line) current = el;
+      if (current) setActive(current.id);
+    };
+    const io = new IntersectionObserver(update, { rootMargin: "-20% 0px -60% 0px" });
     els.forEach((el) => io.observe(el));
     return () => io.disconnect();
   }, [items]);

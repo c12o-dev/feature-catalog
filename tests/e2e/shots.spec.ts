@@ -38,10 +38,15 @@ for (const width of [1440, 390]) {
           const base = `${OUT}/${nameOf(route)}-${width}${reduced ? "-reduced" : ""}`;
           await page.screenshot({ path: `${base}.png` });
           await page.screenshot({ path: `${base}-full.png`, fullPage: true });
-          const toggles = page.getByRole("button", { name: "ステージをダークにする" });
-          if ((await toggles.count()) > 0) {
-            for (const t of await toggles.all()) await t.click().catch(() => {});
-            await page.waitForTimeout(600);
+          // Toolbars are hover-revealed and off-screen cards are content-visibility: auto, so
+          // click through the DOM rather than waiting for Playwright's actionability checks.
+          const toggled = await page.evaluate(() => {
+            const b = document.querySelectorAll<HTMLButtonElement>('button[aria-label="ステージをダークにする"]');
+            b.forEach((x) => x.click());
+            return b.length;
+          });
+          if (toggled > 0) {
+            await page.waitForTimeout(800);
             await page.screenshot({ path: `${base}-darkstage.png` });
           }
         });
