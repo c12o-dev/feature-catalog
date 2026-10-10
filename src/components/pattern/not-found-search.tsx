@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import type { SearchItem } from "@/lib/catalog";
 import { loadSearchIndex } from "@/lib/search-index";
+import { Xray } from "@/components/shell/xray";
 
 export function NotFoundSearch() {
   const [q, setQ] = useState("");
@@ -23,6 +24,7 @@ export function NotFoundSearch() {
   return (
     <div className="w-full max-w-xl">
       <label htmlFor="nf-q" className="sr-only">パターンを検索</label>
+      <Xray slug="typeahead-search" as="div" place="br">
       <input
         id="nf-q"
         type="search"
@@ -32,6 +34,7 @@ export function NotFoundSearch() {
         autoComplete="off"
         className="h-14 w-full rounded-full border border-line-2 bg-bg-1 px-6 text-base text-fg-1 outline-none placeholder:text-fg-3 focus:border-brand"
       />
+      </Xray>
       <p aria-live="polite" className="sr-only">{q ? `${hits.length} 件` : ""}</p>
       {hits.length > 0 && (
         <ul className="mt-4 divide-y divide-line-1 rounded-2xl border border-line-1 bg-bg-1 text-left">
