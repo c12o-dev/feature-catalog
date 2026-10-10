@@ -8,6 +8,7 @@ import { DemoSkeleton } from "@/components/demos/_skeleton";
 import demoSizes from "@/data/demo-sizes.generated.json";
 import { StageContext, type StageTheme } from "./stage-context";
 import { cn } from "@/lib/utils";
+import { Xray } from "@/components/shell/xray";
 
 type Props = {
   demo: string;
@@ -88,7 +89,7 @@ export function Stage({ demo, href, source, label, size = "card", eager, toolbar
         )}
       >
         {toolbar && (
-          <div className="absolute right-2 top-2 z-10 flex items-center gap-0.5 rounded-full border bg-background/80 p-0.5 text-muted-foreground backdrop-blur">
+          <Xray slug="theme-toggle" as="div" place="bl" className="absolute right-2 top-2 z-10 flex items-center gap-0.5 rounded-full border bg-background/80 p-0.5 text-muted-foreground backdrop-blur">
             <ToolButton label={theme === "light" ? "ステージをダークにする" : "ステージをライトにする"} onClick={() => setTheme(theme === "light" ? "dark" : "light")}>
               {theme === "light" ? <Moon className="size-3.5" /> : <Sun className="size-3.5" />}
             </ToolButton>
@@ -105,7 +106,7 @@ export function Stage({ demo, href, source, label, size = "card", eager, toolbar
                 <ArrowUpRight className="size-3.5" />
               </Link>
             )}
-          </div>
+          </Xray>
         )}
         <div
           className={cn(
@@ -125,7 +126,9 @@ export function Stage({ demo, href, source, label, size = "card", eager, toolbar
                 <Demo />
               </DemoBoundary>
             ) : (
-              <DemoSkeleton />
+              <Xray slug="skeleton-loader" place="br">
+                <DemoSkeleton />
+              </Xray>
             )}
           </div>
         </div>

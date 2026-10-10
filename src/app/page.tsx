@@ -112,6 +112,7 @@ export default function Home() {
       {/* ── Goals ── */}
       <section aria-labelledby="goals-h" className="mx-auto max-w-[1440px] px-4 pt-28 sm:px-8 sm:pt-36">
         <SectionHead id="goals-h" no="02" en="Goals" title="困りごとから引く" lead="「フォームの離脱を減らしたい」のような問題文から、効くパターンをまとめて引けます。" />
+        <Xray slug="scroll-driven" as="div" place="tr">
         <ul className="reveal grid border-t border-line-1 md:grid-cols-2">
           {goals.map((g, i) => (
             <li key={g.href} className={`border-b border-line-1 ${i % 2 === 0 ? "md:border-r" : ""}`}>
@@ -128,6 +129,7 @@ export default function Home() {
             </li>
           ))}
         </ul>
+        </Xray>
         <div className="mt-8">
           <Link href="/goals" className="inline-flex items-center gap-2 text-sm text-fg-2 hover:text-fg-1">
             {stats.goals} の目的をすべて見る <ArrowRight className="size-4" />
