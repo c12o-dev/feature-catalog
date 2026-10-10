@@ -229,12 +229,12 @@ const nextConfig: NextConfig = {
 |---|---|
 | LCP | ≤ 1.8s（ホーム）。/c・/p・/g は ≤ 2.5s（2026-10-10 決定、見出しフォントの到着が支配するため） |
 | CLS | 0（フォント swap による揺れはフォールバック `size-adjust` で吸収） |
-| INP | ≤ 200ms |
+| INP | ≤ 200ms（CI の TBT ゲートは ≤ 600ms。2026-10-10 決定、同上） |
 | ホームの初期 JS（gzip、デモ除く） | ≤ 180KB |
 | カテゴリページの初期 JS（デモ除く） | ≤ 200KB |
 | 1 デモあたりの chunk | ≤ 40KB（recharts 系は共有 chunk に寄せる） |
 | フォント初回転送 | ≤ 120KB（ヒーローの見出しスライス＋本文 1 スライス） |
-| Lighthouse（モバイル） | Performance / Accessibility / Best Practices / SEO すべて ≥ 95 |
+| Lighthouse（モバイル） | Accessibility / Best Practices / SEO ≥ 95。Performance は ≥ 85（2026-10-10 決定: 品質のために読み込みが延びるのは許容。目標は引き続き 95） |
 
 ### 6.3 アクセシビリティ
 
