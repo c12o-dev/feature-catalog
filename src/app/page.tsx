@@ -33,7 +33,7 @@ export default function Home() {
   return (
     <div style={fonts}>
       {/* ── Hero ── */}
-      <section className="relative mx-auto grid max-w-[1440px] gap-12 px-4 pt-10 pb-20 sm:px-8 sm:pt-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-16 lg:pt-24 lg:pb-32">
+      <section className="relative mx-auto grid max-w-[1440px] gap-8 px-4 pt-6 pb-20 sm:gap-12 sm:px-8 sm:pt-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-16 lg:pt-24 lg:pb-32">
         <div className="flex flex-col gap-12 [container-type:inline-size] lg:pt-6">
           <div>
             <p className="fade-up mb-8 flex items-center gap-3 font-mono text-[11px] tracking-[0.2em] text-fg-3 uppercase">

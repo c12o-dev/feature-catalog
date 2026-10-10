@@ -155,13 +155,23 @@ export default async function PatternPage({ params }: PageProps<"/p/[slug]">) {
               <span className="flex items-center gap-2 text-xs text-fg-3"><ArrowLeft className="size-3.5" /> {prev.code}</span>
               <span className="text-xl text-fg-1">{prev.name}</span>
             </Link>
-          ) : <span className="bg-bg-0" />}
+          ) : (
+            <Link href={`/c/${entry.category.slug}`} className="flex flex-col gap-2 bg-bg-0 py-8 pr-4 transition-colors hover:bg-bg-1 sm:pr-6">
+              <span className="flex items-center gap-2 text-xs text-fg-3"><ArrowLeft className="size-3.5" /> {entry.category.code}</span>
+              <span className="text-xl text-fg-1">{entry.category.name} の先頭です</span>
+            </Link>
+          )}
           {next ? (
             <Link href={`/p/${next.slug}`} className="flex flex-col items-end gap-2 bg-bg-0 py-8 pl-4 text-right transition-colors hover:bg-bg-1 sm:pl-6">
               <span className="flex items-center gap-2 text-xs text-fg-3">{next.code} <ArrowRight className="size-3.5" /></span>
               <span className="text-xl text-fg-1">{next.name}</span>
             </Link>
-          ) : <span className="bg-bg-0" />}
+          ) : (
+            <Link href={`/c/${entry.category.slug}`} className="flex flex-col items-end gap-2 bg-bg-0 py-8 pl-4 text-right transition-colors hover:bg-bg-1 sm:pl-6">
+              <span className="flex items-center gap-2 text-xs text-fg-3">{entry.category.code} <ArrowRight className="size-3.5" /></span>
+              <span className="text-xl text-fg-1">{entry.category.name} の末尾です</span>
+            </Link>
+          )}
         </nav>
       </div>
     </div>

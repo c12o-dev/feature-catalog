@@ -65,7 +65,7 @@ export function Stage({ demo, href, source, label, size = "card", eager, toolbar
         data-stage={theme}
         className={cn(
           "group/stage relative isolate overflow-hidden rounded-[var(--radius-md)] border border-black/5 shadow-[0_1px_0_rgba(255,255,255,0.04)_inset,0_24px_60px_-32px_rgba(0,0,0,0.9)] transition-colors duration-300",
-          size === "hero" && "min-h-[22rem]",
+          size === "hero" && "flex min-h-[16rem] flex-col justify-center",
           size === "card" && "min-h-[12rem]",
           // fixed so mounting the demo never shifts the page (CLS); taller demos fade out at the bottom
           size === "mini" && "h-60",
@@ -73,7 +73,7 @@ export function Stage({ demo, href, source, label, size = "card", eager, toolbar
         )}
       >
         {toolbar && (
-          <div className="absolute right-2 top-2 z-10 flex items-center gap-0.5 rounded-full border bg-background/80 p-0.5 text-muted-foreground opacity-100 backdrop-blur transition-opacity sm:opacity-0 sm:group-hover/stage:opacity-100 sm:group-focus-within/stage:opacity-100">
+          <div className="absolute right-2 top-2 z-10 flex items-center gap-0.5 rounded-full border bg-background/80 p-0.5 text-muted-foreground backdrop-blur">
             <ToolButton label={theme === "light" ? "ステージをダークにする" : "ステージをライトにする"} onClick={() => setTheme(theme === "light" ? "dark" : "light")}>
               {theme === "light" ? <Moon className="size-3.5" /> : <Sun className="size-3.5" />}
             </ToolButton>

@@ -49,8 +49,11 @@ export default function CommandPalette({ open, setOpen, recent, categories, goal
 
   const today = open && withDemo.length ? withDemo[dayIndex(withDemo.length)] : undefined;
   const recentItems = recent.map((s) => bySlug.get(s)).filter((x): x is SearchItem => !!x);
-  // Until the user moves, today's pattern is selected so the preview is live on open.
-  const current = value || (today ? `p:${today.s}#today` : "");
+  // Until the user moves, today's pattern is selected so the preview is live on open. The list is
+  // remounted once the index arrives so cmdk picks that up as its default (a controlled value set
+  // after the items mount is ignored by cmdk).
+  const todayValue = today ? `p:${today.s}#today` : "";
+  const current = value || todayValue;
   const selected = current.startsWith("p:") ? bySlug.get(current.slice(2).split("#")[0]) : undefined;
 
   return (
@@ -61,10 +64,11 @@ export default function CommandPalette({ open, setOpen, recent, categories, goal
       description="パターン名・カテゴリ・目的で検索。↑↓ で選び Enter で開く。"
       className="top-[12vh] w-[calc(100vw-2rem)] max-w-none border-line-2 bg-bg-1 shadow-[0_40px_120px_-40px_rgba(0,0,0,0.9)] sm:max-w-4xl"
     >
-      <CommandPrimitive value={current} onValueChange={setValue} loop className="flex h-[min(70vh,560px)] flex-col">
+      <CommandPrimitive key={items.length ? "ready" : "loading"} defaultValue={todayValue} onValueChange={setValue} loop className="flex h-[min(70vh,560px)] flex-col">
         <div className="flex items-center gap-3 border-b border-line-1 px-4">
           <Search className="size-4 shrink-0 text-fg-3" />
           <CommandPrimitive.Input
+            autoFocus
             value={query}
             onValueChange={setQuery}
             placeholder="パターン名・カテゴリ・目的で検索…"

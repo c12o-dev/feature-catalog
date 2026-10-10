@@ -28,7 +28,7 @@ export function NotFoundSearch() {
         type="search"
         value={q}
         onChange={(e) => setQ(e.target.value)}
-        placeholder="探していたものを入力（例: トースト、skeleton）"
+        placeholder="探しているもの（例: トースト）"
         autoComplete="off"
         className="h-14 w-full rounded-full border border-line-2 bg-bg-1 px-6 text-base text-fg-1 outline-none placeholder:text-fg-3 focus:border-brand"
       />
