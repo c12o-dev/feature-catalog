@@ -90,7 +90,7 @@ export default function Home() {
               <div key={s.k} className={`flex flex-col gap-2 px-1 py-8 sm:px-6 sm:py-10 ${i % 2 ? "border-l border-line-1" : ""} ${i >= 2 ? "border-t border-line-1 lg:border-t-0" : ""} ${i === 2 ? "lg:border-l" : ""}`}>
                 <dt className="order-2 text-sm text-fg-3">
                   {s.k}
-                  <span className="ml-2 font-serif text-fg-3 italic">{s.en}</span>
+                  <span className="ml-2 font-serif text-fg-3 italic whitespace-nowrap">{s.en}</span>
                 </dt>
                 <dd className="order-1 font-mono text-5xl tracking-tight text-fg-1 sm:text-7xl">
                   <CountUp value={s.v} />

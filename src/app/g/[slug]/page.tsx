@@ -55,13 +55,14 @@ export default async function ThemePage({ params }: PageProps<"/g/[slug]">) {
               <ul className="divide-y divide-line-1">
                 {list.map((e) => (
                   <li key={e.slug} data-hue={e.category.hue} style={{ "--cat-hue": e.category.hue } as React.CSSProperties} className="grid gap-4 py-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1.5fr)] md:gap-10">
-                    <div className="flex flex-col gap-2 md:pt-2">
+                    <div className="flex flex-col gap-3 md:justify-center">
                       <Link href={`/p/${e.slug}`} className="group">
                         <span className="idx mr-2 text-[11px] text-cat">{e.code}</span>
                         <span className="text-xl text-fg-1 decoration-cat/60 underline-offset-4 group-hover:underline">{e.name}</span>
                       </Link>
-                      <p className="text-sm text-fg-3">{e.description}</p>
-                      <span className="mt-auto text-[11px] text-fg-3">{e.category.name}</span>
+                      <p className="text-sm text-fg-2">{e.description}</p>
+                      {e.notes && <p className="border-l border-cat/40 pl-4 text-sm leading-relaxed text-fg-3">{e.notes}</p>}
+                      <span className="text-[11px] text-fg-3">{e.category.name}</span>
                     </div>
                     {e.demo && <Stage demo={e.demo} label={e.name} href={`/p/${e.slug}`} size="mini" />}
                   </li>

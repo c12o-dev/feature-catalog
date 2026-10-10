@@ -2103,7 +2103,7 @@ export const demoMeta: Record<string, DemoMeta> = {
     "file": "src/components/demos/scroll-driven.tsx",
     "libs": [],
     "apis": [],
-    "lines": 28
+    "lines": 26
   },
   "SdkDownload": {
     "file": "src/components/demos/sdk-download.tsx",
