@@ -1,11 +1,12 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
-import { allRoutes } from "./routes";
+import { allRoutes, waitReady } from "./routes";
 
 // quality-loop G7/G11 at full scale: every demo stage, light and dark, serious/critical = 0.
 for (const route of allRoutes().filter((r) => r.startsWith("/p/"))) {
   test(`stage is accessible in both themes: ${route}`, async ({ page }) => {
     await page.goto(route, { waitUntil: "load" });
+    await waitReady(page);
     // Theme changes animate colours; measure the settled state only.
     await page.addStyleTag({ content: "*,*::before,*::after{transition:none!important}" });
     await page.waitForTimeout(700);

@@ -8,6 +8,7 @@ import { Breadcrumb } from "@/components/catalog/breadcrumb";
 import { categoryList, entries, getCategory, neighbours } from "@/lib/catalog";
 import { headingFonts } from "@/lib/fonts";
 import { TintHue } from "@/components/shell/tint-hue";
+import { PageLoader } from "@/components/shell/page-loader";
 
 export const dynamicParams = false;
 
@@ -38,6 +39,7 @@ export default async function CategoryPage({ params }: PageProps<"/c/[slug]">) {
 
   return (
     <div data-hue={category.hue} style={{ "--cat-hue": category.hue, ...fonts } as React.CSSProperties}>
+      <PageLoader />
       <TintHue hue={category.hue} />
       <header className="mx-auto max-w-[1440px] px-4 pt-10 pb-12 sm:px-8 sm:pt-16 sm:pb-20">
         <Breadcrumb items={[{ href: "/categories", label: "カテゴリ" }, { label: category.name }]} />
@@ -72,7 +74,7 @@ export default async function CategoryPage({ params }: PageProps<"/c/[slug]">) {
           {list.slice(0, FIRST).map((e) => (
             // No Suspense boundary here: in the static HTML it is written as a pending boundary and
             // swapped in at the end of the document, which paints the cards twice (CLS).
-            <PatternCard key={e.slug} entry={e} />
+            <PatternCard key={e.slug} entry={e} preload />
           ))}
           {list.length > FIRST && (
             // The rest is folded so long categories don't scroll for 20,000px. A TOC link (#slug) or

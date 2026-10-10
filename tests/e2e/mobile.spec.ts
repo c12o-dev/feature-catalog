@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { KEY_ROUTES, allRoutes } from "./routes";
+import { KEY_ROUTES, allRoutes, waitReady } from "./routes";
 
 /*
  * quality-loop G10 at 390px: no horizontal page scroll on the key routes, and on every pattern
@@ -10,6 +10,7 @@ test.use({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true
 for (const route of KEY_ROUTES) {
   test(`no horizontal overflow: ${route}`, async ({ page }) => {
     await page.goto(route, { waitUntil: "load" });
+    await waitReady(page);
     await page.waitForTimeout(800);
     const h = await page.evaluate(() => document.documentElement.scrollHeight);
     for (let y = 0; y < h; y += 700) {
@@ -25,6 +26,7 @@ for (const route of KEY_ROUTES) {
 for (const route of allRoutes().filter((r) => r.startsWith("/p/"))) {
   test(`demo fits its stage: ${route}`, async ({ page }) => {
     await page.goto(route, { waitUntil: "load" });
+    await waitReady(page);
     await page.waitForTimeout(900);
     const bad = await page.evaluate(() => {
       const stage = document.querySelector<HTMLElement>("[data-stage]");

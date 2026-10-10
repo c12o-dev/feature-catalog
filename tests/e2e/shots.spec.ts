@@ -1,6 +1,6 @@
 import { mkdirSync } from "node:fs";
 import { expect, test, type Page } from "@playwright/test";
-import { KEY_ROUTES } from "./routes";
+import { KEY_ROUTES, waitReady } from "./routes";
 
 /*
  * Screenshots for the quality loop (quality-loop §2.1): fixed routes × 1440/390 × light/dark
@@ -37,6 +37,7 @@ for (const width of [1440, 390]) {
       for (const route of KEY_ROUTES) {
         test(`shot ${route}`, async ({ page }) => {
           await page.goto(route, { waitUntil: "load" });
+          await waitReady(page);
           await settle(page);
           const base = `${OUT}/${nameOf(route)}-${width}${reduced ? "-reduced" : ""}`;
           await page.screenshot({ path: `${base}.png` });
@@ -68,6 +69,7 @@ for (const width of [1440, 390]) {
       }
       test("shot ⌘K open", async ({ page }) => {
         await page.goto("/", { waitUntil: "load" });
+        await waitReady(page);
         await page.waitForTimeout(500);
         await page.keyboard.press("ControlOrMeta+k");
         await page.getByPlaceholder("パターン名・カテゴリ・目的で検索…").waitFor();
@@ -76,6 +78,7 @@ for (const width of [1440, 390]) {
       });
       test("shot X-ray on", async ({ page }) => {
         await page.goto("/?x-ray=1", { waitUntil: "load" });
+        await waitReady(page);
         await settle(page);
         await page.screenshot({ path: `${OUT}/xray-home-${width}${reduced ? "-reduced" : ""}.png` });
         const docHeight = await page.evaluate(() => document.documentElement.scrollHeight);

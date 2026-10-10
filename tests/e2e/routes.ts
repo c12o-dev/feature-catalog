@@ -1,4 +1,5 @@
 import { readFileSync } from "node:fs";
+import type { Page } from "@playwright/test";
 
 /** Every route in the built sitemap, plus a miss for the 404 page. */
 export function allRoutes(): string[] {
@@ -21,3 +22,8 @@ export const KEY_ROUTES = [
 ];
 
 export const IGNORED_CONSOLE = /Download the React DevTools/;
+
+/** Pages with demos show a loading screen until their demos have rendered; wait it out. */
+export async function waitReady(page: Page) {
+  await page.waitForFunction(() => !document.querySelector("[data-page-loader]"), null, { timeout: 15000 });
+}

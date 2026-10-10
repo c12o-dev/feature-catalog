@@ -21,6 +21,7 @@ const browser = await chromium.launch();
 async function measure(ctx, route) {
   const page = await ctx.newPage();
   await page.goto(`http://localhost:${PORT}${route}`, { waitUntil: "load" });
+  await page.waitForFunction(() => !document.querySelector("[data-page-loader]"), null, { timeout: 15000 });
   const stage = page.locator("[data-stage]").first();
   if (!(await stage.count())) return null;
   // wait for the lazy demo chunk to replace the skeleton
@@ -55,6 +56,7 @@ const catRoutes = [...xml.matchAll(/<loc>https?:\/\/[^/]+(\/c\/[^<]*)<\/loc>/g)]
 async function measureCards(ctx, route, field) {
   const page = await ctx.newPage();
   await page.goto(`http://localhost:${PORT}${route}`, { waitUntil: "load" });
+  await page.waitForFunction(() => !document.querySelector("[data-page-loader]"), null, { timeout: 15000 });
   await page.evaluate(() => document.querySelectorAll("details").forEach((d) => (d.open = true)));
   // walk down so every stage comes near the viewport and mounts its demo
   const h = await page.evaluate(() => document.documentElement.scrollHeight);

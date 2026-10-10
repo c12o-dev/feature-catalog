@@ -6,7 +6,7 @@ import { getEntry, sourceUrl, type Entry } from "@/lib/catalog";
 import { TagList } from "./tag-list";
 
 /** One pattern on a category page: text on the left, its live demo on the right. */
-export function PatternCard({ entry }: { entry: Entry }) {
+export function PatternCard({ entry, preload }: { entry: Entry; preload?: boolean }) {
   const alias = entry.aliasOf ? getEntry(entry.aliasOf) : undefined;
   return (
     <article
@@ -56,7 +56,7 @@ export function PatternCard({ entry }: { entry: Entry }) {
       {entry.demo && (
         <ViewTransition name={`stage-${entry.slug}`}>
           <div className="min-w-0">
-            <Stage demo={entry.demo} label={entry.name} href={`/p/${entry.slug}`} source={sourceUrl(entry)} />
+            <Stage demo={entry.demo} label={entry.name} href={`/p/${entry.slug}`} source={sourceUrl(entry)} preload={preload} />
           </div>
         </ViewTransition>
       )}
