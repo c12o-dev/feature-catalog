@@ -41,7 +41,7 @@ export default function PromptLibrary() {
   };
 
   return (
-    <div className="mx-auto grid w-full max-w-2xl gap-3 md:grid-cols-[1fr_1fr]">
+    <div className="mx-auto grid w-full max-w-2xl gap-3 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] [&>*]:min-w-0">
       <section aria-label="プロンプトライブラリ" className="space-y-2">
         <label className="flex items-center gap-2 rounded-md border bg-background px-2 py-1.5">
           <Search aria-hidden className="size-3.5 text-muted-foreground" />

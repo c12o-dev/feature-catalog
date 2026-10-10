@@ -86,7 +86,7 @@ export default function ApiPlayground() {
 
   return (
     <div className="@container w-full">
-      <div className="grid gap-3 @xl:grid-cols-2">
+      <div className="grid gap-3 @xl:grid-cols-2 [&>*]:min-w-0">
         <div className="space-y-2">
           <div className="flex gap-1.5">
             <label className="sr-only" htmlFor="ap-method">メソッド</label>

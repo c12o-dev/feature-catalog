@@ -422,5 +422,7 @@
    `auto` keeps the last rendered size, so scroll position and the TOC stay stable. */
 .pattern-card {
   content-visibility: auto;
-  contain-intrinsic-size: auto 520px;
+  /* Reserve height only: a reserved width would make skipped cards wider than a phone screen. */
+  contain-intrinsic-width: none;
+  contain-intrinsic-height: auto 520px;
 }
