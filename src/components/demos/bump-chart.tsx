@@ -20,7 +20,7 @@ export default function BumpChart() {
           <Tooltip contentStyle={{ background: "var(--popover)", border: "1px solid var(--border)", borderRadius: 8, fontSize: 12 }} />
           <Legend wrapperStyle={{ fontSize: 11 }} />
           {["Alice", "Bob", "Carol", "Dan"].map((n, i) => (
-            <Line key={n} dataKey={n} type="monotone" stroke={["#3b82f6", "#10b981", "#f59e0b", "#ef4444"][i]} strokeWidth={2} dot={{ r: 4 }} />
+            <Line key={n} dataKey={n} type="monotone" stroke={["#3b82f6", "#10b981", "#f59e0b", "#ef4444"][i]} strokeWidth={2} dot={{ r: 4 }} isAnimationActive={false} />
           ))}
         </LineChart>
       </ResponsiveContainer>

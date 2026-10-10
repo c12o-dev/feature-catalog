@@ -129,7 +129,7 @@ export default function CommandPalette({ open, setOpen, recent, categories, goal
                   <p className="mt-1 text-sm text-fg-3">{selected.d}</p>
                 </div>
                 {selected.k && (
-                  <div className="min-h-0 flex-1 overflow-hidden">
+                  <div className="relative min-h-0 flex-1 overflow-hidden after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-16 after:bg-gradient-to-t after:from-bg-1 after:to-transparent">
                     <Stage demo={selected.k} label={selected.n} size="mini" eager toolbar={false} className="pointer-events-none max-h-full" />
                   </div>
                 )}

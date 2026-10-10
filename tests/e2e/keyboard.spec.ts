@@ -21,10 +21,10 @@ test("Tab-only journey through search, pattern page and stage toggle", async ({ 
   await expect(page).toHaveURL(/\/p\/command-palette$/);
 
   const stage = page.locator("[data-stage]").first();
-  await expect(stage).toHaveAttribute("data-stage", "light");
-  await tabTo(page, (el) => el.getAttribute("aria-label") === "ステージをダークにする", 60);
-  await page.keyboard.press("Enter");
   await expect(stage).toHaveAttribute("data-stage", "dark");
+  await tabTo(page, (el) => el.getAttribute("aria-label") === "ステージをライトにする", 60);
+  await page.keyboard.press("Enter");
+  await expect(stage).toHaveAttribute("data-stage", "light");
 
   // Browser-chrome shortcuts (Alt+←) are not dispatchable from Playwright; history back is the same action.
   await page.goBack();

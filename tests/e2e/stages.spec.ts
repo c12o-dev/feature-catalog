@@ -10,10 +10,10 @@ for (const route of allRoutes().filter((r) => r.startsWith("/p/"))) {
     await page.addStyleTag({ content: "*,*::before,*::after{transition:none!important}" });
     await page.waitForTimeout(700);
     const bad: string[] = [];
-    for (const theme of ["light", "dark"] as const) {
-      if (theme === "dark") {
-        await page.getByRole("button", { name: "ステージをダークにする" }).first().click();
-        await page.locator('[data-stage="dark"]').first().waitFor();
+    for (const theme of ["dark", "light"] as const) {
+      if (theme === "light") {
+        await page.getByRole("button", { name: "ステージをライトにする" }).first().click();
+        await page.locator('[data-stage="light"]').first().waitFor();
         await page.waitForTimeout(400);
       }
       const { violations } = await new AxeBuilder({ page }).include("[data-stage]").withTags(["wcag2a", "wcag2aa", "wcag21aa"]).analyze();

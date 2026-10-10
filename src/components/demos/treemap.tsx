@@ -85,7 +85,11 @@ export default function Treemap() {
       </div>
       <div className="relative aspect-[16/10] w-full overflow-hidden rounded-lg bg-card" role="list" aria-label="ストレージの内訳（面積が使用量に比例）">
         {rects.map((r) => {
+          // Every cell gets a label. Cells too short for two lines show the name alone at 9px (truncated);
+          // cells too narrow for even that show the first character. The full text is in `title`.
           const small = r.w < 22 || r.h < 18;
+          const tiny = r.w < 12 || r.h < 9;
+          const title = `${r.name} ${r.v} GB（${Math.round((r.v / total) * 100)}%）`;
           return (
             <div
               key={r.name}
@@ -100,14 +104,20 @@ export default function Treemap() {
                 onFocus={() => setActive(r.name)}
                 onBlur={() => setActive(null)}
                 onClick={() => setActive(r.name)}
-                aria-label={`${r.name} ${r.v} GB（${Math.round((r.v / total) * 100)}%）`}
+                aria-label={title}
+                title={title}
                 className={cn(
-                  "flex size-full flex-col justify-end overflow-hidden rounded-[5px] p-1.5 text-left outline-none transition-opacity focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
+                  "flex size-full min-w-0 flex-col justify-end overflow-hidden rounded-[5px] text-left outline-none transition-opacity focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
+                  small ? "p-1" : "p-1.5",
                   r.color,
                   active && active !== r.name && "opacity-60",
                 )}
               >
-                {!small && (
+                {tiny ? (
+                  <span className="truncate text-[9px] font-semibold leading-none">{r.name.charAt(0)}</span>
+                ) : small ? (
+                  <span className="truncate text-[9px] font-semibold leading-none">{r.name}</span>
+                ) : (
                   <>
                     <span className="truncate text-xs font-semibold">{r.name}</span>
                     <span className="truncate text-[10px] opacity-90 tabular-nums">{r.v} GB</span>

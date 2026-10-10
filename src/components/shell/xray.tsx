@@ -182,7 +182,7 @@ export function XrayToggle({ className }: { className?: string }) {
       )}
     >
       <span aria-hidden className={cn("size-1.5 rounded-full", on ? "bg-black" : "bg-brand")} />
-      <span className="hidden sm:inline">X-ray</span>
+      X-ray
     </button>
   );
 }

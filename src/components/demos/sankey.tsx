@@ -29,7 +29,9 @@ const LINKS: { s: string; t: string; v: number }[] = [
 const W = 360;
 const H = 230;
 const NW = 10;
-const GAP = 14;
+// Gap between stacked nodes, per column. The middle column is wider so a label fits above its
+// second node without touching the bands leaving the node above it.
+const GAP = [14, 22, 14];
 const COL_X = [0, (W - NW) / 2, W - NW];
 
 // Node value = max(inflow, outflow) so band widths always add up to node height (flow conservation).
@@ -40,7 +42,7 @@ const value = (id: string) =>
   );
 const colTotals = [0, 1, 2].map((c) => NODES.filter((n) => n.col === c).reduce((a, n) => a + value(n.id), 0));
 const colCounts = [0, 1, 2].map((c) => NODES.filter((n) => n.col === c).length);
-const K = Math.min(...colTotals.map((t, c) => (H - GAP * (colCounts[c] - 1)) / t));
+const K = Math.min(...colTotals.map((t, c) => (H - GAP[c] * (colCounts[c] - 1)) / t));
 
 const layout: Record<string, { x: number; y: number; h: number; v: number }> = {};
 [0, 1, 2].forEach((c) => {
@@ -48,7 +50,7 @@ const layout: Record<string, { x: number; y: number; h: number; v: number }> = {
   NODES.filter((n) => n.col === c).forEach((n) => {
     const v = value(n.id);
     layout[n.id] = { x: COL_X[c], y, h: v * K, v };
-    y += v * K + GAP;
+    y += v * K + GAP[c];
   });
 });
 const order = (id: string) => NODES.findIndex((n) => n.id === id);
@@ -74,18 +76,19 @@ const BANDS = [...LINKS]
     return { ...l, d, key: `${l.s}-${l.t}` };
   });
 
-// Label placement. Left column: right of the node; right column: left of the node (both inside the band
-// area). Middle column: above the first node / below the last, so the labels never cross the right-hand
-// ones (「商品閲覧 1,500」 and 「カート放棄 350」 used to share the same y and overlap).
-type Placement = "left" | "right" | "above" | "below";
+// Label placement. Left column: right of the node; right column: left of the node (both sit over the
+// band area, legible thanks to the background halo). Middle column: just above the node rectangle,
+// centred on it, so the label stays attached to its node and never crosses the right-hand labels.
+// A middle node with no outflow (直帰) has nothing to its right, so its label goes there instead:
+// above it, the incoming bands cross each other and there is no clear space.
+type Placement = "left" | "right" | "above";
 const placement = (n: NodeDef): Placement => {
   if (n.col === 0) return "right";
   if (n.col === 2) return "left";
-  const col = NODES.filter((m) => m.col === 1);
-  return col.indexOf(n) === 0 ? "above" : "below";
+  return LINKS.some((l) => l.s === n.id) ? "above" : "right";
 };
-const LABEL_DY = 12; // centre line of an above/below label, measured from the node edge
-const PAD_Y = LABEL_DY + 10; // viewBox room for those labels (12px glyphs ≈ ±7 around the centre line)
+const LABEL_DY = 8; // centre line of an "above" label, measured up from the node top (12px glyphs → ~2px clearance)
+const PAD_TOP = LABEL_DY + 8; // viewBox room for the label above the first middle node
 
 const label = (id: string) => NODES.find((n) => n.id === id)!.label;
 const fmt = (n: number) => n.toLocaleString("ja-JP");
@@ -106,7 +109,7 @@ export default function Sankey() {
         <span className="font-medium">サイト訪問者の流れ（9 月）</span>
         <span className="text-xs text-muted-foreground tabular-nums">訪問 {fmt(colTotals[0])} 人</span>
       </figcaption>
-      <svg viewBox={`-2 -${PAD_Y} ${W + 4} ${H + PAD_Y * 2}`} className="h-auto w-full overflow-visible" role="group" aria-label="流入元から商品閲覧・直帰を経て購入・カート放棄・離脱に至る流れ">
+      <svg viewBox={`-2 -${PAD_TOP} ${W + 4} ${H + PAD_TOP + 2}`} className="h-auto w-full overflow-visible" role="group" aria-label="流入元から商品閲覧・直帰を経て購入・カート放棄・離脱に至る流れ">
         <g>
           {BANDS.map((b) => (
             <path
@@ -132,7 +135,7 @@ export default function Sankey() {
           const p = layout[n.id];
           const pos = placement(n);
           const tx = pos === "left" ? p.x - 6 : pos === "right" ? p.x + NW + 6 : p.x + NW / 2;
-          const ty = pos === "above" ? p.y - LABEL_DY : pos === "below" ? p.y + p.h + LABEL_DY : p.y + p.h / 2;
+          const ty = pos === "above" ? p.y - LABEL_DY : p.y + p.h / 2;
           return (
             <g
               key={n.id}

@@ -156,7 +156,7 @@ export const demoMeta: Record<string, DemoMeta> = {
       "recharts"
     ],
     "apis": [],
-    "lines": 82
+    "lines": 83
   },
   "AriaLive": {
     "file": "src/components/demos/aria-live.tsx",
@@ -2088,7 +2088,7 @@ export const demoMeta: Record<string, DemoMeta> = {
     "apis": [
       "SVG"
     ],
-    "lines": 173
+    "lines": 176
   },
   "SavedView": {
     "file": "src/components/demos/saved-view.tsx",
@@ -2240,7 +2240,7 @@ export const demoMeta: Record<string, DemoMeta> = {
       "recharts"
     ],
     "apis": [],
-    "lines": 34
+    "lines": 37
   },
   "SkipLink": {
     "file": "src/components/demos/skip-link.tsx",
@@ -2293,11 +2293,11 @@ export const demoMeta: Record<string, DemoMeta> = {
   },
   "Sparkline": {
     "file": "src/components/demos/sparkline.tsx",
-    "libs": [
-      "recharts"
+    "libs": [],
+    "apis": [
+      "SVG"
     ],
-    "apis": [],
-    "lines": 38
+    "lines": 54
   },
   "Spinner": {
     "file": "src/components/demos/spinner.tsx",
@@ -2652,7 +2652,7 @@ export const demoMeta: Record<string, DemoMeta> = {
     "file": "src/components/demos/treemap.tsx",
     "libs": [],
     "apis": [],
-    "lines": 127
+    "lines": 137
   },
   "TrialCounter": {
     "file": "src/components/demos/trial-counter.tsx",
@@ -2857,7 +2857,7 @@ export const demoMeta: Record<string, DemoMeta> = {
       "lucide-react"
     ],
     "apis": [],
-    "lines": 79
+    "lines": 86
   },
   "WhatsNew": {
     "file": "src/components/demos/whats-new.tsx",
