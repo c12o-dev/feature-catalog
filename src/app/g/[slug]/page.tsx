@@ -1,4 +1,3 @@
-import { Suspense } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -62,11 +61,7 @@ export default async function ThemePage({ params }: PageProps<"/g/[slug]">) {
                       </Link>
                     </div>
                     <p className="text-sm text-fg-3">{e.description}</p>
-                    {e.demo && (
-                      <Suspense fallback={null}>
-                        <Stage demo={e.demo} label={e.name} href={`/p/${e.slug}`} size="mini" />
-                      </Suspense>
-                    )}
+                    {e.demo && <Stage demo={e.demo} label={e.name} href={`/p/${e.slug}`} size="mini" />}
                   </li>
                 ))}
               </ul>
