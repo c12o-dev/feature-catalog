@@ -152,8 +152,8 @@ export function Xray({
           className={cn(
             "xray-tag absolute z-[70] inline-flex max-w-[calc(100%-0.5rem)] items-center gap-1.5 truncate rounded-sm bg-cat px-1.5 py-0.5 font-mono text-[10px] leading-4 font-medium text-black shadow-lg",
             place === "tl" && "left-1 top-1",
-            place === "below" && "left-1 top-full mt-1 max-w-[16rem]",
-            place === "below-right" && "right-0 top-full mt-1 max-w-[16rem]",
+            place === "below" && "left-1 top-full mt-1 hidden max-w-[16rem] sm:inline-flex",
+            place === "below-right" && "right-0 top-full mt-1 hidden max-w-[16rem] sm:inline-flex",
             place === "tr" && "right-1 top-1",
             place === "bl" && "bottom-1 left-1",
             place === "br" && "bottom-1 right-1",

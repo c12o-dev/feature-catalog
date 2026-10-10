@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Breadcrumb } from "@/components/catalog/breadcrumb";
-import { stats, themes } from "@/lib/catalog";
+import { categoryList, stats, themes } from "@/lib/catalog";
 import { headingFonts } from "@/lib/fonts";
 
 export const metadata: Metadata = {
@@ -36,6 +36,13 @@ export default function GoalsPage() {
                 <li key={g.title} className="border-b border-line-1">
                   <Link href={`/g/${t.slug}#g${i}`} className="group flex items-baseline gap-4 py-5 transition-colors hover:bg-bg-1 sm:px-4">
                     <span className="flex-1 text-xl leading-snug text-fg-1 transition-colors group-hover:text-brand sm:text-2xl">{g.title}</span>
+                    {/* the categories this goal draws on, in their hues */}
+                    <span aria-hidden className="flex shrink-0 items-center gap-1">
+                      {g.categoryRefs.slice(0, 4).map((id) => {
+                        const c = categoryList.find((x) => x.id === id);
+                        return c ? <span key={id} className="size-1.5 rounded-full" style={{ background: `oklch(0.78 0.13 ${c.hue})` }} /> : null;
+                      })}
+                    </span>
                     <span className="shrink-0 font-mono text-xs text-fg-3">{g.patterns.length} 件</span>
                     <ArrowRight className="size-4 shrink-0 self-center text-fg-3 transition-transform group-hover:translate-x-1" />
                   </Link>
