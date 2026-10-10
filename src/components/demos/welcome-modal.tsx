@@ -75,7 +75,10 @@ export default function WelcomeModal() {
             </ul>
             <div className="mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
               <Button variant="ghost" onClick={() => setOpen(false)}>後で</Button>
-              <Button ref={primaryRef} onClick={() => setOpen(false)}>始める</Button>
+              {/* Primary is pinned to foreground/background rather than --primary (brand amber outside a
+                  stage): near-black fill on the light stage, near-white fill with dark text on the dark
+                  stage, so it is unmistakably the primary action next to the ghost 後で (contrast > 15:1). */}
+              <Button ref={primaryRef} className="bg-foreground text-background hover:bg-foreground/90" onClick={() => setOpen(false)}>始める</Button>
             </div>
           </div>
         </div>

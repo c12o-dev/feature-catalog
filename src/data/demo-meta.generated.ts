@@ -924,7 +924,7 @@ export const demoMeta: Record<string, DemoMeta> = {
       "SVG",
       "Pointer Events"
     ],
-    "lines": 250
+    "lines": 266
   },
   "FormRestore": {
     "file": "src/components/demos/form-restore.tsx",
@@ -967,7 +967,7 @@ export const demoMeta: Record<string, DemoMeta> = {
     "apis": [
       "SVG"
     ],
-    "lines": 159
+    "lines": 148
   },
   "Gauge": {
     "file": "src/components/demos/gauge.tsx",
@@ -1523,7 +1523,7 @@ export const demoMeta: Record<string, DemoMeta> = {
     "apis": [
       "SVG"
     ],
-    "lines": 84
+    "lines": 93
   },
   "ModalDemo": {
     "file": "src/components/demos/modal-demo.tsx",
@@ -2088,7 +2088,7 @@ export const demoMeta: Record<string, DemoMeta> = {
     "apis": [
       "SVG"
     ],
-    "lines": 176
+    "lines": 184
   },
   "SavedView": {
     "file": "src/components/demos/saved-view.tsx",
@@ -2857,7 +2857,7 @@ export const demoMeta: Record<string, DemoMeta> = {
       "lucide-react"
     ],
     "apis": [],
-    "lines": 86
+    "lines": 89
   },
   "WhatsNew": {
     "file": "src/components/demos/whats-new.tsx",

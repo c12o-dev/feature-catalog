@@ -8,6 +8,10 @@ import { cn } from "@/lib/utils";
 
 const W = 400;
 const H = 260;
+// Labels are HTML (fixed px) rather than SVG text, which shrank to ~8px on a phone stage. They hang
+// LABEL_DY viewBox units under the node, so nodes stop Y_MAX short of the bottom to leave them room.
+const LABEL_DY = 13;
+const Y_MAX = H - 30;
 
 const NODES = [
   { label: "佐藤", group: 0 },
@@ -85,7 +89,7 @@ function step(ps: P[], alpha: number, pinned: number | null) {
     p.vx *= 0.6;
     p.vy *= 0.6;
     p.x = Math.min(W - 16, Math.max(16, p.x + p.vx));
-    p.y = Math.min(H - 20, Math.max(16, p.y + p.vy));
+    p.y = Math.min(Y_MAX, Math.max(16, p.y + p.vy));
   });
 }
 
@@ -152,7 +156,7 @@ export default function ForceGraph() {
     if (drag.current === null) return;
     const { x, y } = toLocal(e);
     sim.current[drag.current].x = Math.min(W - 16, Math.max(16, x));
-    sim.current[drag.current].y = Math.min(H - 20, Math.max(16, y));
+    sim.current[drag.current].y = Math.min(Y_MAX, Math.max(16, y));
   };
   const onUp = () => {
     drag.current = null;
@@ -182,7 +186,7 @@ export default function ForceGraph() {
           再配置
         </Button>
       </div>
-      <div className="rounded-lg border bg-card">
+      <div className="relative rounded-lg border bg-card">
         <svg
           ref={svgRef}
           viewBox={`0 0 ${W} ${H}`}
@@ -227,12 +231,24 @@ export default function ForceGraph() {
                 className={cn(GROUP_CLASS[NODES[i].group], "stroke-card")}
                 strokeWidth={2}
               />
-              <text y={20} textAnchor="middle" fontSize="10" className="pointer-events-none fill-foreground">
-                {NODES[i].label}
-              </text>
             </g>
           ))}
         </svg>
+        {/* name labels: positioned in % of the viewBox so they track the nodes, sized in px so they stay legible */}
+        <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden rounded-[inherit]">
+          {pos.map((p, i) => (
+            <span
+              key={i}
+              className={cn(
+                "absolute -translate-x-1/2 text-[11px] leading-none whitespace-nowrap text-foreground transition-opacity sm:text-xs",
+                isLit(i) ? "opacity-100" : "opacity-30",
+              )}
+              style={{ left: `${(p.x / W) * 100}%`, top: `${((p.y + LABEL_DY) / H) * 100}%` }}
+            >
+              {NODES[i].label}
+            </span>
+          ))}
+        </div>
       </div>
       <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
         {["開発", "デザイン", "営業"].map((g, i) => (

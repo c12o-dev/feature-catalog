@@ -72,6 +72,11 @@ export default async function PatternPage({ params }: PageProps<"/p/[slug]">) {
           <p className="fade-up mt-5 max-w-2xl text-lg text-fg-2" style={{ animationDelay: "120ms" }}>
             {entry.description}
           </p>
+          {entry.when && (
+            <p className="fade-up mt-4 max-w-2xl text-[15px] leading-relaxed text-fg-3" style={{ animationDelay: "200ms" }}>
+              {entry.when}
+            </p>
+          )}
         </header>
 
         {!entry.demo && (

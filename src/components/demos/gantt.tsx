@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { ScrollHint, useScrollHint } from "./_scroll-hint";
 
 type Task = { id: string; name: string; start: number; len: number; progress: number; deps: string[]; milestone?: boolean };
 
@@ -23,21 +24,17 @@ const dateLabel = (d: number) => `10/${d + 1}`;
 
 export default function Gantt() {
   const [selected, setSelected] = useState<string>("build");
-  const [scrolledToEnd, setScrolledToEnd] = useState(false);
+  const { hint, scrollProps } = useScrollHint<HTMLDivElement>();
   const sel = tasks.find((t) => t.id === selected)!;
   const index = Object.fromEntries(tasks.map((t, i) => [t.id, i]));
 
   return (
     <div className="w-full space-y-3">
-      {/* Below sm the 560px chart overflows its stage: fade the right edge and hint until scrolled to the end. */}
+      {/* On a phone stage the 560px chart (header row included) scrolls sideways; a thin edge fade and a
+          hint show until the reader reaches the end. The fade stays narrow so the last visible day
+          header is not obscured. */}
       <div className="relative">
-        <div
-          onScroll={(e) => {
-            const el = e.currentTarget;
-            setScrolledToEnd(el.scrollLeft + el.clientWidth >= el.scrollWidth - 1);
-          }}
-          className="overflow-x-auto rounded-lg border bg-card"
-        >
+        <div {...scrollProps} className="overflow-x-auto rounded-lg border bg-card">
           <div className="grid min-w-[560px]" style={{ gridTemplateColumns: "6rem 1fr" }}>
             {/* header */}
             <div className="sticky left-0 z-20 border-b border-r bg-card px-3 py-2 text-xs font-medium text-muted-foreground">タスク</div>
@@ -134,15 +131,7 @@ export default function Gantt() {
             </div>
           </div>
         </div>
-        <div
-          aria-hidden
-          className={cn(
-            "pointer-events-none absolute inset-y-px right-px flex w-16 items-end justify-end rounded-r-lg bg-gradient-to-l from-card via-card/80 to-transparent pb-1.5 pr-2 transition-opacity sm:hidden",
-            scrolledToEnd && "opacity-0",
-          )}
-        >
-          <span className="text-[10px] whitespace-nowrap text-muted-foreground">→ スクロール</span>
-        </div>
+        <ScrollHint show={hint} className="rounded-r-lg" />
       </div>
 
       <div aria-live="polite" className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 rounded-lg border bg-card px-3 py-2 text-sm">

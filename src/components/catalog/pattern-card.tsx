@@ -24,6 +24,7 @@ export function PatternCard({ entry }: { entry: Entry }) {
           </h2>
         </ViewTransition>
         <p className="text-[15px] text-fg-2">{entry.description}</p>
+        {entry.when && <p className="text-sm leading-relaxed text-fg-3">{entry.when}</p>}
         {entry.notes && (
           <p className="border-l border-cat/40 pl-4 text-sm leading-relaxed text-fg-3">
             <span className="mb-1 block font-mono text-[10px] tracking-[0.16em] text-fg-3 uppercase">実装のポイント</span>
