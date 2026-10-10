@@ -227,7 +227,7 @@ const nextConfig: NextConfig = {
 
 | 指標 | 予算（モバイル、Slow 4G 相当） |
 |---|---|
-| LCP | ≤ 1.8s |
+| LCP | ≤ 1.8s（ホーム）。/c・/p・/g は ≤ 2.5s（2026-10-10 決定、見出しフォントの到着が支配するため） |
 | CLS | 0（フォント swap による揺れはフォールバック `size-adjust` で吸収） |
 | INP | ≤ 200ms |
 | ホームの初期 JS（gzip、デモ除く） | ≤ 180KB |

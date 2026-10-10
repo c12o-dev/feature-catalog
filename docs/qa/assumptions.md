@@ -16,4 +16,5 @@
 | A7 | 目的ページのミニステージは固定高（15rem）で、はみ出すデモは下端をフェード | マウント時の高さ変化が CLS 0.049 を出していた（G5 は CLS = 0） |
 | A8 | ⌘K の「戻る」（G8）は Playwright の `page.goBack()` で検証 | ブラウザ UI のショートカット（Alt+←）は Playwright から発火できない。同じ履歴操作 |
 | A9 | `serve-out.mjs`（e2e / LHCI 用の静的サーバー）は brotli/gzip と `_headers` を適用 | 本番の Cloudflare Pages と同条件で転送量・CSP を測るため |
+| A14 | **本人決定（2026-10-10）**: LCP 予算は見出しページ（/c・/p・/g）2.5s、ホーム 1.8s | 見出しページの LCP は Shippori Mincho の到着時刻で決まり（`optional` の実挙動はフォールバック描画）、simulated 計測では 2.0〜2.4s。`lighthouserc.json` の assertMatrix に反映 |
 | A10 | Lighthouse の CLS 予算は `0.001`（G5 の「0」） | Lighthouse は浮動小数で返すため、実質 0 の判定に許容幅を置いた |
