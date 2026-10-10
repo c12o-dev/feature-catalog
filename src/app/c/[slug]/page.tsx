@@ -77,15 +77,16 @@ export default async function CategoryPage({ params }: PageProps<"/c/[slug]">) {
             <PatternCard key={e.slug} entry={e} preload />
           ))}
           {list.length > FIRST && (
-            // The rest is folded so long categories don't scroll for 20,000px. A TOC link (#slug) or
+            // The rest is folded so long categories don't scroll for 20,000px; its demos load with the page
+            // (they preload too), so opening it shows finished demos. A TOC link (#slug) or
             // find-in-page opens it: browsers reveal a closed <details> that holds the target.
-            <details className="group/more">
+            <details className="group/more [&[open]>summary]:hidden">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-4 border-t border-line-1 py-8 text-fg-2 transition-colors hover:text-fg-1 [&::-webkit-details-marker]:hidden">
                 <span className="text-lg">残り {list.length - FIRST} 件のパターン</span>
                 <span className="font-mono text-xs text-fg-3 group-open/more:hidden">{list.slice(FIRST, FIRST + 3).map((e) => e.name).join(" / ")} …</span>
               </summary>
               {list.slice(FIRST).map((e) => (
-                <PatternCard key={e.slug} entry={e} />
+                <PatternCard key={e.slug} entry={e} preload />
               ))}
             </details>
           )}

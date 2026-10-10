@@ -5,6 +5,7 @@ import { demoServerSnapshot, demoSnapshot, resetDemos, subscribeDemos } from "@/
 
 /** Upper bound on the wait: on a slow connection the page shows anyway (decided 2026-10-10). */
 const MAX_WAIT_MS = 4000;
+let firstLoad = true;
 
 /*
  * Loading screen for pages with demos (/c, /g, /p). It is in the static HTML, so nothing shows
@@ -26,7 +27,11 @@ export function PageLoader() {
     let live = true;
     document.fonts.ready.then(() => live && setFontsReady(true));
     const raf = requestAnimationFrame(() => requestAnimationFrame(() => live && setSettled(true)));
-    const timer = setTimeout(() => live && setTimedOut(true), MAX_WAIT_MS);
+    // on the first (full) load the cap counts from navigation start, not from when this script ran;
+    // on a client-side navigation it counts from now
+    const elapsed = firstLoad ? performance.now() : 0;
+    firstLoad = false;
+    const timer = setTimeout(() => live && setTimedOut(true), Math.max(0, MAX_WAIT_MS - elapsed));
     const main = document.getElementById("main");
     main?.setAttribute("aria-busy", "true");
     return () => {
