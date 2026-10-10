@@ -91,7 +91,7 @@ export default function MarkdownEditor() {
           />
         )}
         {mode !== "edit" && (
-          <div aria-label="プレビュー" role="region" className="h-56 space-y-2 overflow-y-auto rounded-md border bg-card p-3 text-sm break-words">
+          <div aria-label="プレビュー" role="region" tabIndex={0} className="h-56 space-y-2 overflow-y-auto rounded-md border bg-card p-3 text-sm break-words">
             {render(v)}
           </div>
         )}

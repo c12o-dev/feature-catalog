@@ -64,7 +64,7 @@ export default function CommandPalette({ open, setOpen, recent, categories, goal
       description="パターン名・カテゴリ・目的で検索。↑↓ で選び Enter で開く。"
       className="top-[12vh] w-[calc(100vw-2rem)] max-w-none border-line-2 bg-bg-1 shadow-[0_40px_120px_-40px_rgba(0,0,0,0.9)] sm:max-w-4xl"
     >
-      <CommandPrimitive key={items.length ? "ready" : "loading"} defaultValue={todayValue} onValueChange={setValue} loop className="flex h-[min(70vh,560px)] w-full flex-col">
+      <CommandPrimitive key={items.length ? "ready" : "loading"} defaultValue={todayValue} onValueChange={setValue} loop className="flex h-[min(70vh,560px)] w-full min-w-0 max-w-full flex-col">
         <div className="flex items-center gap-3 border-b border-line-1 px-4">
           <Search className="size-4 shrink-0 text-fg-3" />
           <CommandPrimitive.Input
