@@ -56,3 +56,6 @@ next-env.d.ts
 # Lighthouse Chrome profile dirs created under WSL
 /C:*
 __pycache__/
+
+# scratch files (screen recordings etc.)
+/tmp/

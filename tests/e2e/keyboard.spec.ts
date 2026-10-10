@@ -1,3 +1,4 @@
+import { waitReady } from "./routes";
 import { expect, test, type Page } from "@playwright/test";
 
 /** Press Tab until the focused element matches, failing after `max` presses. */
@@ -12,6 +13,7 @@ async function tabTo(page: Page, matches: (el: Element) => boolean, max = 40) {
 // quality-loop G8: home → ⌘K → pattern page → stage theme → back, keyboard only.
 test("Tab-only journey through search, pattern page and stage toggle", async ({ page }) => {
   await page.goto("/");
+  await waitReady(page);
   await tabTo(page, (el) => el.tagName === "BUTTON" && !!el.textContent?.includes("検索"));
   await page.keyboard.press("Enter");
   const input = page.getByPlaceholder("パターン名・カテゴリ・目的で検索…");
@@ -19,6 +21,7 @@ test("Tab-only journey through search, pattern page and stage toggle", async ({ 
   await page.keyboard.type("command palette");
   await page.keyboard.press("Enter");
   await expect(page).toHaveURL(/\/p\/command-palette$/);
+  await waitReady(page);
 
   const stage = page.locator("[data-stage]").first();
   await expect(stage).toHaveAttribute("data-stage", "dark");

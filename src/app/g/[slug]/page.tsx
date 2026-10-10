@@ -6,6 +6,7 @@ import { Breadcrumb } from "@/components/catalog/breadcrumb";
 import { Stage } from "@/components/stage/stage";
 import { categoryList, getCategory, getEntry, getTheme, neighbours, themes } from "@/lib/catalog";
 import { headingFonts } from "@/lib/fonts";
+import { PageLoader } from "@/components/shell/page-loader";
 
 export const dynamicParams = false;
 
@@ -31,6 +32,7 @@ export default async function ThemePage({ params }: PageProps<"/g/[slug]">) {
 
   return (
     <div className="mx-auto max-w-[1180px] px-4 pt-10 sm:px-8 sm:pt-16" style={fonts}>
+      <PageLoader />
       <Breadcrumb items={[{ href: "/goals", label: "目的" }, { label: theme.name }]} />
       <h1 className="fade-up mt-10 mb-12 text-[length:var(--fs-h2)] leading-[1.1] text-fg-2">{theme.name}</h1>
       <div className="space-y-24">
@@ -64,7 +66,7 @@ export default async function ThemePage({ params }: PageProps<"/g/[slug]">) {
                       {(e.when ?? e.notes) && <p className="border-l border-cat/40 pl-4 text-sm leading-relaxed text-fg-3">{e.when ?? e.notes}</p>}
                       <span className="text-[11px] text-fg-3">{e.category.name}</span>
                     </div>
-                    {e.demo && <Stage demo={e.demo} label={e.name} href={`/p/${e.slug}`} size="mini" />}
+                    {e.demo && <Stage demo={e.demo} label={e.name} href={`/p/${e.slug}`} size="mini" preload />}
                   </li>
                 ))}
               </ul>

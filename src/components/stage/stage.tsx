@@ -1,9 +1,10 @@
 "use client";
 
-import { Component, useEffect, useRef, useState, type ReactNode } from "react";
+import { Component, useEffect, useId, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { ArrowUpRight, Code2, Moon, RotateCcw, Sun } from "lucide-react";
 import { demoRegistry } from "@/components/demos/registry";
+import { demoReady, registerDemo } from "@/lib/demo-ready";
 import { DemoSkeleton } from "@/components/demos/_skeleton";
 import demoSizes from "@/data/demo-sizes.generated.json";
 import { StageContext, type StageTheme } from "./stage-context";
@@ -19,26 +20,29 @@ type Props = {
   size?: "card" | "hero" | "mini";
   /** mount immediately instead of on scroll-in */
   eager?: boolean;
+  /** mount immediately and hold the page's loading screen until this demo has rendered */
+  preload?: boolean;
   toolbar?: boolean;
   className?: string;
 };
 
-const UNMOUNT_AFTER_MS = 60_000;
-
 /**
- * Neutral frame a demo plays on (v2-launch §3.4). Mounts the demo when it scrolls near the
- * viewport and unmounts it a minute after it leaves, so timers in off-screen demos stop.
+ * Neutral frame a demo plays on (v2-launch §3.4). Preloading stages mount at once and count
+ * towards the page's loading screen; the others mount when they come near the viewport. A demo
+ * that has mounted stays mounted: unmounting off-screen demos made every scroll back re-load and
+ * re-render them, which is what left stale frames on screen while scrolling.
  */
 // Rendered heights of each demo at 390 / 1440 (scripts/measure-demos.mjs), reserved by hero and card stages. The
 // stage reserves them before the demo chunk arrives, so the swap from skeleton to demo doesn't
 // move the page (CLS). Unmeasured demos fall back to the skeleton's own height.
 const SIZES = demoSizes as Record<string, { sm: number; lg: number; csm?: number; clg?: number }>;
 
-export function Stage({ demo, href, source, label, size = "card", eager, toolbar = true, className }: Props) {
+export function Stage({ demo, href, source, label, size = "card", eager, preload, toolbar = true, className }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   // dark by default (§3.4: the stage sits on --bg-1); light is one click away
   const [theme, setTheme] = useState<StageTheme>("dark");
-  const [mounted, setMounted] = useState(!!eager);
+  const [mounted, setMounted] = useState(!!(eager || preload));
+  const readyId = useId();
   const [run, setRun] = useState(0);
   const Demo = demoRegistry[demo];
   // mini: 44px toolbar band + 12px bottom padding around the measured heights, capped at 30rem
@@ -47,29 +51,55 @@ export function Stage({ demo, href, source, label, size = "card", eager, toolbar
   const miniLg = SIZES[demo] ? Math.min(MINI_MAX, SIZES[demo].lg + 56) : 240;
   const miniClipped = !SIZES[demo] || Math.max(SIZES[demo].sm, SIZES[demo].lg) + 56 > MINI_MAX;
 
+  // Not preloading: mount once the stage comes near the viewport (or its <details> opens), then keep it.
   useEffect(() => {
-    if (eager) return;
+    if (eager || preload || mounted) return;
     const el = ref.current;
     if (!el) return;
-    let timer: ReturnType<typeof setTimeout> | undefined;
-    const io = new IntersectionObserver(
-      ([e]) => {
-        if (e.isIntersecting) {
-          clearTimeout(timer);
-          setMounted(true);
-        } else {
-          clearTimeout(timer);
-          timer = setTimeout(() => setMounted(false), UNMOUNT_AFTER_MS);
-        }
-      },
-      { rootMargin: "400px 0px" },
-    );
+    // inside a folded <details>: mount together the moment it opens, not one by one while scrolling
+    const details = el.closest("details");
+    if (details) {
+      const onToggle = () => details.open && setMounted(true);
+      if (details.open) setTimeout(onToggle, 0);
+      details.addEventListener("toggle", onToggle);
+      return () => details.removeEventListener("toggle", onToggle);
+    }
+    const io = new IntersectionObserver(([e]) => e.isIntersecting && setMounted(true), { rootMargin: "400px 0px" });
     io.observe(el);
-    return () => {
-      io.disconnect();
-      clearTimeout(timer);
+    return () => io.disconnect();
+  }, [eager, preload, mounted]);
+
+  // Preloading: count towards the loading screen until the demo has replaced its skeleton on screen.
+  useEffect(() => {
+    if (!preload) return;
+    const id = `${readyId}:${demo}`;
+    registerDemo(id);
+    const root = ref.current?.querySelector("[data-demo-root]");
+    let live = true;
+    const settle = () => requestAnimationFrame(() => requestAnimationFrame(() => live && demoReady(id)));
+    if (!root || !demoRegistry[demo]) {
+      settle();
+      return () => {
+        live = false;
+        demoReady(id);
+      };
+    }
+    // next/dynamic renders its own skeleton until the chunk is in; done when no skeleton remains
+    const check = () => {
+      if (root.querySelector("[data-demo-skeleton]")) return false;
+      mo.disconnect();
+      settle();
+      return true;
     };
-  }, [eager]);
+    const mo = new MutationObserver(check);
+    mo.observe(root, { childList: true, subtree: true });
+    check();
+    return () => {
+      live = false;
+      mo.disconnect();
+      demoReady(id);
+    };
+  }, [preload, demo, readyId]);
 
   return (
     <StageContext.Provider value={{ theme, setTheme }}>

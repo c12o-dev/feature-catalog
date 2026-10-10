@@ -1,5 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
-import { IGNORED_CONSOLE, allRoutes } from "./routes";
+import { IGNORED_CONSOLE, allRoutes, waitReady } from "./routes";
 
 /** Scroll the whole page so lazily mounted stages render and get a chance to log. */
 async function scrollThrough(page: Page) {
@@ -18,6 +18,7 @@ for (const route of allRoutes()) {
     });
     page.on("pageerror", (e) => msgs.push(`pageerror: ${e.message}`));
     const res = await page.goto(route, { waitUntil: "load" });
+    await waitReady(page);
     expect(res?.status()).toBe(route === "/does-not-exist" ? 404 : 200);
     await page.waitForTimeout(500);
     if (route === "/" || route.startsWith("/c/") || route.startsWith("/g/")) await scrollThrough(page);
