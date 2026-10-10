@@ -10,7 +10,7 @@ export function Breadcrumb({ items }: { items: { href?: string; label: string }[
         </li>
         {items.map((i) => (
           <li key={i.label} className="flex items-center gap-2">
-            <span aria-hidden>/</span>
+            <span aria-hidden>›</span>
             {i.href ? (
               <Link href={i.href} className="hover:text-fg-1">{i.label}</Link>
             ) : (

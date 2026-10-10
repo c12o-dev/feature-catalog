@@ -39,7 +39,7 @@ export function PatternCard({ entry }: { entry: Entry }) {
             と共通です。
           </p>
         )}
-        <div className="mt-auto flex flex-wrap items-center gap-x-4 gap-y-3 pt-2">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-3 pt-2">
           <TagList tags={entry.tags} />
           <Link href={`/p/${entry.slug}`} className="group ml-auto inline-flex items-center gap-1.5 text-sm text-fg-2 hover:text-fg-1">
             詳細
