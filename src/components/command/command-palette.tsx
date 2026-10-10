@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Command as CommandPrimitive } from "cmdk";
-import { CornerDownLeft, Search } from "lucide-react";
+import { CornerDownLeft, Search, X } from "lucide-react";
 import { CommandDialog } from "@/components/ui/command";
 import { Stage } from "@/components/stage/stage";
 import type { SearchItem } from "@/lib/catalog";
@@ -72,9 +72,12 @@ export default function CommandPalette({ open, setOpen, recent, categories, goal
             value={query}
             onValueChange={setQuery}
             placeholder="パターン名・カテゴリ・目的で検索…"
-            className="h-14 w-full bg-transparent text-base text-fg-1 outline-none placeholder:text-fg-3"
+            className="h-14 w-full min-w-0 flex-1 bg-transparent text-base text-fg-1 outline-none placeholder:text-fg-3"
           />
           <kbd className="hidden rounded border border-line-1 px-1.5 py-0.5 font-mono text-[10px] text-fg-3 sm:inline">esc</kbd>
+          <button type="button" onClick={() => setOpen(false)} aria-label="検索を閉じる" className="grid size-9 shrink-0 place-items-center rounded-full text-fg-3 hover:bg-bg-3 hover:text-fg-1 sm:hidden">
+            <X className="size-4" />
+          </button>
         </div>
         <div className="flex min-h-0 flex-1">
           <CommandPrimitive.List className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-2 md:max-w-[46%] md:border-r md:border-line-1">

@@ -56,7 +56,7 @@ for (const width of [1440, 390]) {
             return b.length;
           });
           if (toggled > 0) {
-            await page.waitForTimeout(800);
+            await page.waitForTimeout(1500);
             await page.screenshot({ path: `${base}-darkstage.png` });
           }
         });
@@ -71,9 +71,12 @@ for (const width of [1440, 390]) {
       });
       test("shot X-ray on", async ({ page }) => {
         await page.goto("/?x-ray=1", { waitUntil: "load" });
-        await page.waitForTimeout(1200);
+        await settle(page);
         await page.screenshot({ path: `${OUT}/xray-home-${width}${reduced ? "-reduced" : ""}.png` });
-        await page.screenshot({ path: `${OUT}/xray-home-${width}${reduced ? "-reduced" : ""}-full.png`, fullPage: true });
+        const docHeight = await page.evaluate(() => document.documentElement.scrollHeight);
+        await page.setViewportSize({ width, height: Math.min(docHeight, 12000) });
+        await page.waitForTimeout(1500);
+        await page.screenshot({ path: `${OUT}/xray-home-${width}${reduced ? "-reduced" : ""}-full.png` });
       });
     });
   }

@@ -22,7 +22,7 @@ export default function Parallax() {
         onScroll={(e) => setY(e.currentTarget.scrollTop)}
         tabIndex={0}
         aria-label="視差スクロールの例（スクロールできます）"
-        className="relative h-56 overflow-y-auto rounded-lg border outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+        className="relative h-60 overflow-y-auto rounded-lg border outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
       >
         <div className="relative h-48 overflow-hidden bg-gradient-to-b from-sky-200 to-indigo-100 dark:from-slate-900 dark:to-indigo-950">
           <div
@@ -47,8 +47,9 @@ export default function Parallax() {
             <div className="text-xs text-indigo-900/70 dark:text-indigo-100/70">下へスクロール</div>
           </div>
         </div>
-        <div className="relative space-y-2 bg-background p-4 text-sm">
-          <p className="font-medium">奥の層ほどゆっくり動く</p>
+        {/* Fills the strip under the scene (h-60 − h-48 = 48px) so the heading is fully visible before scrolling. */}
+        <p className="relative flex h-12 items-center bg-background px-4 text-sm font-medium">奥の層ほどゆっくり動く</p>
+        <div className="relative space-y-2 bg-background px-4 pb-4 text-sm">
           <p className="text-muted-foreground">太陽・遠い山・近い山がそれぞれ違う速度で移動し、平面に奥行きが生まれます。</p>
           <p className="text-muted-foreground">「視差効果を減らす」設定では層を固定し、通常のスクロールだけにしています。</p>
           <div className="h-16" />

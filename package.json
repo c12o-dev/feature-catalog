@@ -25,7 +25,8 @@
     "shots": "playwright test --project=shots",
     "lhci": "lhci autorun",
     "checklist": "node scripts/demo-checklist.mjs",
-    "check": "pnpm run lint && pnpm run typecheck && pnpm run test && pnpm run build && pnpm run e2e && pnpm run lhci"
+    "check": "pnpm run lint && pnpm run typecheck && pnpm run test && pnpm run build && pnpm run e2e && pnpm run lhci",
+    "measure": "node scripts/measure-demos.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",
