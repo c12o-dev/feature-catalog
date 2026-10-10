@@ -26,7 +26,7 @@ export function LivingWall({ tiles }: { tiles: WallTile[] }) {
       <Tile t={t["sortable-list"]} className="col-span-2 row-span-2 sm:col-span-3"><Sortable /></Tile>
       <Tile t={t["toggle-switch"]} className="hidden sm:flex sm:col-span-1"><Toggle /></Tile>
       <Tile t={t["gauge"]} className="hidden sm:flex sm:col-span-2"><Gauge /></Tile>
-      <Tile t={t["emoji-reactions"]} className="sm:col-span-3"><Reactions /></Tile>
+      <Tile t={t["emoji-reactions"]} className="col-span-2 sm:col-span-3"><Reactions /></Tile>
       <Tile t={t["waveform"]} className="hidden sm:flex sm:col-span-4"><Wave /></Tile>
       <Tile t={t["skeleton-fade"]} className="hidden sm:flex sm:col-span-2"><Skeleton /></Tile>
     </div>

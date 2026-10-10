@@ -105,7 +105,7 @@ export default function Home() {
       <section aria-labelledby="index-h" className="mx-auto max-w-[1440px] px-4 pt-28 sm:px-8 sm:pt-36">
         <SectionHead id="index-h" no="01" en="Index" title="UI のかたちで引く" lead="25 のカテゴリに分けた索引です。行に触れると、そのカテゴリの色がページににじみます。" />
         <div className="reveal">
-          <CategoryIndex categories={categoryList} />
+          <CategoryIndex categories={categoryList} samples={Object.fromEntries(categoryList.map((c) => [c.slug, c.patterns.slice(0, 4).map((p) => p.name)]))} />
         </div>
       </section>
 

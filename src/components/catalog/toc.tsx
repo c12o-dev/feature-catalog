@@ -76,9 +76,9 @@ export function Toc({ items }: { items: { slug: string; name: string; code: stri
           aria-controls="toc-sheet"
           className="fixed inset-x-0 top-[var(--header-h)] z-40 flex h-10 items-center gap-3 border-b border-line-1 bg-bg-0/90 px-4 font-mono text-[11px] tracking-[0.14em] text-fg-1 backdrop-blur"
         >
-          <span className="text-cat">{counter}</span>
-          <span className="truncate text-fg-2">{items[idx]?.name}</span>
-          <span className="ml-auto text-fg-3">目次 ▾</span>
+          <span className="shrink-0 whitespace-nowrap text-cat">{counter}</span>
+          <span className="min-w-0 truncate text-fg-2">{items[idx]?.name}</span>
+          <span className="ml-auto shrink-0 whitespace-nowrap text-fg-3">目次 ▾</span>
         </button>
         {open && (
           <>

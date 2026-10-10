@@ -51,21 +51,34 @@ export default async function ThemePage({ params }: PageProps<"/g/[slug]">) {
                   })}
                 </div>
               </div>
-              <ul className="grid gap-x-8 gap-y-10 md:grid-cols-2 md:[&>li:last-child:nth-child(odd)]:col-span-2">
+              {/* one row per pattern: name + description on the left, the demo on the right (§4.5) */}
+              <ul className="divide-y divide-line-1">
                 {list.map((e) => (
-                  <li key={e.slug} data-hue={e.category.hue} style={{ "--cat-hue": e.category.hue } as React.CSSProperties} className="flex flex-col gap-3">
-                    <div className="flex items-baseline justify-between gap-3">
+                  <li key={e.slug} data-hue={e.category.hue} style={{ "--cat-hue": e.category.hue } as React.CSSProperties} className="grid gap-4 py-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1.5fr)] md:gap-10">
+                    <div className="flex flex-col gap-2 md:pt-2">
                       <Link href={`/p/${e.slug}`} className="group">
                         <span className="idx mr-2 text-[11px] text-cat">{e.code}</span>
                         <span className="text-xl text-fg-1 decoration-cat/60 underline-offset-4 group-hover:underline">{e.name}</span>
                       </Link>
+                      <p className="text-sm text-fg-3">{e.description}</p>
+                      <span className="mt-auto text-[11px] text-fg-3">{e.category.name}</span>
                     </div>
-                    <p className="text-sm text-fg-3">{e.description}</p>
                     {e.demo && <Stage demo={e.demo} label={e.name} href={`/p/${e.slug}`} size="mini" />}
                   </li>
                 ))}
               </ul>
-              {g.external && <p className="mt-8 font-mono text-xs text-fg-3">参考: {g.external}</p>}
+              {g.external && (
+                <p className="mt-8 font-mono text-xs text-fg-3">
+                  参考:{" "}
+                  {/^[\w.-]+\.[a-z]{2,}(\/\S*)?$/i.test(g.external) ? (
+                    <a href={`https://${g.external}`} target="_blank" rel="noreferrer" className="text-fg-2 underline decoration-line-2 underline-offset-4 hover:text-fg-1">
+                      {g.external}
+                    </a>
+                  ) : (
+                    g.external
+                  )}
+                </p>
+              )}
             </section>
           );
         })}
