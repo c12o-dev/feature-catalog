@@ -1,5 +1,5 @@
 import { mkdirSync } from "node:fs";
-import { test, type Page } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 import { KEY_ROUTES } from "./routes";
 
 /*
@@ -57,6 +57,9 @@ for (const width of [1440, 390]) {
           });
           if (toggled > 0) {
             await page.waitForTimeout(1500);
+            // every stage on the page must actually be dark now (G11)
+            const notDark = await page.evaluate(() => [...document.querySelectorAll<HTMLElement>("[data-stage]")].filter((s) => s.dataset.stage !== "dark").map((s) => s.dataset.demo));
+            expect(notDark).toEqual([]);
             await page.screenshot({ path: `${base}-darkstage.png` });
           }
         });
