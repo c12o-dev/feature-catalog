@@ -24,4 +24,12 @@ describe("font subsets", () => {
     ].join("");
     expect(missing("mincho-700", text)).toBe("");
   });
+
+  it("cover every name and description in the OG image fonts", () => {
+    const og: string = JSON.parse(readFileSync("assets/fonts/og/charset.json", "utf8"));
+    const have = new Set(og);
+    const text = categories.flatMap((c) => [c.name, ...c.patterns.flatMap((p) => [p.name, p.description])]).join("");
+    const lost = [...new Set(text)].filter((ch) => !/\s/.test(ch) && !have.has(ch) && !NOT_IN_FACE.has(ch) && !(ch >= "\u25a0" && ch <= "\u27bf"));
+    expect(lost.join("")).toBe("");
+  });
 });

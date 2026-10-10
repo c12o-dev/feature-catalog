@@ -1757,7 +1757,7 @@ export const demoMeta: Record<string, DemoMeta> = {
     "file": "src/components/demos/presence-avatars.tsx",
     "libs": [],
     "apis": [],
-    "lines": 33
+    "lines": 34
   },
   "PressLogo": {
     "file": "src/components/demos/press-logo.tsx",
@@ -2262,7 +2262,7 @@ export const demoMeta: Record<string, DemoMeta> = {
     "apis": [
       "CSS scroll snap"
     ],
-    "lines": 17
+    "lines": 23
   },
   "SocialLogin": {
     "file": "src/components/demos/social-login.tsx",
@@ -2893,7 +2893,7 @@ export const demoMeta: Record<string, DemoMeta> = {
     "file": "src/components/demos/word-cloud.tsx",
     "libs": [],
     "apis": [],
-    "lines": 28
+    "lines": 24
   },
   "XpBar": {
     "file": "src/components/demos/xp-bar.tsx",

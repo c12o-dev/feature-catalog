@@ -5,7 +5,7 @@
   "description": "モダン Web の「ユーザーから見える機能」を動くデモ付きで索引化したカタログ",
   "author": "Seu (https://c12o.net)",
   "license": "MIT",
-  "homepage": "https://features.c12o.net",
+  "homepage": "https://feature-catalog.c12o.net",
   "repository": {
     "type": "git",
     "url": "https://github.com/c12o-dev/feature-catalog.git"

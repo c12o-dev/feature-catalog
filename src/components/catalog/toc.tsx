@@ -17,7 +17,10 @@ export function Toc({ items }: { items: { slug: string; name: string; code: stri
     const update = () => {
       const line = window.innerHeight * 0.4;
       let current = els[0];
-      for (const el of els) if (el.getBoundingClientRect().top <= line) current = el;
+      for (const el of els) {
+        const r = el.getBoundingClientRect();
+        if (r.height > 0 && r.top <= line) current = el; // folded cards have no box
+      }
       if (current) setActive(current.id);
     };
     const io = new IntersectionObserver(update, { rootMargin: "-20% 0px -60% 0px" });
@@ -30,7 +33,35 @@ export function Toc({ items }: { items: { slug: string; name: string; code: stri
       raf = requestAnimationFrame(update);
     };
     window.addEventListener("scroll", onScroll, { passive: true });
+    // A jump into the folded part opens its <details>; the cards there only get their real height
+    // once laid out (content-visibility), so settle the position again after two frames.
+    const settle = () => {
+      const el = location.hash ? document.getElementById(decodeURIComponent(location.hash.slice(1))) : null;
+      if (!el) return;
+      // Stages above the target mount their demos as they come near and change height, so keep
+      // re-aligning for a short while; any scroll input from the reader cancels it.
+      const until = performance.now() + 1200;
+      let cancelled = false;
+      const cancel = () => (cancelled = true);
+      window.addEventListener("wheel", cancel, { once: true, passive: true });
+      window.addEventListener("touchstart", cancel, { once: true, passive: true });
+      window.addEventListener("keydown", cancel, { once: true });
+      const step = () => {
+        if (cancelled) return;
+        el.scrollIntoView({ block: "start" });
+        if (performance.now() < until) setTimeout(step, 100);
+        else {
+          window.removeEventListener("wheel", cancel);
+          window.removeEventListener("touchstart", cancel);
+          window.removeEventListener("keydown", cancel);
+        }
+      };
+      requestAnimationFrame(step);
+    };
+    settle();
+    window.addEventListener("hashchange", settle);
     return () => {
+      window.removeEventListener("hashchange", settle);
       io.disconnect();
       window.removeEventListener("scroll", onScroll);
       cancelAnimationFrame(raf);

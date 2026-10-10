@@ -26,6 +26,9 @@ export async function generateMetadata({ params }: PageProps<"/c/[slug]">): Prom
   };
 }
 
+/** Cards shown before the fold-out (§4.3). */
+const FIRST = 8;
+
 export default async function CategoryPage({ params }: PageProps<"/c/[slug]">) {
   const category = getCategory((await params).slug);
   if (!category) notFound();
@@ -66,11 +69,24 @@ export default async function CategoryPage({ params }: PageProps<"/c/[slug]">) {
           <Toc items={list.map((e) => ({ slug: e.slug, name: e.name, code: e.code }))} />
         </aside>
         <div>
-          {list.map((e) => (
+          {list.slice(0, FIRST).map((e) => (
             // No Suspense boundary here: in the static HTML it is written as a pending boundary and
             // swapped in at the end of the document, which paints the cards twice (CLS).
             <PatternCard key={e.slug} entry={e} />
           ))}
+          {list.length > FIRST && (
+            // The rest is folded so long categories don't scroll for 20,000px. A TOC link (#slug) or
+            // find-in-page opens it: browsers reveal a closed <details> that holds the target.
+            <details className="group/more">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 border-t border-line-1 py-8 text-fg-2 transition-colors hover:text-fg-1 [&::-webkit-details-marker]:hidden">
+                <span className="text-lg">残り {list.length - FIRST} 件のパターン</span>
+                <span className="font-mono text-xs text-fg-3 group-open/more:hidden">{list.slice(FIRST, FIRST + 3).map((e) => e.name).join(" / ")} …</span>
+              </summary>
+              {list.slice(FIRST).map((e) => (
+                <PatternCard key={e.slug} entry={e} />
+              ))}
+            </details>
+          )}
         </div>
       </div>
 

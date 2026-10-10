@@ -3,65 +3,35 @@ import { join } from "node:path";
 import { ImageResponse } from "next/og";
 
 /*
- * Build-time Open Graph images. Satori cannot read woff2, so we load Fontsource's .woff
- * unicode-range slices — only the ones that cover the glyphs this image actually uses.
+ * Build-time Open Graph images. Satori reads woff (not woff2) and works best with one font per
+ * family, so scripts/fonts/subset.py writes a single subset of each face holding every character
+ * the catalog can put on a card (assets/fonts/og/). tests/fonts.test.ts guards the coverage.
  */
 
 export const OG_SIZE = { width: 1200, height: 630 };
 
-type Face = { name: string; weight: 400 | 700; css: string };
-const FACES: Face[] = [
-  { name: "Shippori", weight: 700, css: "node_modules/@fontsource/shippori-mincho-b1/700.css" },
-  { name: "Zen", weight: 400, css: "node_modules/@fontsource/zen-kaku-gothic-new/400.css" },
-];
+type OgFont = { name: string; data: ArrayBuffer; weight: 400 | 700; style: "normal" };
+let cached: Promise<{ fonts: OgFont[]; glyphs: Set<number> }> | null = null;
 
-type Slice = { file: string; ranges: [number, number][] };
-const sliceCache = new Map<string, Slice[]>();
-
-async function slices(face: Face): Promise<Slice[]> {
-  const hit = sliceCache.get(face.css);
-  if (hit) return hit;
-  const css = await readFile(join(/*turbopackIgnore: true*/ process.cwd(), face.css), "utf8");
-  const dir = join(/*turbopackIgnore: true*/ process.cwd(), face.css, "..", "files");
-  const out: Slice[] = [];
-  for (const block of css.split("@font-face").slice(1)) {
-    const woff = block.match(/url\(\.\/files\/([^)]+\.woff)\)/)?.[1];
-    const range = block.match(/unicode-range:\s*([^;]+);/)?.[1];
-    if (!woff || !range) continue;
-    const ranges = range.split(",").map((r) => {
-      const [a, b] = r.trim().replace(/^U\+/i, "").split("-");
-      const lo = parseInt(a, 16);
-      return [lo, b ? parseInt(b, 16) : lo] as [number, number];
-    });
-    out.push({ file: join(dir, woff), ranges });
-  }
-  sliceCache.set(face.css, out);
-  return out;
+async function loadFonts() {
+  const read = async (file: string) => {
+    const buf = await readFile(join(/*turbopackIgnore: true*/ process.cwd(), "assets/fonts/og", file));
+    return buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength) as ArrayBuffer;
+  };
+  const charset = JSON.parse(await readFile(join(/*turbopackIgnore: true*/ process.cwd(), "assets/fonts/og/charset.json"), "utf8")) as string;
+  return {
+    fonts: [
+      { name: "Shippori", data: await read("shippori-700.woff"), weight: 700, style: "normal" },
+      { name: "Zen", data: await read("zen-400.woff"), weight: 400, style: "normal" },
+    ] as OgFont[],
+    glyphs: new Set(Array.from(charset).map((c) => c.codePointAt(0)!)),
+  };
 }
 
-async function fontsFor(text: string) {
-  const cps = new Set(Array.from(text).map((c) => c.codePointAt(0)!));
-  const fonts: { name: string; data: ArrayBuffer; weight: 400 | 700; style: "normal" }[] = [];
-  for (const face of FACES) {
-    for (const s of await slices(face)) {
-      if (![...cps].some((cp) => s.ranges.some(([lo, hi]) => cp >= lo && cp <= hi))) continue;
-      const buf = await readFile(s.file);
-      fonts.push({ name: face.name, data: buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength) as ArrayBuffer, weight: face.weight, style: "normal" });
-    }
-  }
-  return fonts;
-}
-
-/** Replaces glyphs the bundled slices can't draw, which Satori would otherwise try to fetch over the network.
-    Geometric shapes and symbols (U+25A0–27BF, e.g. ● ★) fall inside a slice's unicode-range but have no glyph in these faces. */
-async function coveredText(text: string) {
-  const all = (await Promise.all(FACES.map(slices))).flat();
-  const covered = (cp: number) => all.some((s) => s.ranges.some(([lo, hi]) => cp >= lo && cp <= hi));
+/** Replaces characters the OG subsets can't draw, which Satori would otherwise try to fetch over the network. */
+function coveredText(text: string, glyphs: Set<number>) {
   return Array.from(text)
-    .map((ch) => {
-      const cp = ch.codePointAt(0)!;
-      return /\s/.test(ch) || (covered(cp) && !(cp >= 0x25a0 && cp <= 0x27bf)) ? ch : "・";
-    })
+    .map((ch) => (/\s/.test(ch) || glyphs.has(ch.codePointAt(0)!) ? ch : "・"))
     .join("");
 }
 
@@ -90,13 +60,14 @@ export function oklchHex(l: number, c: number, h: number) {
 
 export async function renderOg(input: { eyebrow: string; title: string; sub?: string; hue?: number }) {
   const { hue = 75 } = input;
-  const eyebrow = await coveredText(input.eyebrow);
-  const title = await coveredText(input.title);
-  const sub = input.sub && (await coveredText(input.sub));
+  cached ??= loadFonts();
+  const { fonts, glyphs } = await cached;
+  const eyebrow = coveredText(input.eyebrow, glyphs);
+  const title = coveredText(input.title, glyphs);
+  const sub = input.sub && coveredText(input.sub, glyphs);
   const accent = oklchHex(0.8, 0.13, hue);
   const glow = oklchHex(0.45, 0.12, hue);
-  const footer = "features.c12o.net";
-  const fonts = await fontsFor(`${eyebrow}${title}${sub ?? ""}${footer}§0123456789·-—`);
+  const footer = "feature-catalog.c12o.net";
   const size = title.length > 26 ? 64 : title.length > 14 ? 80 : 104;
   return new ImageResponse(
     (
@@ -119,13 +90,13 @@ export async function renderOg(input: { eyebrow: string; title: string; sub?: st
           {eyebrow}
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
-          <div style={{ fontFamily: "Shippori", fontSize: size, lineHeight: 1.15, letterSpacing: -1, display: "flex", flexWrap: "wrap" }}>{title}</div>
+          <div style={{ fontFamily: "Shippori", fontWeight: 700, fontSize: size, lineHeight: 1.15, letterSpacing: -1, display: "flex", flexWrap: "wrap" }}>{title}</div>
           {sub && <div style={{ fontSize: 30, color: "rgba(244,243,239,0.6)", lineHeight: 1.5, display: "flex" }}>{sub}</div>}
         </div>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 24, color: "rgba(244,243,239,0.45)" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-            <span style={{ fontFamily: "Shippori", fontSize: 44, color: "#e8b458" }}>§</span>
-            <span style={{ fontFamily: "Shippori", color: "#f4f3ef" }}>Feature Catalog</span>
+            <span style={{ fontFamily: "Shippori", fontWeight: 700, fontSize: 44, color: "#e8b458" }}>§</span>
+            <span style={{ fontFamily: "Shippori", fontWeight: 700, color: "#f4f3ef" }}>Feature Catalog</span>
           </div>
           <span>{footer}</span>
         </div>

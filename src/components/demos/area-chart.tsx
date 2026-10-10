@@ -22,7 +22,7 @@ const H = 180;
 export default function AreaChartDemo() {
   const [mode, setMode] = useState<Mode>("monotone");
   return (
-    <div className="w-full space-y-3 text-blue-600 dark:text-blue-400">
+    <div className="w-full space-y-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div className="text-sm font-medium text-foreground">
           日次アクティブ <span className="text-xs font-normal text-muted-foreground">10月</span>
@@ -60,8 +60,8 @@ export default function AreaChartDemo() {
           <AreaChart data={data} margin={{ top: 4, right: 4, bottom: 0, left: -20 }}>
             <defs>
               <linearGradient id="area-chart-fill" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="currentColor" stopOpacity={0.35} />
-                <stop offset="100%" stopColor="currentColor" stopOpacity={0} />
+                <stop offset="0%" stopColor="var(--chart-1)" stopOpacity={0.35} />
+                <stop offset="100%" stopColor="var(--chart-1)" stopOpacity={0} />
               </linearGradient>
             </defs>
             <CartesianGrid stroke="var(--border)" vertical={false} />
@@ -73,7 +73,7 @@ export default function AreaChartDemo() {
               formatter={(v) => [v, "アクティブ"]}
             />
             {/* no draw animation: the first paint is the final state (screenshots/off-screen mounts used to catch it half-drawn) */}
-            <Area type={mode} dataKey="v" stroke="currentColor" strokeWidth={2} fill="url(#area-chart-fill)" isAnimationActive={false} />
+            <Area type={mode} dataKey="v" stroke="var(--chart-1)" strokeWidth={2} fill="url(#area-chart-fill)" isAnimationActive={false} />
           </AreaChart>
         </ResponsiveContainer>
       </div>
