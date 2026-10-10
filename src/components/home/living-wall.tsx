@@ -36,7 +36,7 @@ export function LivingWall({ tiles }: { tiles: WallTile[] }) {
 function Tile({ t, className, children }: { t?: WallTile; className?: string; children: React.ReactNode }) {
   if (!t) return null;
   return (
-    <Xray slug={t.slug} place="tl" className={cn("flex", className)}>
+    <Xray slug={t.slug} place="br" className={cn("flex", className)}>
       <Link
         href={`/p/${t.slug}`}
         data-hue={t.hue}
@@ -152,7 +152,9 @@ function Odometer() {
   const { n, reduced } = useTick(1800);
   const v = String(ODO[reduced ? 0 : n % ODO.length]).padStart(4, "0");
   return (
-    <span className="flex items-center font-mono text-4xl text-fg-1 tabular-nums">
+    <span className="flex flex-col items-center gap-1">
+      <span className="font-mono text-[10px] tracking-[0.18em] text-fg-3 uppercase">Signups</span>
+      <span className="flex items-center font-mono text-4xl text-fg-1 tabular-nums">
       {v.split("").map((d, i) => (
         <span key={i} className="relative h-[1.15em] w-[0.62em] overflow-hidden">
           <span className="absolute inset-x-0 top-0 flex flex-col transition-transform duration-700 ease-[var(--ease-out-expo)]" style={{ transform: `translateY(-${Number(d) * 10}%)` }}>
@@ -160,6 +162,7 @@ function Odometer() {
           </span>
         </span>
       ))}
+    </span>
     </span>
   );
 }

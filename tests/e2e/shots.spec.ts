@@ -52,16 +52,16 @@ for (const width of [1440, 390]) {
           // Toolbars are hover-revealed and off-screen cards are content-visibility: auto, so
           // click through the DOM rather than waiting for Playwright's actionability checks.
           const toggled = await page.evaluate(() => {
-            const b = document.querySelectorAll<HTMLButtonElement>('button[aria-label="ステージをダークにする"]');
+            const b = document.querySelectorAll<HTMLButtonElement>('button[aria-label="ステージをライトにする"]');
             b.forEach((x) => x.click());
             return b.length;
           });
           if (toggled > 0) {
             await page.waitForTimeout(1500);
-            // every stage on the page must actually be dark now (G11)
-            const notDark = await page.evaluate(() => [...document.querySelectorAll<HTMLElement>("[data-stage]")].filter((s) => s.dataset.stage !== "dark").map((s) => s.dataset.demo));
-            expect(notDark).toEqual([]);
-            await page.screenshot({ path: `${base}-darkstage.png` });
+            // every stage on the page must actually be light now (G11)
+            const notLight = await page.evaluate(() => [...document.querySelectorAll<HTMLElement>("[data-stage]")].filter((s) => s.dataset.stage !== "light").map((s) => s.dataset.demo));
+            expect(notLight).toEqual([]);
+            await page.screenshot({ path: `${base}-lightstage.png` });
           }
         });
       }

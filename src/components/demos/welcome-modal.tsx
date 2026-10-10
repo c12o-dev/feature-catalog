@@ -33,14 +33,21 @@ export default function WelcomeModal() {
     else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
   };
 
+  // The "home screen" and the overlay share one grid cell, so the demo root grows to fit the dialog
+  // (footer buttons included) instead of the overlay escaping an absolutely-positioned box.
   return (
-    <div className="relative grid min-h-[380px] place-items-center overflow-hidden rounded-lg">
-      <div className="text-center">
-        <p className="mb-3 text-xs text-muted-foreground">アプリのホーム画面（背景）</p>
-        <Button ref={openerRef} variant="outline" onClick={() => setOpen(true)}>初回起動を再現</Button>
+    <div className="relative grid min-h-[380px] overflow-hidden rounded-lg border bg-background text-foreground">
+      <div className="col-start-1 row-start-1 grid place-items-center p-4 text-center">
+        <div>
+          <p className="mb-3 text-xs text-muted-foreground">アプリのホーム画面（背景）</p>
+          <Button ref={openerRef} variant="outline" onClick={() => setOpen(true)}>初回起動を再現</Button>
+        </div>
       </div>
       {open && (
-        <div className="absolute inset-0 z-10 grid place-items-center bg-black/40 p-4 motion-safe:animate-in motion-safe:fade-in" onClick={() => setOpen(false)}>
+        <div
+          className="z-10 col-start-1 row-start-1 grid place-items-center bg-black/50 p-4 motion-safe:animate-in motion-safe:fade-in dark:bg-black/60"
+          onClick={() => setOpen(false)}
+        >
           <div
             ref={dialogRef}
             role="dialog"
@@ -49,7 +56,7 @@ export default function WelcomeModal() {
             aria-describedby="wm-desc"
             onKeyDown={onKeyDown}
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-sm rounded-xl border bg-popover p-5 text-popover-foreground shadow-lg motion-safe:animate-in motion-safe:zoom-in-95"
+            className="w-full max-w-sm rounded-xl border bg-card p-5 text-card-foreground shadow-lg motion-safe:animate-in motion-safe:zoom-in-95"
           >
             <div className="mx-auto mb-3 grid size-11 place-items-center rounded-full bg-primary/10">
               <Sparkles className="size-5 text-primary" aria-hidden />

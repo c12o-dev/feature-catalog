@@ -218,6 +218,7 @@
     font-family: var(--font-sans);
     -webkit-text-size-adjust: 100%;
     text-rendering: optimizeLegibility;
+    line-break: strict;
     scroll-padding-top: calc(var(--header-h) + 16px);
   }
   body {

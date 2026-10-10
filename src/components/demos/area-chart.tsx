@@ -72,7 +72,8 @@ export default function AreaChartDemo() {
               contentStyle={{ background: "var(--popover)", color: "var(--popover-foreground)", border: "1px solid var(--border)", borderRadius: 8, fontSize: 12 }}
               formatter={(v) => [v, "アクティブ"]}
             />
-            <Area type={mode} dataKey="v" stroke="currentColor" strokeWidth={2} fill="url(#area-chart-fill)" />
+            {/* no draw animation: the first paint is the final state (screenshots/off-screen mounts used to catch it half-drawn) */}
+            <Area type={mode} dataKey="v" stroke="currentColor" strokeWidth={2} fill="url(#area-chart-fill)" isAnimationActive={false} />
           </AreaChart>
         </ResponsiveContainer>
       </div>

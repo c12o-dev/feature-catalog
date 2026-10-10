@@ -35,12 +35,13 @@ const SIZES = demoSizes as Record<string, { sm: number; lg: number }>;
 
 export function Stage({ demo, href, source, label, size = "card", eager, toolbar = true, className }: Props) {
   const ref = useRef<HTMLDivElement>(null);
-  const [theme, setTheme] = useState<StageTheme>("light");
+  // dark by default (§3.4: the stage sits on --bg-1); light is one click away
+  const [theme, setTheme] = useState<StageTheme>("dark");
   const [mounted, setMounted] = useState(!!eager);
   const [run, setRun] = useState(0);
   const Demo = demoRegistry[demo];
-  // mini: 44px toolbar band + 12px bottom padding around the measured heights, capped at 24rem
-  const MINI_MAX = 384;
+  // mini: 44px toolbar band + 12px bottom padding around the measured heights, capped at 30rem
+  const MINI_MAX = 480;
   const miniSm = SIZES[demo] ? Math.min(MINI_MAX, SIZES[demo].sm + 56) : 240;
   const miniLg = SIZES[demo] ? Math.min(MINI_MAX, SIZES[demo].lg + 56) : 240;
   const miniClipped = !SIZES[demo] || Math.max(SIZES[demo].sm, SIZES[demo].lg) + 56 > MINI_MAX;

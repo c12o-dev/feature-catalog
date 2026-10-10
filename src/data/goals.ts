@@ -216,7 +216,7 @@ export const themes: Theme[] = [
   {
     id: "3.9",
     slug: "cross-cutting",
-    name: "横串（複数カテゴリにまたがる）",
+    name: "横串",
     goals: [
       {
         title: "アクセシビリティを担保したい",

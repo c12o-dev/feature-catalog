@@ -58,7 +58,7 @@ export function GlobalCommand({ categories, goals }: { categories: CommandCatego
 
   return (
     <>
-      <Xray slug="command-palette" as="span" place="bl">
+      <Xray slug="command-palette" as="span" place="below">
         <button
           type="button"
           onClick={show}

@@ -367,7 +367,7 @@ export const categories: Category[] = [
       { slug: "tilt-card", name: "3D tilt card", description: "mouse で傾く", example: { text: "Vercel templates", verified: false }, demo: "TiltCard" },
       { slug: "ambient-orb", name: "Ambient shader / orb", description: "背景の生気", example: { text: "Vercel, Linear LP", verified: false }, demo: "AmbientOrb" },
       { slug: "toast-slide", name: "Toast slide-in", description: "端から滑り込む", example: { text: "あらゆる app", verified: false }, demo: "ToastSlide" },
-      { slug: "number-roll", name: "Number tick animation", description: "数字が回転", example: { text: "SaaS hero", verified: false }, demo: "CounterTick" },
+      { slug: "number-roll", name: "Number tick animation", description: "数字が回転", example: { text: "SaaS hero", verified: false }, demo: "CounterTick", aliasOf: "counter-tick" },
       { slug: "skeleton-fade", name: "Skeleton → fade in", description: "ロード→滑らかに", example: { text: "LinkedIn", verified: false }, demo: "SkeletonFade" },
     ],
   },
