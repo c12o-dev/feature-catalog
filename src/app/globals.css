@@ -275,7 +275,7 @@
 .ambient {
   position: fixed;
   inset: 0;
-  z-index: 0;
+  z-index: -1; /* behind the content, which no longer stacks above it with its own z-index */
   pointer-events: none;
   background:
     radial-gradient(520px circle at var(--mx, 70%) var(--my, -10%), oklch(0.78 0.16 var(--tint-hue, 75) / 0.14), transparent 70%),
