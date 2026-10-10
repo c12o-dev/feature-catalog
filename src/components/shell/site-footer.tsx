@@ -4,7 +4,7 @@ import { Xray, XrayToggle } from "@/components/shell/xray";
 
 export function SiteFooter() {
   return (
-    <footer className="relative z-[1] mt-32 border-t border-line-1">
+    <footer className="relative mt-32 border-t border-line-1">
       <div className="mx-auto max-w-[1440px] px-4 pt-16 pb-10 sm:px-8">
         <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr_1fr]">
           <div>

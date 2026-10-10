@@ -64,7 +64,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           </a>
           <CursorLight />
           <SiteHeader />
-          <main id="main" tabIndex={-1} className="relative z-[1] outline-none">
+          {/* no z-index here: a stacking context on main would trap the loading screen beneath the header */}
+          <main id="main" tabIndex={-1} className="relative outline-none">
             {children}
           </main>
           <SiteFooter />

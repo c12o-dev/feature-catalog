@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useState, useSyncExternalStore } from "react";
-import { demoServerSnapshot, demoSnapshot, resetDemos, subscribeDemos } from "@/lib/demo-ready";
+import { demoServerSnapshot, demoSnapshot, nextGeneration, resetDemos, subscribeDemos } from "@/lib/demo-ready";
 import { Xray } from "@/components/shell/xray";
 
 /** Upper bound on the wait: on a slow connection the page shows anyway (decided 2026-10-10). */
@@ -15,14 +15,17 @@ let firstLoad = true;
  * has faded; tests and tooling wait for [data-page-loader] to disappear.
  */
 export function PageLoader() {
-  const { total, done } = useSyncExternalStore(subscribeDemos, demoSnapshot, demoServerSnapshot);
+  const [gen] = useState(nextGeneration);
+  const { total, done, generation } = useSyncExternalStore(subscribeDemos, demoSnapshot, demoServerSnapshot);
+  // Until this page's count has started, the store may still hold the previous page's "30 / 30".
+  const counting = generation === gen;
   const [fontsReady, setFontsReady] = useState(false);
   const [settled, setSettled] = useState(false); // stages have had a chance to register
   const [timedOut, setTimedOut] = useState(false);
   const [phase, setPhase] = useState<"shown" | "fading" | "gone">("shown");
 
   // a fresh count for this page (runs before the stages' effects register their demos)
-  useLayoutEffect(() => resetDemos(), []);
+  useLayoutEffect(() => resetDemos(gen), [gen]);
 
   useEffect(() => {
     let live = true;
@@ -43,7 +46,7 @@ export function PageLoader() {
     };
   }, []);
 
-  const ready = timedOut || (settled && fontsReady && done >= total);
+  const ready = timedOut || (counting && settled && fontsReady && done >= total);
 
   useEffect(() => {
     if (!ready || phase !== "shown") return;
@@ -61,11 +64,11 @@ export function PageLoader() {
 
   if (phase === "gone") return null;
   // a sliver before any demo has registered, so the bar never looks stalled at zero
-  const progress = total > 0 ? Math.max(0.08, done / total) : 0.08;
+  const progress = counting && total > 0 ? Math.max(0.08, done / total) : 0.08;
   return (
     <div
       data-page-loader
-      className={`fixed inset-0 z-[90] flex flex-col items-center justify-center gap-6 bg-bg-0 [will-change:opacity] transition-opacity duration-[240ms] ${phase === "fading" ? "opacity-0" : "opacity-100"}`}
+      className={`fixed inset-0 z-[200] flex flex-col items-center justify-center gap-6 bg-bg-0 [will-change:opacity] transition-opacity duration-[240ms] ${phase === "fading" ? "opacity-0" : "opacity-100"}`}
     >
       <noscript>
         <style>{"[data-page-loader]{display:none}"}</style>
@@ -83,7 +86,7 @@ export function PageLoader() {
           className="h-0.5 w-48 overflow-hidden rounded-full bg-line-1"
         >
           {/* transform only (§3.1); no transition under reduced motion */}
-          <div className="h-full w-full origin-left rounded-full bg-brand motion-safe:transition-transform motion-safe:duration-200" style={{ transform: `scaleX(${progress})` }} />
+          <div className={`h-full w-full origin-left rounded-full bg-brand ${counting ? "motion-safe:transition-transform motion-safe:duration-200" : ""}`} style={{ transform: `scaleX(${progress})` }} />
         </div>
       </Xray>
     </div>

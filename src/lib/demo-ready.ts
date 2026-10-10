@@ -6,10 +6,12 @@
 const pending = new Set<string>();
 const done = new Set<string>();
 const listeners = new Set<() => void>();
-let snapshot = { total: 0, done: 0 };
+let generation = 0; // which page the count belongs to (see PageLoader)
+let issued = 0;
+let snapshot = { total: 0, done: 0, generation };
 
 function emit() {
-  snapshot = { total: pending.size + done.size, done: done.size };
+  snapshot = { total: pending.size + done.size, done: done.size, generation };
   listeners.forEach((l) => l());
 }
 
@@ -25,10 +27,16 @@ export function demoReady(id: string) {
   emit();
 }
 
-/** Clears the count on a client-side route change, before the next page registers its demos. */
-export function resetDemos() {
+/** A new generation number for a page's loading screen (no store change, safe during render). */
+export function nextGeneration() {
+  return ++issued;
+}
+
+/** Starts a fresh count owned by `gen`, before the page's stages register their demos. */
+export function resetDemos(gen: number) {
   pending.clear();
   done.clear();
+  generation = gen;
   emit();
 }
 
@@ -41,7 +49,7 @@ export function demoSnapshot() {
   return snapshot;
 }
 
-const EMPTY = { total: 0, done: 0 };
+const EMPTY = { total: 0, done: 0, generation: 0 };
 export function demoServerSnapshot() {
   return EMPTY;
 }
