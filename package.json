@@ -24,6 +24,7 @@
     "serve": "node scripts/serve-out.mjs",
     "shots": "playwright test --project=shots",
     "lhci": "lhci autorun",
+    "checklist": "node scripts/demo-checklist.mjs",
     "check": "pnpm run lint && pnpm run typecheck && pnpm run test && pnpm run build && pnpm run e2e && pnpm run lhci"
   },
   "dependencies": {
