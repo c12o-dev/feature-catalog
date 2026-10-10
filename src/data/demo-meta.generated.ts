@@ -492,7 +492,7 @@ export const demoMeta: Record<string, DemoMeta> = {
     "apis": [
       "requestAnimationFrame"
     ],
-    "lines": 142
+    "lines": 141
   },
   "CompareSlider": {
     "file": "src/components/demos/compare-slider.tsx",
