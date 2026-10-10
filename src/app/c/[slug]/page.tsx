@@ -8,6 +8,7 @@ import { Toc } from "@/components/catalog/toc";
 import { Breadcrumb } from "@/components/catalog/breadcrumb";
 import { categoryList, entries, getCategory, neighbours } from "@/lib/catalog";
 import { headingFonts } from "@/lib/fonts";
+import { TintHue } from "@/components/shell/tint-hue";
 
 export const dynamicParams = false;
 
@@ -35,6 +36,7 @@ export default async function CategoryPage({ params }: PageProps<"/c/[slug]">) {
 
   return (
     <div data-hue={category.hue} style={{ "--cat-hue": category.hue, ...fonts } as React.CSSProperties}>
+      <TintHue hue={category.hue} />
       <header className="mx-auto max-w-[1440px] px-4 pt-10 pb-12 sm:px-8 sm:pt-16 sm:pb-20">
         <Breadcrumb items={[{ href: "/categories", label: "カテゴリ" }, { label: category.name }]} />
         <div className="mt-10 grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">

@@ -23,12 +23,12 @@ export function LivingWall({ tiles }: { tiles: WallTile[] }) {
       <Tile t={t["sparkline"]} className="sm:col-span-2"><Spark /></Tile>
       <Tile t={t["number-roll"]} className="sm:col-span-2"><Odometer /></Tile>
       <Tile t={t["live-badge"]} className="sm:col-span-2"><Live /></Tile>
-      <Tile t={t["sortable-list"]} className="col-span-2 sm:col-span-3 sm:row-span-2"><Sortable /></Tile>
+      <Tile t={t["sortable-list"]} className="col-span-2 row-span-2 sm:col-span-3"><Sortable /></Tile>
       <Tile t={t["toggle-switch"]} className="hidden sm:flex sm:col-span-1"><Toggle /></Tile>
       <Tile t={t["gauge"]} className="hidden sm:flex sm:col-span-2"><Gauge /></Tile>
       <Tile t={t["emoji-reactions"]} className="sm:col-span-3"><Reactions /></Tile>
-      <Tile t={t["waveform"]} className="hidden sm:flex sm:col-span-2"><Wave /></Tile>
-      <Tile t={t["skeleton-fade"]} className="hidden sm:flex sm:col-span-1"><Skeleton /></Tile>
+      <Tile t={t["waveform"]} className="hidden sm:flex sm:col-span-4"><Wave /></Tile>
+      <Tile t={t["skeleton-fade"]} className="hidden sm:flex sm:col-span-2"><Skeleton /></Tile>
     </div>
   );
 }
@@ -73,8 +73,8 @@ const HEAT = (() => {
 })();
 
 function Heatmap() {
-  const { n } = useTick(140);
-  const head = n % 30;
+  const { n, reduced } = useTick(140);
+  const head = reduced ? 30 : n % 30;
   return (
     <span className="grid w-full grid-flow-col grid-rows-7 gap-[3px]">
       {HEAT.map((v, i) => {

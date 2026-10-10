@@ -74,6 +74,19 @@ const BANDS = [...LINKS]
     return { ...l, d, key: `${l.s}-${l.t}` };
   });
 
+// Label placement. Left column: right of the node; right column: left of the node (both inside the band
+// area). Middle column: above the first node / below the last, so the labels never cross the right-hand
+// ones (「商品閲覧 1,500」 and 「カート放棄 350」 used to share the same y and overlap).
+type Placement = "left" | "right" | "above" | "below";
+const placement = (n: NodeDef): Placement => {
+  if (n.col === 0) return "right";
+  if (n.col === 2) return "left";
+  const col = NODES.filter((m) => m.col === 1);
+  return col.indexOf(n) === 0 ? "above" : "below";
+};
+const LABEL_DY = 12; // centre line of an above/below label, measured from the node edge
+const PAD_Y = LABEL_DY + 10; // viewBox room for those labels (12px glyphs ≈ ±7 around the centre line)
+
 const label = (id: string) => NODES.find((n) => n.id === id)!.label;
 const fmt = (n: number) => n.toLocaleString("ja-JP");
 
@@ -93,7 +106,7 @@ export default function Sankey() {
         <span className="font-medium">サイト訪問者の流れ（9 月）</span>
         <span className="text-xs text-muted-foreground tabular-nums">訪問 {fmt(colTotals[0])} 人</span>
       </figcaption>
-      <svg viewBox={`-2 -4 ${W + 4} ${H + 8}`} className="h-auto w-full overflow-visible" role="group" aria-label="流入元から商品閲覧・直帰を経て購入・カート放棄・離脱に至る流れ">
+      <svg viewBox={`-2 -${PAD_Y} ${W + 4} ${H + PAD_Y * 2}`} className="h-auto w-full overflow-visible" role="group" aria-label="流入元から商品閲覧・直帰を経て購入・カート放棄・離脱に至る流れ">
         <g>
           {BANDS.map((b) => (
             <path
@@ -117,7 +130,9 @@ export default function Sankey() {
         </g>
         {NODES.map((n) => {
           const p = layout[n.id];
-          const right = n.col === 2;
+          const pos = placement(n);
+          const tx = pos === "left" ? p.x - 6 : pos === "right" ? p.x + NW + 6 : p.x + NW / 2;
+          const ty = pos === "above" ? p.y - LABEL_DY : pos === "below" ? p.y + p.h + LABEL_DY : p.y + p.h / 2;
           return (
             <g
               key={n.id}
@@ -132,10 +147,10 @@ export default function Sankey() {
             >
               <rect x={p.x} y={p.y} width={NW} height={p.h} rx={2} className={n.id === "buy" ? "fill-emerald-600 dark:fill-emerald-400" : "fill-foreground/80"} />
               <text
-                x={right ? p.x - 6 : p.x + NW + 6}
-                y={p.y + p.h / 2}
+                x={tx}
+                y={ty}
                 dominantBaseline="middle"
-                textAnchor={right ? "end" : "start"}
+                textAnchor={pos === "left" ? "end" : pos === "right" ? "start" : "middle"}
                 fontSize={12}
                 className="fill-foreground stroke-background [paint-order:stroke]"
                 strokeWidth={3}

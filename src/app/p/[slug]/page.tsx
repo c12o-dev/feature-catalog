@@ -10,6 +10,7 @@ import { TrackRecent } from "@/components/pattern/track-recent";
 import { Xray } from "@/components/shell/xray";
 import { SITE, aliasesOf, entries, getEntry, goalsFor, neighbours, sourceUrl } from "@/lib/catalog";
 import { headingFonts } from "@/lib/fonts";
+import { TintHue } from "@/components/shell/tint-hue";
 
 export const dynamicParams = false;
 
@@ -54,6 +55,7 @@ export default async function PatternPage({ params }: PageProps<"/p/[slug]">) {
 
   return (
     <div data-hue={entry.category.hue} style={{ "--cat-hue": entry.category.hue, ...fonts } as React.CSSProperties}>
+      <TintHue hue={entry.category.hue} />
       <TrackRecent slug={entry.slug} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="mx-auto max-w-[1180px] px-4 pt-10 sm:px-8 sm:pt-16">
@@ -75,7 +77,7 @@ export default async function PatternPage({ params }: PageProps<"/p/[slug]">) {
         {entry.demo && (
           <ViewTransition name={`stage-${entry.slug}`}>
             <div>
-              <Xray slug="theme-toggle" place="bl">
+              <Xray slug="theme-toggle" place="bl" className="mx-auto max-w-[880px]">
                 <Stage demo={entry.demo} label={entry.name} source={source} size="hero" eager />
               </Xray>
             </div>

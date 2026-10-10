@@ -967,7 +967,7 @@ export const demoMeta: Record<string, DemoMeta> = {
     "apis": [
       "SVG"
     ],
-    "lines": 140
+    "lines": 159
   },
   "Gauge": {
     "file": "src/components/demos/gauge.tsx",
@@ -1669,7 +1669,7 @@ export const demoMeta: Record<string, DemoMeta> = {
     "apis": [
       "SVG"
     ],
-    "lines": 63
+    "lines": 64
   },
   "PasskeyButton": {
     "file": "src/components/demos/passkey-button.tsx",
@@ -2088,7 +2088,7 @@ export const demoMeta: Record<string, DemoMeta> = {
     "apis": [
       "SVG"
     ],
-    "lines": 158
+    "lines": 173
   },
   "SavedView": {
     "file": "src/components/demos/saved-view.tsx",

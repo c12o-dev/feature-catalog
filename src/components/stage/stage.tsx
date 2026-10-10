@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowUpRight, Code2, Moon, RotateCcw, Sun } from "lucide-react";
 import { demoRegistry } from "@/components/demos/registry";
 import { DemoSkeleton } from "@/components/demos/_skeleton";
+import demoSizes from "@/data/demo-sizes.generated.json";
 import { StageContext, type StageTheme } from "./stage-context";
 import { cn } from "@/lib/utils";
 
@@ -27,12 +28,20 @@ const UNMOUNT_AFTER_MS = 60_000;
  * Neutral frame a demo plays on (v2-launch §3.4). Mounts the demo when it scrolls near the
  * viewport and unmounts it a minute after it leaves, so timers in off-screen demos stop.
  */
+// Rendered heights of each demo in a hero stage at 390 / 1440 (scripts/measure-demos.mjs). The
+// stage reserves them before the demo chunk arrives, so the swap from skeleton to demo doesn't
+// move the page (CLS). Unmeasured demos fall back to the skeleton's own height.
+const SIZES = demoSizes as Record<string, { sm: number; lg: number }>;
+
 export function Stage({ demo, href, source, label, size = "card", eager, toolbar = true, className }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const [theme, setTheme] = useState<StageTheme>("light");
   const [mounted, setMounted] = useState(!!eager);
   const [run, setRun] = useState(0);
   const Demo = demoRegistry[demo];
+  // mini: 44px toolbar band + 12px bottom padding around the measured (phone-width) height
+  const miniHeight = SIZES[demo] ? Math.min(240, SIZES[demo].sm + 56) : 240;
+  const miniClipped = !SIZES[demo] || SIZES[demo].sm + 56 > 240;
 
   useEffect(() => {
     if (eager) return;
@@ -63,12 +72,15 @@ export function Stage({ demo, href, source, label, size = "card", eager, toolbar
       <div
         ref={ref}
         data-stage={theme}
+        data-demo={demo}
+        style={size === "mini" ? { height: miniHeight } : undefined}
         className={cn(
           "group/stage relative isolate overflow-hidden rounded-[var(--radius-md)] border border-black/5 shadow-[0_1px_0_rgba(255,255,255,0.04)_inset,0_24px_60px_-32px_rgba(0,0,0,0.9)] transition-colors duration-300",
           size === "hero" && "flex min-h-[16rem] flex-col justify-center",
           size === "card" && "min-h-[12rem]",
-          // fixed so mounting the demo never shifts the page (CLS); taller demos fade out at the bottom
-          size === "mini" && "h-60",
+          // sized to the demo (measured) so mounting it never shifts the page; taller demos are
+          // clipped with a fade at the bottom
+          size === "mini" && !SIZES[demo] && "h-60",
           className,
         )}
       >
@@ -92,14 +104,27 @@ export function Stage({ demo, href, source, label, size = "card", eager, toolbar
             )}
           </div>
         )}
-        <div className={cn("relative", size === "mini" ? "h-full p-3 pt-11 [mask-image:linear-gradient(to_bottom,black_82%,transparent)]" : size === "hero" ? "p-6 sm:p-10" : "p-5 sm:p-7", toolbar && size !== "mini" && "pt-12 sm:pt-7")}>
-          {Demo && mounted ? (
-            <DemoBoundary key={run} label={label}>
-              <Demo />
-            </DemoBoundary>
-          ) : (
-            <DemoSkeleton />
+        <div
+          className={cn(
+            "relative",
+            size === "mini" ? cn("h-full p-3 pt-11", miniClipped && "[mask-image:linear-gradient(to_bottom,black_82%,transparent)]") : size === "hero" ? "p-6 sm:p-10" : "p-5 sm:p-7",
+            // the toolbar floats top-right: keep the first row of the demo clear of it
+            toolbar && size !== "mini" && "pt-12 sm:pt-14",
           )}
+        >
+          <div
+            data-demo-root
+            className={cn(size === "hero" && SIZES[demo] && "min-h-[var(--demo-h-sm)] sm:min-h-[var(--demo-h-lg)]")}
+            style={size === "hero" && SIZES[demo] ? ({ "--demo-h-sm": `${SIZES[demo].sm}px`, "--demo-h-lg": `${SIZES[demo].lg}px` } as React.CSSProperties) : undefined}
+          >
+            {Demo && mounted ? (
+              <DemoBoundary key={run} label={label}>
+                <Demo />
+              </DemoBoundary>
+            ) : (
+              <DemoSkeleton />
+            )}
+          </div>
         </div>
       </div>
     </StageContext.Provider>
