@@ -2,6 +2,7 @@
 
 import { useEffect, useLayoutEffect, useState, useSyncExternalStore } from "react";
 import { demoServerSnapshot, demoSnapshot, resetDemos, subscribeDemos } from "@/lib/demo-ready";
+import { Xray } from "@/components/shell/xray";
 
 /** Upper bound on the wait: on a slow connection the page shows anyway (decided 2026-10-10). */
 const MAX_WAIT_MS = 4000;
@@ -59,12 +60,12 @@ export function PageLoader() {
   }, [phase]);
 
   if (phase === "gone") return null;
+  // a sliver before any demo has registered, so the bar never looks stalled at zero
+  const progress = total > 0 ? Math.max(0.08, done / total) : 0.08;
   return (
     <div
       data-page-loader
-      role="status"
-      aria-live="polite"
-      className={`fixed inset-0 z-[90] flex flex-col items-center justify-center gap-5 bg-bg-0 transition-opacity duration-[240ms] ${phase === "fading" ? "opacity-0" : "opacity-100"}`}
+      className={`fixed inset-0 z-[90] flex flex-col items-center justify-center gap-6 bg-bg-0 [will-change:opacity] transition-opacity duration-[240ms] ${phase === "fading" ? "opacity-0" : "opacity-100"}`}
     >
       <noscript>
         <style>{"[data-page-loader]{display:none}"}</style>
@@ -72,9 +73,19 @@ export function PageLoader() {
       <span aria-hidden className="font-serif text-6xl leading-none text-brand motion-safe:animate-pulse">
         §
       </span>
-      <span className="font-mono text-[11px] tracking-[0.18em] text-fg-3 uppercase">
-        読み込み中{total > 0 ? ` ${done} / ${total}` : ""}
-      </span>
+      <Xray slug="progress-bar" as="div" place="below">
+        <div
+          role="progressbar"
+          aria-label="読み込み中"
+          aria-valuemin={0}
+          aria-valuemax={Math.max(total, 1)}
+          aria-valuenow={done}
+          className="h-0.5 w-48 overflow-hidden rounded-full bg-line-1"
+        >
+          {/* transform only (§3.1); no transition under reduced motion */}
+          <div className="h-full w-full origin-left rounded-full bg-brand motion-safe:transition-transform motion-safe:duration-200" style={{ transform: `scaleX(${progress})` }} />
+        </div>
+      </Xray>
     </div>
   );
 }
