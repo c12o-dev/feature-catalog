@@ -305,6 +305,11 @@
   animation-duration: 420ms;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 }
+/* No shared elements while the curtain or a loading screen covers the page: their snapshots are
+   drawn above everything and would fly across the curtain (e.g. /p → its category). */
+html:has([data-page-loader]) * {
+  view-transition-name: none !important;
+}
 
 /* ── Reduced motion: stop autonomous motion everywhere (v2-launch D13) ── */
 @media (prefers-reduced-motion: reduce) {

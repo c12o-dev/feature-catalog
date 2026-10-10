@@ -1,3 +1,4 @@
+import { ViewTransition } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Stage } from "@/components/stage/stage";
@@ -19,11 +20,13 @@ export function PatternCard({ entry, preload, enter }: { entry: Entry; preload?:
     >
       <div className="flex flex-col gap-4">
         <p className="idx text-xs text-cat">{entry.code}</p>
-        <h2 id={`${entry.slug}-h`} className="text-[length:var(--fs-h2)] leading-[1.2] text-fg-1">
-          <Link href={`/p/${entry.slug}`} className="decoration-cat/60 decoration-1 underline-offset-[6px] hover:underline">
-            {entry.name}
-          </Link>
-        </h2>
+        <ViewTransition name={`title-${entry.slug}`}>
+          <h2 id={`${entry.slug}-h`} className="text-[length:var(--fs-h2)] leading-[1.2] text-fg-1">
+            <Link href={`/p/${entry.slug}`} className="decoration-cat/60 decoration-1 underline-offset-[6px] hover:underline">
+              {entry.name}
+            </Link>
+          </h2>
+        </ViewTransition>
         <p className="text-[15px] text-fg-2">{entry.description}</p>
         {entry.when && <p className="text-sm leading-relaxed text-fg-3">{entry.when}</p>}
         {entry.notes && (
@@ -55,9 +58,11 @@ export function PatternCard({ entry, preload, enter }: { entry: Entry; preload?:
         </p>
       )}
       {entry.demo && (
-        <div className="min-w-0">
-          <Stage demo={entry.demo} label={entry.name} href={`/p/${entry.slug}`} source={sourceUrl(entry)} preload={preload} />
-        </div>
+        <ViewTransition name={`stage-${entry.slug}`}>
+          <div className="min-w-0">
+            <Stage demo={entry.demo} label={entry.name} href={`/p/${entry.slug}`} source={sourceUrl(entry)} preload={preload} />
+          </div>
+        </ViewTransition>
       )}
     </article>
   );
