@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ViewTransition } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
@@ -32,8 +33,8 @@ export default async function PatternPage({ params }: PageProps<"/p/[slug]">) {
   const entry = getEntry((await params).slug);
   if (!entry) notFound();
   const fonts = headingFonts(`c-${entry.category.slug}`);
-  const siblings = entries.filter((e) => e.category.slug === entry.category.slug);
-  const { prev, next } = neighbours(siblings, entry);
+  // reading order runs on across categories; at either end of the catalog, back to the category list
+  const { prev, next } = neighbours(entries, entry);
   const goals = goalsFor(entry.slug);
   const alias = entry.aliasOf ? getEntry(entry.aliasOf) : undefined;
   const sharers = aliasesOf(entry.slug);
@@ -65,9 +66,10 @@ export default async function PatternPage({ params }: PageProps<"/p/[slug]">) {
             {entry.code}
             <span className="ml-3 text-fg-3">{entry.category.en}</span>
           </p>
-          <h1 className="fade-up text-[length:var(--fs-h1)] leading-[1.08] tracking-[-0.01em] text-fg-1" style={{ animationDelay: "140ms" }}>
-            {entry.name}
-          </h1>
+          {/* no entrance on the title and stage: they morph in from the card (view transition) */}
+          <ViewTransition name={`title-${entry.slug}`}>
+            <h1 className="text-[length:var(--fs-h1)] leading-[1.08] tracking-[-0.01em] text-fg-1">{entry.name}</h1>
+          </ViewTransition>
           <p className="fade-up mt-5 max-w-2xl text-lg text-fg-2" style={{ animationDelay: "210ms" }}>
             {entry.description}
           </p>
@@ -89,11 +91,13 @@ export default async function PatternPage({ params }: PageProps<"/p/[slug]">) {
         )}
 
         {entry.demo && (
-          <div className="fade-up" style={{ animationDelay: "350ms" }}>
-            <Xray slug="theme-toggle" place="bl" className="max-w-[880px]">
-              <Stage demo={entry.demo} label={entry.name} source={source} size="hero" eager />
-            </Xray>
-          </div>
+          <ViewTransition name={`stage-${entry.slug}`}>
+            <div>
+              <Xray slug="theme-toggle" place="bl" className="max-w-[880px]">
+                <Stage demo={entry.demo} label={entry.name} source={source} size="hero" eager />
+              </Xray>
+            </div>
+          </ViewTransition>
         )}
 
         <div className="mt-14 grid gap-12 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] lg:gap-16">
@@ -166,29 +170,45 @@ export default async function PatternPage({ params }: PageProps<"/p/[slug]">) {
         <nav aria-label="前後のパターン" className="mt-20 grid gap-px border-y border-line-1 bg-line-1 sm:grid-cols-2">
           {prev ? (
             <Link href={`/p/${prev.slug}`} className="flex flex-col gap-2 bg-bg-0 py-8 pr-4 transition-colors hover:bg-bg-1 sm:pr-6">
-              <span className="flex items-center gap-2 text-xs text-fg-3"><ArrowLeft className="size-3.5" /> {prev.code}</span>
+              <span className="flex items-center gap-2 text-xs text-fg-3">
+                <ArrowLeft className="size-3.5" /> {prev.code}
+                {prev.category !== entry.category && <span>· 前のカテゴリ「{prev.category.name}」</span>}
+              </span>
               <span className="text-xl text-fg-1">{prev.name}</span>
             </Link>
           ) : (
-            <Link href={`/c/${entry.category.slug}`} className="flex flex-col gap-2 bg-bg-0 py-8 pr-4 transition-colors hover:bg-bg-1 sm:pr-6">
-              <span className="flex items-center gap-2 text-xs text-fg-3"><ArrowLeft className="size-3.5" /> {entry.category.code}</span>
-              <span className="text-xl text-fg-1">{entry.category.name} の先頭です</span>
-            </Link>
+            <EndLink side="prev" />
           )}
           {next ? (
             <Link href={`/p/${next.slug}`} className="flex flex-col items-end gap-2 bg-bg-0 py-8 pl-4 text-right transition-colors hover:bg-bg-1 sm:pl-6">
-              <span className="flex items-center gap-2 text-xs text-fg-3">{next.code} <ArrowRight className="size-3.5" /></span>
+              <span className="flex items-center gap-2 text-xs text-fg-3">
+                {next.category !== entry.category && <span>次のカテゴリ「{next.category.name}」 ·</span>}
+                {next.code} <ArrowRight className="size-3.5" />
+              </span>
               <span className="text-xl text-fg-1">{next.name}</span>
             </Link>
           ) : (
-            <Link href={`/c/${entry.category.slug}`} className="flex flex-col items-end gap-2 bg-bg-0 py-8 pl-4 text-right transition-colors hover:bg-bg-1 sm:pl-6">
-              <span className="flex items-center gap-2 text-xs text-fg-3">{entry.category.code} <ArrowRight className="size-3.5" /></span>
-              <span className="text-xl text-fg-1">{entry.category.name} の末尾です</span>
-            </Link>
+            <EndLink side="next" />
           )}
         </nav>
       </div>
     </div>
+  );
+}
+
+/** First or last pattern of the whole catalog: the way on is the category list. */
+function EndLink({ side }: { side: "prev" | "next" }) {
+  const Arrow = side === "prev" ? ArrowLeft : ArrowRight;
+  return (
+    <Link
+      href="/categories"
+      className={`flex flex-col gap-2 bg-bg-0 py-8 transition-colors hover:bg-bg-1 ${side === "prev" ? "pr-4 sm:pr-6" : "items-end pl-4 text-right sm:pl-6"}`}
+    >
+      <span className={`flex items-center gap-2 text-xs text-fg-3 ${side === "next" ? "flex-row-reverse" : ""}`}>
+        <Arrow className="size-3.5" /> カテゴリ
+      </span>
+      <span className="text-xl text-fg-1">カテゴリ一覧へ</span>
+    </Link>
   );
 }
 
