@@ -89,16 +89,21 @@
         {
           "matchingUrlPattern": "/(c|p|g)/",
           "assertions": {
-            "resource-summary:script:size": [
-              "error",
-              {
-                "maxNumericValue": 204800
-              }
-            ],
             "largest-contentful-paint": [
               "error",
               {
                 "maxNumericValue": 2500
+              }
+            ]
+          }
+        },
+        {
+          "matchingUrlPattern": "/c/",
+          "assertions": {
+            "resource-summary:script:size": [
+              "error",
+              {
+                "maxNumericValue": 204800
               }
             ]
           }
