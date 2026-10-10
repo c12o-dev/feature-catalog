@@ -71,7 +71,7 @@ export function XrayProvider({ info, children }: { info: XrayInfo; children: Rea
 }
 
 /** Patterns with no box of their own (skip link, cursor light, transitions…). */
-const GLOBAL_PATTERNS = ["skip-link", "cursor-follower", "view-transition", "focus-ring", "reduced-motion", "prefetch-on-hover", "ambient-orb"];
+const GLOBAL_PATTERNS = ["skip-link", "cursor-follower", "focus-ring", "reduced-motion", "prefetch-on-hover", "ambient-orb"];
 
 function XrayLegend({ info }: { info: XrayInfo }) {
   const on = useXray();

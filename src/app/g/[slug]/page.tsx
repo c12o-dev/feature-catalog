@@ -34,12 +34,12 @@ export default async function ThemePage({ params }: PageProps<"/g/[slug]">) {
     <div className="mx-auto max-w-[1180px] px-4 pt-10 sm:px-8 sm:pt-16" style={fonts}>
       <PageLoader />
       <Breadcrumb items={[{ href: "/goals", label: "目的" }, { label: theme.name }]} />
-      <h1 className="fade-up mt-10 mb-12 text-[length:var(--fs-h2)] leading-[1.1] text-fg-2">{theme.name}</h1>
+      <h1 className="fade-up mt-10 mb-12 text-[length:var(--fs-h2)] leading-[1.1] text-fg-2" style={{ animationDelay: "70ms" }}>{theme.name}</h1>
       <div className="space-y-24">
         {theme.goals.map((g, i) => {
           const list = g.patterns.map((s) => getEntry(s)).filter((e) => !!e);
           return (
-            <section key={g.title} id={`g${i}`} aria-labelledby={`g${i}-h`} className="scroll-mt-24">
+            <section key={g.title} id={`g${i}`} aria-labelledby={`g${i}-h`} className={`scroll-mt-24 ${i === 0 ? "fade-up" : ""}`} style={i === 0 ? { animationDelay: "140ms" } : undefined}>
               <div className="mb-8 flex flex-wrap items-end justify-between gap-4 border-b border-line-1 pb-6">
                 <h2 id={`g${i}-h`} className="max-w-4xl text-[length:var(--fs-h1)] leading-[1.2] text-fg-1">{g.title}</h2>
                 <div className="flex flex-wrap gap-2">

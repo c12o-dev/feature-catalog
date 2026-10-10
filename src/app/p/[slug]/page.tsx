@@ -1,4 +1,3 @@
-import { ViewTransition } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -64,18 +63,18 @@ export default async function PatternPage({ params }: PageProps<"/p/[slug]">) {
         <Breadcrumb items={[{ href: "/categories", label: "カテゴリ" }, { href: `/c/${entry.category.slug}`, label: entry.category.name }, { label: entry.name }]} />
 
         <header className="mt-10 mb-10 sm:mb-14">
-          <p className="idx fade-up mb-4 text-sm text-cat">
+          <p className="idx fade-up mb-4 text-sm text-cat" style={{ animationDelay: "70ms" }}>
             {entry.code}
             <span className="ml-3 text-fg-3">{entry.category.en}</span>
           </p>
-          <ViewTransition name={`title-${entry.slug}`}>
-            <h1 className="text-[length:var(--fs-h1)] leading-[1.08] tracking-[-0.01em] text-fg-1">{entry.name}</h1>
-          </ViewTransition>
-          <p className="fade-up mt-5 max-w-2xl text-lg text-fg-2" style={{ animationDelay: "120ms" }}>
+          <h1 className="fade-up text-[length:var(--fs-h1)] leading-[1.08] tracking-[-0.01em] text-fg-1" style={{ animationDelay: "140ms" }}>
+            {entry.name}
+          </h1>
+          <p className="fade-up mt-5 max-w-2xl text-lg text-fg-2" style={{ animationDelay: "210ms" }}>
             {entry.description}
           </p>
           {entry.when && (
-            <p className="fade-up mt-4 max-w-2xl text-[15px] leading-relaxed text-fg-3" style={{ animationDelay: "200ms" }}>
+            <p className="fade-up mt-4 max-w-2xl text-[15px] leading-relaxed text-fg-3" style={{ animationDelay: "280ms" }}>
               {entry.when}
             </p>
           )}
@@ -92,13 +91,11 @@ export default async function PatternPage({ params }: PageProps<"/p/[slug]">) {
         )}
 
         {entry.demo && (
-          <ViewTransition name={`stage-${entry.slug}`}>
-            <div>
-              <Xray slug="theme-toggle" place="bl" className="max-w-[880px]">
-                <Stage demo={entry.demo} label={entry.name} source={source} size="hero" preload />
-              </Xray>
-            </div>
-          </ViewTransition>
+          <div className="fade-up" style={{ animationDelay: "350ms" }}>
+            <Xray slug="theme-toggle" place="bl" className="max-w-[880px]">
+              <Stage demo={entry.demo} label={entry.name} source={source} size="hero" preload />
+            </Xray>
+          </div>
         )}
 
         <div className="mt-14 grid gap-12 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] lg:gap-16">
