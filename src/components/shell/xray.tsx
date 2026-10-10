@@ -84,7 +84,7 @@ function XrayLegend({ info }: { info: XrayInfo }) {
       <button
         type="button"
         onClick={() => setExpanded(true)}
-        className="fixed right-4 bottom-4 z-[70] inline-flex h-8 items-center gap-2 rounded-full border border-brand bg-bg-1/90 px-3 font-mono text-[10px] tracking-[0.16em] text-fg-1 uppercase shadow-2xl backdrop-blur hover:bg-bg-2"
+        className="fixed bottom-4 left-4 z-[70] inline-flex h-8 items-center gap-2 rounded-full border border-brand bg-bg-1/90 px-3 font-mono text-[10px] tracking-[0.16em] text-fg-1 uppercase shadow-2xl backdrop-blur hover:bg-bg-2"
       >
         <span aria-hidden className="size-1.5 rounded-full bg-brand" />
         X-ray · ページ全体 {count}
@@ -93,7 +93,7 @@ function XrayLegend({ info }: { info: XrayInfo }) {
   return (
     <aside
       aria-label="X-ray: ページ全体で使っているパターン"
-      className="fixed right-4 bottom-4 z-[70] w-[min(20rem,calc(100vw-2rem))] rounded-lg border border-line-2 bg-bg-1/90 p-3 shadow-2xl backdrop-blur"
+      className="fixed bottom-4 left-4 z-[70] w-[min(20rem,calc(100vw-2rem))] rounded-lg border border-line-2 bg-bg-1/90 p-3 shadow-2xl backdrop-blur"
     >
       <div className="mb-2 flex items-center justify-between font-mono text-[10px] tracking-[0.16em] text-fg-3 uppercase">
         <span>X-ray · ページ全体</span>
@@ -138,7 +138,7 @@ export function Xray({
   className?: string;
   as?: "div" | "span" | "section" | "header" | "footer" | "nav";
   /** Corner of the box the label sits in; "below" hangs it under the box (for the header). */
-  place?: "tl" | "tr" | "bl" | "br" | "below";
+  place?: "tl" | "tr" | "bl" | "br" | "below" | "below-right";
 }) {
   const on = useXray();
   const info = useContext(XrayContext)[slug];
@@ -153,6 +153,7 @@ export function Xray({
             "xray-tag absolute z-[70] inline-flex max-w-[calc(100%-0.5rem)] items-center gap-1.5 truncate rounded-sm bg-cat px-1.5 py-0.5 font-mono text-[10px] leading-4 font-medium text-black shadow-lg",
             place === "tl" && "left-1 top-1",
             place === "below" && "left-1 top-full mt-1 max-w-[16rem]",
+            place === "below-right" && "right-0 top-full mt-1 max-w-[16rem]",
             place === "tr" && "right-1 top-1",
             place === "bl" && "bottom-1 left-1",
             place === "br" && "bottom-1 right-1",
