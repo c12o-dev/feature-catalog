@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -26,7 +27,7 @@ export async function generateMetadata({ params }: PageProps<"/g/[slug]">): Prom
 export default async function ThemePage({ params }: PageProps<"/g/[slug]">) {
   const theme = getTheme((await params).slug);
   if (!theme) notFound();
-  const fonts = headingFonts("hub");
+  const fonts = headingFonts(`g-${theme.slug}`);
   const { prev, next } = neighbours(themes, theme);
 
   return (
@@ -61,7 +62,11 @@ export default async function ThemePage({ params }: PageProps<"/g/[slug]">) {
                       </Link>
                     </div>
                     <p className="text-sm text-fg-3">{e.description}</p>
-                    {e.demo && <Stage demo={e.demo} label={e.name} href={`/p/${e.slug}`} size="mini" />}
+                    {e.demo && (
+                      <Suspense fallback={null}>
+                        <Stage demo={e.demo} label={e.name} href={`/p/${e.slug}`} size="mini" />
+                      </Suspense>
+                    )}
                   </li>
                 ))}
               </ul>

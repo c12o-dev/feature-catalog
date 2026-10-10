@@ -25,9 +25,6 @@ export const viewport: Viewport = {
   colorScheme: "dark",
 };
 
-// Loads the Japanese font slices without blocking first paint (v2-launch §3.3).
-const FONT_LOADER = `(function(l){if(!l)return;function f(){l.media='all'}l.sheet?f():l.addEventListener('load',f)})(document.getElementById('fc-fonts'))`;
-
 const xrayInfo: XrayInfo = Object.fromEntries(
   XRAY_SLUGS.flatMap((s) => {
     const e = getEntry(s);
@@ -49,14 +46,12 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="ja" suppressHydrationWarning>
       <head>
-        {/* Self-hosted font slices are loaded async via media swap; next/font cannot ingest unicode-range slices (v2-launch §3.3). */}
-        {/* eslint-disable-next-line @next/next/no-css-tags */}
-        <link id="fc-fonts" rel="stylesheet" href="/fonts/fonts.css" media="print" suppressHydrationWarning />
-        <script dangerouslySetInnerHTML={{ __html: FONT_LOADER }} />
-        <noscript>
-          {/* eslint-disable-next-line @next/next/no-css-tags */}
+        {/* In production the @font-face rules and per-page preloads are inlined into the static HTML
+            after the build (scripts/inject-font-preloads.mjs). Dev just links the stylesheet. */}
+        {process.env.NODE_ENV !== "production" && (
+          // eslint-disable-next-line @next/next/no-css-tags
           <link rel="stylesheet" href="/fonts/fonts.css" />
-        </noscript>
+        )}
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       </head>
       <body className="grain min-h-dvh overflow-x-clip">

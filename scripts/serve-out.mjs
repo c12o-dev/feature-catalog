@@ -1,14 +1,20 @@
 /* Minimal static server for `out/` that mimics Cloudflare Pages closely enough for tests:
    clean URLs (/c/auth → c/auth.html), 404.html fallback, brotli/gzip for text like Pages, and the
    headers from public/_headers (so CSP violations surface as console errors in e2e).
-   Usage: node scripts/serve-out.mjs [port] */
+   With --h2 it serves HTTPS/2 on a self-signed certificate (Lighthouse then simulates
+   multiplexed loading as Cloudflare does; pass --ignore-certificate-errors to Chrome).
+   Usage: node scripts/serve-out.mjs [port] [--h2] */
+import { execFileSync } from "node:child_process";
 import http from "node:http";
+import http2 from "node:http2";
+import os from "node:os";
 import fs from "node:fs";
 import path from "node:path";
 import zlib from "node:zlib";
 
 const ROOT = path.resolve("out");
-const PORT = Number(process.argv[2] ?? 3100);
+const PORT = Number(process.argv.find((a) => /^\d+$/.test(a)) ?? 3100);
+const H2 = process.argv.includes("--h2");
 
 const TYPES = {
   ".html": "text/html; charset=utf-8",
@@ -66,8 +72,7 @@ function resolve(urlPath) {
   return null;
 }
 
-http
-  .createServer((req, res) => {
+const handler = (req, res) => {
     const urlPath = new URL(req.url, "http://x").pathname;
     const file = resolve(urlPath);
     const status = file ? 200 : 404;
@@ -84,5 +89,19 @@ http
     }
     res.writeHead(status);
     res.end(enc ? compressed(target, enc) : fs.readFileSync(target));
-  })
-  .listen(PORT, () => console.log(`serving out/ on http://localhost:${PORT}`));
+  };
+
+if (H2) {
+  // Self-signed cert for localhost, generated once into the OS temp dir.
+  const dir = path.join(os.tmpdir(), "feature-catalog-h2");
+  fs.mkdirSync(dir, { recursive: true });
+  const key = path.join(dir, "key.pem");
+  const cert = path.join(dir, "cert.pem");
+  if (!fs.existsSync(key) || !fs.existsSync(cert))
+    execFileSync("openssl", ["req", "-x509", "-newkey", "rsa:2048", "-nodes", "-keyout", key, "-out", cert, "-days", "365", "-subj", "/CN=localhost"], { stdio: "ignore" });
+  http2
+    .createSecureServer({ key: fs.readFileSync(key), cert: fs.readFileSync(cert), allowHTTP1: true }, handler)
+    .listen(PORT, () => console.log(`serving out/ on https://localhost:${PORT} (h2)`));
+} else {
+  http.createServer(handler).listen(PORT, () => console.log(`serving out/ on http://localhost:${PORT}`));
+}
