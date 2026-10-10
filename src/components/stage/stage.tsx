@@ -51,25 +51,17 @@ export function Stage({ demo, href, source, label, size = "card", eager, preload
   const miniLg = SIZES[demo] ? Math.min(MINI_MAX, SIZES[demo].lg + 56) : 240;
   const miniClipped = !SIZES[demo] || Math.max(SIZES[demo].sm, SIZES[demo].lg) + 56 > MINI_MAX;
 
-  // Not preloading: mount once the stage comes near the viewport (or its <details> opens), then keep it.
+  // Not preloading: mount once the stage comes near the viewport, then keep it.
   useEffect(() => {
     if (eager || preload || mounted) return;
     const el = ref.current;
     if (!el) return;
-    // inside a folded <details>: mount together the moment it opens, not one by one while scrolling
-    const details = el.closest("details");
-    if (details) {
-      const onToggle = () => details.open && setMounted(true);
-      if (details.open) setTimeout(onToggle, 0);
-      details.addEventListener("toggle", onToggle);
-      return () => details.removeEventListener("toggle", onToggle);
-    }
     const io = new IntersectionObserver(([e]) => e.isIntersecting && setMounted(true), { rootMargin: "400px 0px" });
     io.observe(el);
     return () => io.disconnect();
   }, [eager, preload, mounted]);
 
-  // Preloading: count towards the loading screen until the demo has replaced its skeleton on screen.
+  // Preloading: count towards the loading screen until the demo has replaced its skeleton (also inside a closed <details>).
   useEffect(() => {
     if (!preload) return;
     const id = `${readyId}:${demo}`;

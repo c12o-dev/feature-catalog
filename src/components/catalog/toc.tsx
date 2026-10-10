@@ -70,7 +70,14 @@ export function Toc({ items }: { items: { slug: string; name: string; code: stri
 
   // keep the active row visible inside the scrolling list
   useEffect(() => {
-    listRef.current?.querySelector<HTMLElement>(`[data-slug="${active}"]`)?.scrollIntoView({ block: "nearest" });
+    // Scroll the list box only: scrollIntoView also scrolls the page, and near the bottom (where the
+    // sticky list is pushed up out of view) it kept pulling the page back up while scrolling down.
+    const list = listRef.current;
+    const row = list?.querySelector<HTMLElement>(`[data-slug="${active}"]`);
+    if (!list || !row) return;
+    const top = row.offsetTop - list.offsetTop;
+    if (top < list.scrollTop) list.scrollTop = top;
+    else if (top + row.offsetHeight > list.scrollTop + list.clientHeight) list.scrollTop = top + row.offsetHeight - list.clientHeight;
   }, [active]);
 
   const idx = Math.max(0, items.findIndex((i) => i.slug === active));
