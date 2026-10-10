@@ -53,7 +53,7 @@ export default function MaintenanceBanner() {
               <time dateTime={END.toISOString()}>{fmt(END, tz, false)}</time>（{isJst ? "日本時間" : tzLabel(tz)}）の間、サービスを停止します。
             </p>
             {!isJst && (
-              <p className="mt-0.5 text-xs opacity-60">
+              <p className="mt-0.5 text-xs opacity-80">
                 日本時間 {fmt(START, JST, true)}–{fmt(END, JST, false)}
               </p>
             )}
