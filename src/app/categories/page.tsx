@@ -6,7 +6,7 @@ import { headingFonts } from "@/lib/fonts";
 
 export const metadata: Metadata = {
   title: "カテゴリ",
-  description: `UI のかたちで分けた ${stats.categories} カテゴリ・${stats.patterns} パターンの索引。`,
+  description: `UI のかたちで分けた ${stats.categories} カテゴリ・${stats.patterns} の UI パターンの索引。`,
   alternates: { canonical: "/categories" },
 };
 

@@ -10,7 +10,7 @@ import { SITE, XRAY_SLUGS, getEntry } from "@/lib/catalog";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
-  title: { default: `${SITE.name} — モダン Web の機能パターン 341`, template: `%s · ${SITE.name}` },
+  title: { default: `${SITE.name} — モダン Web の UI パターン 341`, template: `%s · ${SITE.name}` },
   description: SITE.description,
   applicationName: SITE.name,
   authors: [{ name: SITE.author, url: SITE.portal }],
@@ -40,6 +40,7 @@ const jsonLd = {
   url: SITE.url,
   inLanguage: "ja",
   description: SITE.description,
+  keywords: ["UI パターン", "機能パターン", "UI デザインパターン", "Web の機能", "デモ"],
   author: { "@type": "Person", name: SITE.author, url: SITE.portal },
 };
 
