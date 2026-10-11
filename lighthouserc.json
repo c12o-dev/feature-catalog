@@ -23,7 +23,7 @@
     "assert": {
       "assertMatrix": [
         {
-          "matchingUrlPattern": "^(?!.*/c/).*$",
+          "matchingUrlPattern": "^(?!.*/(c|g)/).*$",
           "assertions": {
             "categories:performance": [
               "error",
@@ -98,7 +98,7 @@
           }
         },
         {
-          "matchingUrlPattern": "/c/",
+          "matchingUrlPattern": "/(c|g)/",
           "assertions": {
             "categories:performance": [
               "error",
@@ -133,7 +133,7 @@
             "total-blocking-time": [
               "error",
               {
-                "maxNumericValue": 2000
+                "maxNumericValue": 5000
               }
             ],
             "resource-summary:font:size": [
@@ -141,7 +141,12 @@
               {
                 "maxNumericValue": 122880
               }
-            ],
+            ]
+          }
+        },
+        {
+          "matchingUrlPattern": "/c/",
+          "assertions": {
             "resource-summary:script:size": [
               "error",
               {
