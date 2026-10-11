@@ -1,5 +1,6 @@
-/* Static checklist for the demo conventions (docs/design/v2-launch.md §5.2, gate G12).
-   Reads src/components/demos/*.tsx (registry.tsx and _* skipped) and writes docs/qa/demo-checklist.md.
+/* Static checklist for the demo conventions (design doc v2-launch.md §5.2, gate G12).
+   The design docs live in the private c12o-dev/project-docs repo, under feature-catalog/.
+   Reads src/components/demos/*.tsx (registry.tsx and _* skipped) and writes ../project-docs/feature-catalog/qa/demo-checklist.md.
    Heuristics only: ✓ = passes the static check, ✗ = violation found, – = not statically checkable.
    Run via `pnpm run checklist`. Does not touch the demos. */
 
@@ -8,7 +9,7 @@ import path from "node:path";
 
 // DEMO_CHECKLIST_DIR / DEMO_CHECKLIST_OUT override the paths (used to try the heuristics on fixtures).
 const DIR = process.env.DEMO_CHECKLIST_DIR ?? "src/components/demos";
-const OUT = process.env.DEMO_CHECKLIST_OUT ?? "docs/qa/demo-checklist.md";
+const OUT = process.env.DEMO_CHECKLIST_OUT ?? "../project-docs/feature-catalog/qa/demo-checklist.md";
 
 const files = fs
   .readdirSync(DIR)
@@ -459,7 +460,7 @@ const md = [];
 md.push("# デモ規約チェックリスト（G12）");
 md.push("");
 md.push(`> \`pnpm run checklist\`（\`scripts/demo-checklist.mjs\`）が生成。手で編集しない。生成日: ${today}。対象 ${results.length} 件（\`src/components/demos/*.tsx\`、\`registry.tsx\` と \`_*\` を除く）。`);
-md.push("> 規約は `docs/design/v2-launch.md` §5.2。静的ヒューリスティックによる判定で、✓ は「違反を検出しなかった」の意味。");
+md.push("> 規約は `design/v2-launch.md` §5.2。静的ヒューリスティックによる判定で、✓ は「違反を検出しなかった」の意味。");
 md.push("");
 md.push("## 凡例");
 md.push("");

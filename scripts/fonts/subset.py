@@ -80,8 +80,7 @@ def plan_slices(real, extra, drawable, cats):
 
     A shared-slice optimiser (greedy merge on per-character usage signatures) did worse here:
     a category page's text spans many groups, so every page still pulled ~190 KB. Exact
-    per-page subsets would meet the budget but need ~10 MB of generated fonts; see
-    docs/qa/remaining.md.
+    per-page subsets would meet the budget but need ~10 MB of generated fonts.
     """
     n = max(1, len(real))
     freq = defaultdict(int)

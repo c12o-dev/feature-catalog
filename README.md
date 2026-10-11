@@ -45,14 +45,14 @@ src/
 └── data/
     ├── categories.ts    カテゴリとパターン
     └── goals.ts         目的からの逆引き
-docs/design/             設計書
 ```
 
 ## デモを追加する
 
 1. `src/components/demos/your-demo.tsx` を作る（`"use client"`、default export、props なし）。
-2. `src/components/demos/registry.tsx` に登録する。
-3. `src/data/categories.ts` の該当パターンに `demo` を指定する。
+2. `src/data/categories.ts` の該当パターンに `demo` を指定する（ファイル名の PascalCase）。
+
+`registry.tsx` と `src/data/demo-meta.generated.ts` は `pnpm run dev` / `pnpm run build` のたびに `scripts/gen-demos.mjs` が生成するので、手で編集しません。
 
 ## ライセンス
 

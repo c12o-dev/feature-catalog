@@ -1,7 +1,7 @@
 /*
  * Design tokens. Mirrors portfolio src/styles/tokens.css @ fabaf93 (itself a mirror of
  * c12o-blog). If they drift, the blog is the source of truth. Site-specific tokens live in
- * src/app/globals.css. Spec: docs/design/v2-launch.md §3.2.
+ * src/app/globals.css. Spec: design doc v2-launch.md §3.2.
  */
 :root {
   color-scheme: dark;

@@ -4,9 +4,9 @@ import { KEY_ROUTES, waitReady } from "./routes";
 
 /*
  * Screenshots for the quality loop (quality-loop §2.1): fixed routes × 1440/390 × light/dark
- * stage × motion/reduced-motion, plus ⌘K open and X-ray on. Output: docs/qa/shots/ (gitignored).
+ * stage × motion/reduced-motion, plus ⌘K open and X-ray on. Output: tmp/qa/shots/ (gitignored).
  */
-const OUT = "docs/qa/shots";
+const OUT = "tmp/qa/shots";
 mkdirSync(OUT, { recursive: true });
 
 const nameOf = (route: string) => (route === "/" ? "home" : route.slice(1).replaceAll("/", "_"));
