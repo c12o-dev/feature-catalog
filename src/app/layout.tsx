@@ -54,7 +54,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           // eslint-disable-next-line @next/next/no-css-tags
           <link rel="stylesheet" href="/fonts/fonts.css" />
         )}
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
       </head>
       <body className="grain min-h-dvh overflow-x-clip">
         <XrayProvider info={xrayInfo}>
