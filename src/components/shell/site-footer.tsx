@@ -14,7 +14,7 @@ export function SiteFooter() {
               <span className="text-fg-3">Catalog</span>
             </p>
             <p className="mt-6 max-w-sm text-sm text-fg-3">
-              {stats.patterns} の機能パターンを、{stats.uniqueDemos} の動くデモで。ユーザーから見える機能の語彙索引です。
+              {stats.patterns} の UI パターンを、{stats.uniqueDemos} の動くデモで。名前と動きで引ける索引です。
             </p>
           </div>
           <nav aria-label="サイト" className="text-sm">

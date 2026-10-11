@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: PageProps<"/p/[slug]">): Prom
   if (!e) return {};
   return {
     title: e.name,
-    description: `${e.description}。${e.notes ?? ""}`.slice(0, 160),
+    description: `${e.description}${e.when ?? e.notes ?? ""}`.slice(0, 160),
     alternates: { canonical: `/p/${e.slug}` },
     openGraph: { type: "article", url: `/p/${e.slug}` },
   };
@@ -43,14 +43,15 @@ export default async function PatternPage({ params }: PageProps<"/p/[slug]">) {
 
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "CreativeWork",
+    "@type": ["DefinedTerm", "CreativeWork"],
     name: entry.name,
-    description: entry.description,
+    termCode: entry.code,
+    description: `${entry.description}${entry.when ?? ""}`,
+    inDefinedTermSet: { "@type": "DefinedTermSet", name: `${SITE.name} — UI パターン / 機能パターン`, url: SITE.url },
     url: `${SITE.url}/p/${entry.slug}`,
     inLanguage: "ja",
     isPartOf: { "@type": "WebSite", name: SITE.name, url: SITE.url },
     author: { "@type": "Person", name: SITE.author, url: SITE.portal },
-    ...(source ? { codeRepository: SITE.repo } : {}),
   };
 
   return (

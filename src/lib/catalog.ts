@@ -11,7 +11,7 @@ export const SITE = {
   portal: "https://c12o.net",
   blog: "https://blog.c12o.net",
   description:
-    "草チャート、コマンドパレット、AI ストリーミング表示。モダン Web の「ユーザーから見える機能」341 パターンを、動くデモ付きで索引化したカタログ。",
+    "Feature Catalog は、モダン Web の UI パターン / 機能パターン 341 種を動くデモ付きで引けるカタログ。草チャート、コマンドパレット、AI ストリーミング表示など、25 カテゴリと目的からの逆引きで探せる。",
 } as const;
 
 /** OKLCH hue per category, grouped into 8 families (v2-launch §3.2). */

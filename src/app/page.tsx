@@ -38,16 +38,13 @@ export default function Home() {
           <div>
             <p className="fade-up mb-8 flex items-center gap-3 font-mono text-[11px] tracking-[0.2em] text-fg-3 uppercase">
               <span className="h-px w-8 bg-brand" />
-              Feature Catalog · {stats.categories} categories
+              Feature Catalog · {stats.categories} categories · {stats.patterns} patterns
             </p>
             <h1 className="hero-title leading-[1.04] tracking-[-0.02em] text-fg-1">
-              <span className="hero-line"><RiseText text="ユーザーから" /></span>
-              <span className="hero-line"><RiseText text="見える機能の、" delay={180} /></span>
+              <span className="hero-line"><RiseText text="UI パターンの、" /></span>
               <span className="hero-line">
-                <span className="text-brand">
-                  <RiseText text={`${stats.patterns}`} delay={420} step={60} className="font-mono tracking-[-0.06em]" />
-                </span>
-                <RiseText text=" の語彙。" delay={560} />
+                <RiseText text="動く" delay={420} step={60} className="text-brand" />
+                <RiseText text="カタログ。" delay={540} />
               </span>
             </h1>
           </div>
@@ -143,7 +140,7 @@ export default function Home() {
         <div className="reveal grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
           <div className="max-w-[38em] space-y-5 text-[15px] leading-[1.95] text-fg-2">
             <p>
-              個人開発で「あの機能、何て呼ぶんだっけ」を引くために作った語彙の索引です。コンポーネントライブラリではありません。何を作るかの選択肢を、名前と動きで見渡すためのカタログです。
+              個人開発で「あの機能、何て呼ぶんだっけ」を引くために作った UI パターンの索引です。コンポーネントライブラリではありません。何を作るかの選択肢を、名前と動きで見渡すためのカタログです。
             </p>
             <p>
               デモはすべて手元で動くモックです。地図・決済・動画のような外部サービスが要るパターンも、通信しない UI で再現しています。各デモの右上から、ステージの明暗の切り替え、リセット、ソースの表示ができます。
