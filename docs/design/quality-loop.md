@@ -28,7 +28,7 @@ FWA 軸: **初見 5 秒の驚き**（ヒーローを見た瞬間に「触りた�
 | G3 コンソール | 全ルートで error 0 / warning 0（recharts 警告も不可） |
 | G4 Lighthouse（モバイル） | Performance / A11y / Best Practices / SEO すべて ≥ 95。ホーム、カテゴリ 1 つ、パターン 1 つ、目的 1 つの 4 ページ |
 | G5 Core Web Vitals | LCP ≤ 1.8s、CLS = 0、INP ≤ 200ms（Lighthouse の値で可） |
-| G6 予算 | `v2-launch.md` §6.2 の JS / フォント予算内 |
+| G6 転送量 | `v2-launch.md` §6.2 の JS / フォント量の上限以内 |
 | G7 axe | 代表 8 ページで serious / critical 0 |
 | G8 キーボード | Tab だけでホーム → ⌘K → パターンページ → ステージ切替 → 戻る、が完了する |
 | G9 reduced-motion | エミュレートして全ページを開き、自律アニメーションが止まっていること |

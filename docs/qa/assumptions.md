@@ -8,7 +8,7 @@
 | A2 | 代表例の検証は別タスク。公開は待たない（Q4 の仮） | 全 341 件 `verified: false`。UI には出ない（D7） |
 | A3 | デモのステージ内はシステムフォント（ゴシック・明朝・等幅とも） | ステージは「別アプリの画面」（§3.4 無彩色で静か）。デモ 335 件の文言 1,300 字を和文フォントに含めると +150KB 以上 |
 | A4 | 和文フォントは Fontsource のスライスではなく、サイトの文言から切った自前サブセット（`assets/fonts/`、コミット対象） | Fontsource のスライスは 1 ページ 550〜790KB を引いた。文言を変えたら再生成が要る（`tests/fonts.test.ts` が検知）。手順は `scripts/build-fonts.mjs` 冒頭 |
-| A11 | **D3 の変更（本人承認 2026-10-10）**: 本文はシステムフォント（Hiragino Sans / Yu Gothic UI / Noto Sans JP）。自前で持つのは見出しの Shippori Mincho B1 と索引番号の JetBrains Mono だけ | 本文を Zen Kaku で持つと 1 ページ 180〜360KB で予算 120KB を満たせない（`docs/qa/remaining.md` R1）。見出しの明朝が「このサイトらしさ」の中心で、システムの明朝は OS でばらつく（Android は明朝なし）ため見出しだけ残す。結果 1 ページ 51〜83KB |
+| A11 | **D3 の変更（本人承認 2026-10-10）**: 本文はシステムフォント（Hiragino Sans / Yu Gothic UI / Noto Sans JP）。自前で持つのは見出しの Shippori Mincho B1 と索引番号の JetBrains Mono だけ | 本文を Zen Kaku で持つと 1 ページ 180〜360KB で上限 120KB に収まらない（`docs/qa/remaining.md` R1）。見出しの明朝が「このサイトらしさ」の中心で、システムの明朝は OS でばらつく（Android は明朝なし）ため見出しだけ残す。結果 1 ページ 51〜83KB |
 | A12 | 明朝は**ページ群ごとに別ファミリー名**（`Shippori Mincho B1 c-forms` など）で切り、ページの `--font-serif` で指す。preload はビルド後に静的 HTML へ直接書く | 1 文字 1 ファイルの排他的スライスだとパターン名 1 つが 7 ファイルに散った。React の `preload()` や JSX の `<link>` は、Next がリンク先を prefetch した時点でも実行され、リンク先 14 ページ分のフォントまで読んでいた（`scripts/inject-font-preloads.mjs` 冒頭） |
 | A13 | 自前フォントは `font-display: optional`、`@font-face` は HTML にインライン | swap だと欧文の字幅差で見出しの行数が変わり CLS 0.003〜0.035。optional でも `@font-face` が後から届くと再レイアウトになるため、インラインにして初回描画時点で定義を揃える。代償: 遅い回線の初回訪問は見出しがフォールバック明朝のまま（2 回目以降はキャッシュで Shippori） |
 | A5 | `out/` の HTML は 380 件（G2 の「341 + 40」は概算と解釈） | 341 パターン + 25 カテゴリ + 9 目的 + ホーム / categories / goals + 404 / _not-found |
@@ -16,7 +16,8 @@
 | A7 | 目的ページのミニステージは固定高（15rem）で、はみ出すデモは下端をフェード | マウント時の高さ変化が CLS 0.049 を出していた（G5 は CLS = 0） |
 | A8 | ⌘K の「戻る」（G8）は Playwright の `page.goBack()` で検証 | ブラウザ UI のショートカット（Alt+←）は Playwright から発火できない。同じ履歴操作 |
 | A9 | `serve-out.mjs`（e2e / LHCI 用の静的サーバー）は brotli/gzip と `_headers` を適用 | 本番の Cloudflare Pages と同条件で転送量・CSP を測るため |
-| A14 | **本人決定（2026-10-10）**: LCP 予算は見出しページ（/c・/p・/g）2.5s、ホーム 1.8s | 見出しページの LCP は Shippori Mincho の到着時刻で決まり（`optional` の実挙動はフォールバック描画）、simulated 計測では 2.0〜2.4s。`lighthouserc.json` の assertMatrix に反映 |
-| A15 | **本人決定（2026-10-10）**: 「より良いサイトにするうえで読み込み時間が延びるなら許容」。CI の Lighthouse ゲートは Performance ≥ 85、TBT ≤ 600ms に。A11y / BP / SEO ≥ 95、CLS 0、JS・フォント予算は据え置き | 計測値は Perf 86〜97、TBT 170〜540ms（CI でも単発で 170 ↔ 378ms と揺れる）。95 / 200ms は目標として `v2-launch.md` §6.2 に残す |
-| A10 | Lighthouse の CLS 予算は `0.001`（G5 の「0」） | Lighthouse は浮動小数で返すため、実質 0 の判定に許容幅を置いた |
+| A14 | **本人決定（2026-10-10）**: LCP の基準値は見出しページ（/c・/p・/g）2.5s、ホーム 1.8s | 見出しページの LCP は Shippori Mincho の到着時刻で決まり（`optional` の実挙動はフォールバック描画）、simulated 計測では 2.0〜2.4s。`lighthouserc.json` の assertMatrix に反映 |
+| A15 | **本人決定（2026-10-10）**: 「より良いサイトにするうえで読み込み時間が延びるなら許容」。CI の Lighthouse ゲートは Performance ≥ 85、TBT ≤ 600ms に。A11y / BP / SEO ≥ 95、CLS 0、JS・フォント量の上限は据え置き | 計測値は Perf 86〜97、TBT 170〜540ms（CI でも単発で 170 ↔ 378ms と揺れる）。95 / 200ms は目標として `v2-launch.md` §6.2 に残す |
+| A10 | Lighthouse の CLS の基準値は `0.001`（G5 の「0」） | Lighthouse は浮動小数で返すため、実質 0 の判定に許容幅を置いた |
 | A16 | **本人決定（2026-10-10）**: デモが並ぶページ（/c・/g）はローディング画面を出し、「完了 → 保持 → 退場 → 間 → 本文の入場」と拍を分ける（準備完了から約 1.4 秒）。ここへの遷移は幕に一本化し、幕やローディングが出ている間は View Transition の共有要素を付けない | 幕と共有要素のモーフが重なって見えなかった。単体ページ（/p）はデモ 1 つで待たせる理由がないため、ローディングも幕もなし。カード → 詳細の共有要素（D5）はそのまま（本人決定 2026-10-11）。拍の尺は `page-loader.tsx` の `BEATS`、幕は `transition-curtain.tsx` |
+| A17 | **本人決定（2026-10-11）**: /c の Lighthouse の基準値を Performance 65 以上、TBT 2s 以下、JS 700KB 以下にする（ほかのページと、/c の A11y・BP・SEO・CLS・LCP・フォント量は据え置き） | A16 で全デモ（折りたたみ分も）をローディング中に読み込むようにし、/c/data-visualization の実測が Perf 66〜71、TBT 1.5〜1.7s、JS 648KB になった。重い処理はローディング画面の間に終わり、表示後の操作は重くならない |
