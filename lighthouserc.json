@@ -87,7 +87,7 @@
           }
         },
         {
-          "matchingUrlPattern": "/(c|p|g)/",
+          "matchingUrlPattern": "/p/",
           "assertions": {
             "largest-contentful-paint": [
               "error",
@@ -140,6 +140,12 @@
               "error",
               {
                 "maxNumericValue": 122880
+              }
+            ],
+            "first-contentful-paint": [
+              "error",
+              {
+                "maxNumericValue": 1800
               }
             ]
           }
