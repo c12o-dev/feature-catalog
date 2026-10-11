@@ -25,10 +25,11 @@ describe("font subsets", () => {
     expect(missing("mincho-700", text)).toBe("");
   });
 
-  it("cover every name and description in the OG image fonts", () => {
+  it("cover every name, description and OG route string in the OG image fonts", () => {
     const og: string = JSON.parse(readFileSync("assets/fonts/og/charset.json", "utf8"));
     const have = new Set(og);
-    const text = categories.flatMap((c) => [c.name, ...c.patterns.flatMap((p) => [p.name, p.description])]).join("");
+    const routes = ["src/app/opengraph-image.tsx", "src/app/c/[slug]/opengraph-image.tsx", "src/app/p/[slug]/opengraph-image.tsx"];
+    const text = categories.flatMap((c) => [c.name, ...c.patterns.flatMap((p) => [p.name, p.description])]).join("") + routes.map((f) => readFileSync(f, "utf8")).join("");
     const lost = [...new Set(text)].filter((ch) => !/\s/.test(ch) && !have.has(ch) && !NOT_IN_FACE.has(ch) && !(ch >= "\u25a0" && ch <= "\u27bf"));
     expect(lost.join("")).toBe("");
   });
