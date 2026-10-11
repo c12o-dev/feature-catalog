@@ -8,15 +8,15 @@ import { Label } from "@/components/ui/label";
 
 // Mock directory: email domain → the organisation's identity provider.
 const IDP: Record<string, { org: string; idp: string; protocol: "SAML" | "OIDC" }> = {
-  "hoshino.example": { org: "星野製作所", idp: "Hoshi ID", protocol: "SAML" },
-  "kumo-labs.example": { org: "Kumo Labs", idp: "Kumo Auth", protocol: "OIDC" },
+  "hoshino.test": { org: "星野製作所", idp: "Hoshi ID", protocol: "SAML" },
+  "kumo-labs.test": { org: "Kumo Labs", idp: "Kumo Auth", protocol: "OIDC" },
 };
 
 type Step = "email" | "found" | "redirect" | "done" | "none";
 
 export default function SsoButton() {
   const id = useId();
-  const [email, setEmail] = useState("aoi@hoshino.example");
+  const [email, setEmail] = useState("aoi@hoshino.test");
   const [step, setStep] = useState<Step>("email");
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -53,7 +53,7 @@ export default function SsoButton() {
                 会社のメールアドレス
               </Label>
               <Input id={id} type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-              <p className="text-[11px] text-muted-foreground">試す: …@hoshino.example / …@kumo-labs.example / その他</p>
+              <p className="text-[11px] text-muted-foreground">試す: …@hoshino.test / …@kumo-labs.test / その他</p>
             </div>
             <Button type="submit" className="w-full" disabled={!validEmail}>
               続ける
