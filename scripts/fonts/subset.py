@@ -193,10 +193,12 @@ def ranges(chars):
 
 
 def og_text():
-    """Every character an OG image can show: catalog names, descriptions, themes, plus fixed strings."""
+    """Every character an OG image can show: catalog names, descriptions, themes, the OG routes' own strings, plus fixed strings."""
     src = ""
     for name in ("categories.ts", "goals.ts"):
         src += open(os.path.join(ROOT, "src", "data", name), encoding="utf8").read()
+    for path in glob.glob(os.path.join(ROOT, "src", "app", "**", "opengraph-image.tsx"), recursive=True):
+        src += open(path, encoding="utf8").read()
     return set(src) | set(ALWAYS) | set("§·—Feature Catalog")
 
 
