@@ -8,7 +8,7 @@ type App = { id: number; name: string; clientId: string; redirect: string; scope
 
 const initial: App[] = [
   { id: 1, name: "社内 CLI ツール", clientId: "cli_x9k4P2mQ", redirect: "http://localhost:8080/callback", scopes: "read:user, write:repo" },
-  { id: 2, name: "チャット連携ボット", clientId: "bot_3mPaB4tR", redirect: "https://bot.kumo-example.dev/oauth/callback/v2/authorize", scopes: "read:user" },
+  { id: 2, name: "チャット連携ボット", clientId: "bot_3mPaB4tR", redirect: "https://bot.kumo.example/oauth/callback/v2/authorize", scopes: "read:user" },
 ];
 
 // seeded PRNG so generated ids/secrets are deterministic

@@ -6,8 +6,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 
 const accounts = [
   { id: 1, name: "Personal", email: "you@example.com", color: "bg-blue-400" },
-  { id: 2, name: "Acme Inc", email: "you@acme.com", color: "bg-purple-400" },
-  { id: 3, name: "Side Project", email: "you@side.dev", color: "bg-emerald-400" },
+  { id: 2, name: "Acme Inc", email: "you@acme.example", color: "bg-purple-400" },
+  { id: 3, name: "Side Project", email: "you@side.example", color: "bg-emerald-400" },
 ];
 
 export default function AccountSwitcher() {

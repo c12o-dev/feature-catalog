@@ -23,7 +23,7 @@ function code(secret: number, counter: number) {
 }
 
 const accounts = [
-  { name: "Tsumiki", user: "aoi@tsumiki.app", secret: 0x5eed01 },
+  { name: "Tsumiki", user: "aoi@tsumiki.example", secret: 0x5eed01 },
   { name: "Kumo Cloud", user: "aoi.nakamura", secret: 0x5eed02 },
 ];
 

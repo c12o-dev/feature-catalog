@@ -7,7 +7,7 @@ type Phase = "prompt" | "loading" | "done" | "dismissed";
 
 const accounts = [
   { name: "青木 葵", email: "aoi.aoki@example.com", initial: "葵", color: "bg-sky-600" },
-  { name: "青木 葵（仕事）", email: "aoki@kumo-example.dev", initial: "葵", color: "bg-violet-600" },
+  { name: "青木 葵（仕事）", email: "aoki@kumo.example", initial: "葵", color: "bg-violet-600" },
 ];
 
 export default function GoogleOneTap() {

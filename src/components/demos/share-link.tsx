@@ -23,7 +23,7 @@ export default function ShareLink() {
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
 
-  const url = token ? `https://docs.kumo-example.dev/p/${token}` : "";
+  const url = token ? `https://docs.kumo.example/p/${token}` : "";
 
   const issue = () => {
     const t = Array.from({ length: 10 }, () => CHARS[Math.floor(rng.current() * CHARS.length)]).join("");
