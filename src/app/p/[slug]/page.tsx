@@ -58,7 +58,7 @@ export default async function PatternPage({ params }: PageProps<"/p/[slug]">) {
     <div data-hue={entry.category.hue} style={{ "--cat-hue": entry.category.hue, ...fonts } as React.CSSProperties}>
       <TintHue hue={entry.category.hue} />
       <TrackRecent slug={entry.slug} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
       <div className="mx-auto max-w-[1180px] px-4 pt-10 sm:px-8 sm:pt-16">
         <Breadcrumb items={[{ href: "/categories", label: "カテゴリ" }, { href: `/c/${entry.category.slug}`, label: entry.category.name }, { label: entry.name }]} />
 
