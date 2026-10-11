@@ -68,7 +68,10 @@ export async function renderOg(input: { eyebrow: string; title: string; sub?: st
   const accent = oklchHex(0.8, 0.13, hue);
   const glow = oklchHex(0.45, 0.12, hue);
   const footer = "feature-catalog.c12o.net";
-  const size = title.length > 26 ? 64 : title.length > 14 ? 80 : 104;
+  // "\n" in a title is a deliberate break; size by the longest line
+  const lines = title.split("\n");
+  const longest = Math.max(...lines.map((l) => l.length));
+  const size = longest > 26 ? 64 : longest > 14 ? 80 : 104;
   return new ImageResponse(
     (
       <div
@@ -90,7 +93,11 @@ export async function renderOg(input: { eyebrow: string; title: string; sub?: st
           {eyebrow}
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
-          <div style={{ fontFamily: "Shippori", fontWeight: 700, fontSize: size, lineHeight: 1.15, letterSpacing: -1, display: "flex", flexWrap: "wrap" }}>{title}</div>
+          <div style={{ fontFamily: "Shippori", fontWeight: 700, fontSize: size, lineHeight: 1.15, letterSpacing: -1, display: "flex", flexDirection: "column" }}>
+            {lines.map((l, i) => (
+              <div key={i} style={{ display: "flex", flexWrap: "wrap" }}>{l}</div>
+            ))}
+          </div>
           {sub && <div style={{ fontSize: 30, color: "rgba(244,243,239,0.6)", lineHeight: 1.5, display: "flex" }}>{sub}</div>}
         </div>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 24, color: "rgba(244,243,239,0.45)" }}>
