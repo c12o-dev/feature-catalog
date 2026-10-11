@@ -57,3 +57,5 @@ docs/design/             設計書
 ## ライセンス
 
 MIT © 2026 Seu (c12o)
+
+同梱フォント（Shippori Mincho B1 / JetBrains Mono / Zen Kaku Gothic New）は SIL Open Font License 1.1 です。著作権表示とライセンス文は `assets/fonts/` にあります。
