@@ -223,9 +223,9 @@ const nextConfig: NextConfig = {
 - JSON-LD: ルートに `WebSite`、`/p/[slug]` に `CreativeWork`（`isPartOf`）。
 - `public/` の Next デフォルト SVG を削除。favicon は SVG（amber の「§」）＋ `apple-touch-icon.png` 180px。
 
-### 6.2 パフォーマンス予算
+### 6.2 パフォーマンスの基準値
 
-| 指標 | 予算（モバイル、Slow 4G 相当） |
+| 指標 | 基準値（モバイル、Slow 4G 相当） |
 |---|---|
 | LCP | ≤ 1.8s（ホーム）。/c・/p・/g は ≤ 2.5s（2026-10-10 決定、見出しフォントの到着が支配するため） |
 | CLS | 0（フォント swap による揺れはフォールバック `size-adjust` で吸収） |
@@ -270,7 +270,7 @@ const nextConfig: NextConfig = {
 
 ### 6.5 CI とテスト
 
-- `.github/workflows/ci.yml`: `pnpm install --frozen-lockfile` → `pnpm run lint` → `pnpm run typecheck` → `pnpm run test` → `pnpm run build` → Playwright smoke → Lighthouse CI（予算 §6.2 を `lighthouserc.json` に）。
+- `.github/workflows/ci.yml`: `pnpm install --frozen-lockfile` → `pnpm run lint` → `pnpm run typecheck` → `pnpm run test` → `pnpm run build` → Playwright smoke → Lighthouse CI（§6.2 の基準値を `lighthouserc.json` に）。
 - Vitest: データ整合性（§5.1）。
 - Playwright: 全ルートを 1 回ずつ開いてコンソールエラー 0 を確認（341 件は並列 8 で 2 分以内）。代表 8 ページで axe。1440 / 390 幅のスクリーンショットを `docs/qa/shots/` に保存（gitignore）。
 - Dependabot（npm、週次）。
@@ -318,7 +318,7 @@ const nextConfig: NextConfig = {
 | 4 | X-ray モード | 12 箇所以上にラベル |
 | 5 | デモ規約準拠（§5.2）の総点検、19 件の固有化/明示、B7・B8 | 全デモがチェックリスト合格 |
 | 6 | メタ・OG・sitemap・robots・JSON-LD・favicon・`_headers`・security.txt | Lighthouse SEO 100 |
-| 7 | CI・Playwright・LHCI・Dependabot | CI 緑、予算内 |
+| 7 | CI・Playwright・LHCI・Dependabot | CI 緑、基準値を満たす |
 | 8 | 品質ループ（quality-loop.md）を合格まで回す | 合格条件到達 |
 | 9 | Cloudflare Pages 作成、`feature-catalog.c12o.net` 接続、ポートフォリオ側の項目追加 | 本番 URL で全ゲート合格 |
 

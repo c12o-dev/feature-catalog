@@ -66,7 +66,7 @@ pnpm run lhci   # 下表
 | G3 コンソール | pass | 379 ルート error 0 / warning 0 |
 | G4 Lighthouse ≥ 95 | **fail** | Perf 88 / 94 / 95 / 89 |
 | G5 CWV | **fail** | LCP 1.39 / 2.06 / 2.17 / 2.11s、CLS 0、TBT 452 / 240 / 231 / 401ms |
-| G6 予算 | pass（JS・フォント） | JS 162〜201KB、フォント 43〜61KB |
+| G6 転送量 | pass（JS・フォント） | JS 162〜201KB、フォント 43〜61KB |
 | G7 axe | pass | 8 ページ + 全 341 ステージ × 2 テーマで serious / critical 0 |
 | G8 キーボード | pass | `tests/e2e/keyboard.spec.ts` |
 | G9 reduced-motion | pass | `-reduced` スクリーンショットで Living Wall 静止、入場アニメなし |
