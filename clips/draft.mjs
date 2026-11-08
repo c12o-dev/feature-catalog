@@ -4,7 +4,7 @@
 import { execFileSync } from "node:child_process";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
-import { ROOT, SCENARIOS, ensureDirs, listScenarioSlugs, loadScenario, patternContext, saveScenario, validateScenario } from "./lib.mjs";
+import { ROOT, SCENARIOS, ensureDirs, isMain, listScenarioSlugs, loadScenario, patternContext, saveScenario, validateScenario } from "./lib.mjs";
 
 const SPEC = await readFile(path.join(ROOT, "clips", "PROMPT.md"), "utf8");
 const EXAMPLES = ["command-palette", "toast", "otp-input"];
@@ -54,12 +54,13 @@ export async function draftOne(slug, { force = false } = {}) {
     "この 1 パターンの台本 JSON だけを出力してください。",
   ].join("\n");
 
-  // 入れ子の Claude Code セッション判定を外して非対話で呼ぶ
+  // 入れ子の Claude Code セッション判定を外して非対話で呼ぶ。必要な素材は全部プロンプトに入れてあるので
+  // ツールは渡さない（速く、出力が揺れにくく、リポを読み回らない）。--bare はログイン情報も読まなくなるので使わない
   const env = { ...process.env };
   delete env.CLAUDECODE;
   let stdout;
   try {
-    stdout = execFileSync("claude", ["-p", "--output-format", "text"], { env, input: prompt, encoding: "utf8", maxBuffer: 8 * 1024 * 1024, timeout: 240_000 });
+    stdout = execFileSync("claude", ["-p", "--tools", "", "--output-format", "text"], { env, input: prompt, encoding: "utf8", maxBuffer: 8 * 1024 * 1024, timeout: 240_000 });
   } catch (e) {
     throw new Error(`claude -p が失敗: ${(e.stderr || e.message).toString().slice(0, 400)}`);
   }
@@ -72,7 +73,7 @@ export async function draftOne(slug, { force = false } = {}) {
   return sc;
 }
 
-if (process.argv[1] && path.resolve(process.argv[1]) === new URL(import.meta.url).pathname) {
+if (isMain(import.meta.url)) {
   const args = process.argv.slice(2);
   const force = args.includes("--force");
   const slugs = args.filter((a) => !a.startsWith("--"));

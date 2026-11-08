@@ -18,6 +18,9 @@ pnpm run clips -- --all --limit 20 --skip-existing
 - `raw/` — 録画の WebM と、テロップ時刻・切り出し範囲の JSON
 
 個別に動かすなら `node clips/draft.mjs <slug>`、`node clips/record.mjs <slug>`、`node clips/render.mjs <slug>`、`node clips/sheet.mjs <slug>`。
+`record.mjs` を単体で使うときは、先に `pnpm run build` と `node scripts/serve-out.mjs 3100` を自分で動かす（`build.mjs` だけがサーバーの面倒を見る）。別の URL を撮るなら `CLIPS_BASE=https://feature-catalog.c12o.net` のように指定する。
+
+`--all` は `aliasOf` 付きのパターン（同じデモを別名で指すもの）を除いて回る。
 
 ## 台本
 

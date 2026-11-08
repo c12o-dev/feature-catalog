@@ -1,11 +1,12 @@
 // 台本（clips/scenarios/<slug>.json）どおりにデモを操作しながら録画し、
 // tmp/clips/raw/<slug>.webm と <slug>.json（テロップ時刻・切り出し範囲）を出す。
 // 使い方: node clips/record.mjs <slug> [slug ...]
-// 前提: pnpm run build 済みで、node scripts/serve-out.mjs 3100 が動いていること。
+// 前提: pnpm run build 済みで、node scripts/serve-out.mjs 3100 が動いていること（CLIPS_BASE で別の URL も可）。
+// 配信サーバーごと面倒を見てほしければ clips/build.mjs を使う。
 import { rename, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { chromium } from "@playwright/test";
-import { RAW, ensureDirs, loadScenario, validateScenario } from "./lib.mjs";
+import { RAW, ensureDirs, isMain, loadScenario, validateScenario } from "./lib.mjs";
 
 const BASE = process.env.CLIPS_BASE ?? "http://localhost:3100";
 // 録画はビューポート 1:1 の画素でしか取れない（deviceScaleFactor は効かない）ので、
@@ -55,106 +56,122 @@ export async function recordOne(browser, sc) {
   const t0 = Date.now(); // 録画はページ生成から始まる
   const now = () => (Date.now() - t0) / 1000;
   const marks = [];
-
-  await page.goto(`${BASE}/p/${sc.slug}`, { waitUntil: "load" });
-  await page.waitForFunction(() => !document.querySelector("[data-page-loader]"), null, { timeout: 15000 });
-  if (ZOOM !== 1) {
-    await page.evaluate((z) => {
-      document.documentElement.style.zoom = String(z);
-    }, ZOOM);
-    await page.waitForTimeout(300);
-  }
-  const root = page.locator("[data-demo-root]").first();
-  await root.scrollIntoViewIfNeeded();
-  await page.waitForFunction(() => !document.querySelector("[data-demo-root] .animate-pulse"), null, { timeout: 15000 }).catch(() => {});
-  // デモを画面中央に。以後スクロールしない
-  await root.evaluate((el) => el.scrollIntoView({ block: "center", behavior: "instant" }));
-  await page.waitForTimeout(700);
-  const rootBox = await root.boundingBox();
-  // content: 実際に何かが描かれている要素（文字・入力・画像・ボタン）の外接矩形。
-  // 幅いっぱいの入れ物（flex の中央寄せ等）に引きずられて余白だらけにならないように
-  const contentBox =
-    (await root.evaluate((el) => {
-      const r0 = el.getBoundingClientRect();
-      let x1 = Infinity, y1 = Infinity, x2 = -Infinity, y2 = -Infinity;
-      const leafy = (n) =>
-        ["INPUT", "BUTTON", "IMG", "SVG", "CANVAS", "VIDEO", "TEXTAREA", "SELECT"].includes(n.tagName) ||
-        (n.children.length === 0 && n.textContent.trim().length > 0) ||
-        (getComputedStyle(n).backgroundColor !== "rgba(0, 0, 0, 0)" && n.getBoundingClientRect().width < r0.width * 0.98);
-      for (const n of el.querySelectorAll("*")) {
-        if (!leafy(n)) continue;
-        const r = n.getBoundingClientRect();
-        if (r.width === 0 || r.height === 0) continue;
-        x1 = Math.min(x1, r.left); y1 = Math.min(y1, r.top); x2 = Math.max(x2, r.right); y2 = Math.max(y2, r.bottom);
-      }
-      if (!Number.isFinite(x1)) return null;
-      // 親要素の枠内に収める
-      x1 = Math.max(x1, r0.left); y1 = Math.max(y1, r0.top); x2 = Math.min(x2, r0.right); y2 = Math.min(y2, r0.bottom);
-      return { x: x1, y: y1, width: x2 - x1, height: y2 - y1 };
-    })) ?? rootBox;
-  const box = sc.crop === "content" ? contentBox : rootBox;
-  // 画面下端に固定のトースト（sonner）をデモの直下へ寄せる
-  if (sc.toaster === "near-demo") {
-    const bottom = Math.round((H - (box.y + box.height)) / ZOOM) - 120;
-    await page.addStyleTag({ content: `[data-sonner-toaster]{bottom:${bottom}px !important}` });
-  }
-  const title = (await page.locator("h1").first().textContent())?.trim() ?? sc.slug;
-  await page.mouse.move(W - 40, H - 40);
-  await page.waitForTimeout(300);
-  const ready = now();
-
-  const click = async (target, hoverOnly = false) => {
-    const b = await resolve(page, root, target).boundingBox();
-    if (!b) throw new Error(`要素が見つからない: ${JSON.stringify(target)}`);
-    await page.mouse.move(b.x + b.width / 2, b.y + b.height / 2, { steps: 28 });
-    await page.waitForTimeout(180);
-    if (hoverOnly) return;
-    await page.mouse.down();
-    await page.waitForTimeout(90);
-    await page.mouse.up();
-  };
-  for (const st of sc.steps) {
-    if ("mark" in st) marks.push({ t: now(), caption: st.mark });
-    else if ("click" in st) await click(st.click);
-    else if ("hover" in st) await click(st.hover, true);
-    else if ("type" in st) await page.keyboard.type(st.type, { delay: st.delay ?? 140 });
-    else if ("press" in st) await page.keyboard.press(st.press);
-    else if ("wait" in st) await page.waitForTimeout(st.wait);
-    else if ("scroll" in st) await page.mouse.wheel(0, st.scroll);
-    // 操作の直後は少し間を置く（テロップ切替と重ならないように）
-    if (!("wait" in st) && !("mark" in st)) await page.waitForTimeout(st.after ?? 350);
-  }
-  await page.waitForTimeout(800);
-  const end = now();
-  await page.waitForTimeout(300);
   const video = page.video();
+  let meta;
+  try {
+    meta = await drive();
+  } catch (e) {
+    // 途中で落ちたら録画を残さない（ランダム名の webm が raw/ に溜まるのを防ぐ）
+    await context.close().catch(() => {});
+    await video?.delete().catch(() => {});
+    throw e;
+  }
   await context.close();
   const out = path.join(RAW, `${sc.slug}.webm`);
   await rename(await video.path(), out);
-
-  const pad = sc.pad ?? 28;
-  let crop;
-  if (sc.crop === "viewport") crop = { x: 0, y: 0, w: W, h: H };
-  else {
-    crop = {
-      x: Math.max(0, Math.floor(box.x - pad)),
-      y: Math.max(0, Math.floor(box.y - pad)),
-      w: Math.ceil(box.width + pad * 2),
-      h: Math.ceil(box.height + pad * 2),
-    };
-    if (sc.extend) {
-      crop.x = Math.max(0, crop.x - (sc.extend.left ?? 0));
-      crop.y = Math.max(0, crop.y - (sc.extend.top ?? 0));
-      crop.w += (sc.extend.left ?? 0) + (sc.extend.right ?? 0);
-      crop.h += (sc.extend.top ?? 0) + (sc.extend.bottom ?? 0);
-    }
-  }
-  crop.w = Math.min(crop.w, W - crop.x);
-  crop.h = Math.min(crop.h, H - crop.y);
-  const meta = { slug: sc.slug, title, video: out, ready, end, crop, marks, size: { w: W, h: H } };
+  meta.video = out;
   await writeFile(path.join(RAW, `${sc.slug}.json`), JSON.stringify(meta, null, 2));
-  console.log(`record ${sc.slug}: ${title} / ${(end - ready).toFixed(1)}s / crop ${crop.w}x${crop.h} / ${marks.length} captions`);
+  console.log(`record ${sc.slug}: ${meta.title} / ${(meta.end - meta.ready).toFixed(1)}s / crop ${meta.crop.w}x${meta.crop.h} / ${meta.marks.length} captions`);
   return meta;
+
+  async function drive() {
+    const res = await page.goto(`${BASE}/p/${sc.slug}`, { waitUntil: "load" });
+    if (!res || !res.ok()) throw new Error(`ページが開けない: /p/${sc.slug} → HTTP ${res?.status() ?? "?"}（slug の綴りか、out/ が古い）`);
+    await page.waitForFunction(() => !document.querySelector("[data-page-loader]"), null, { timeout: 15000 });
+    if (ZOOM !== 1) {
+      await page.evaluate((z) => {
+        document.documentElement.style.zoom = String(z);
+      }, ZOOM);
+      await page.waitForTimeout(300);
+    }
+    const root = page.locator("[data-demo-root]").first();
+    await root.scrollIntoViewIfNeeded();
+    await page.waitForFunction(() => !document.querySelector("[data-demo-root] .animate-pulse"), null, { timeout: 15000 }).catch(() => {});
+    // デモを画面中央に。以後スクロールしない
+    await root.evaluate((el) => el.scrollIntoView({ block: "center", behavior: "instant" }));
+    await page.waitForTimeout(700);
+    const rootBox = await root.boundingBox();
+    // content: 実際に何かが描かれている要素（文字・入力・画像・ボタン）の外接矩形。
+    // 幅いっぱいの入れ物（flex の中央寄せ等）に引きずられて余白だらけにならないように
+    const contentBox =
+      (await root.evaluate((el) => {
+        const r0 = el.getBoundingClientRect();
+        let x1 = Infinity, y1 = Infinity, x2 = -Infinity, y2 = -Infinity;
+        const leafy = (n) =>
+          ["INPUT", "BUTTON", "IMG", "SVG", "CANVAS", "VIDEO", "TEXTAREA", "SELECT"].includes(n.tagName) ||
+          (n.children.length === 0 && n.textContent.trim().length > 0) ||
+          (getComputedStyle(n).backgroundColor !== "rgba(0, 0, 0, 0)" && n.getBoundingClientRect().width < r0.width * 0.98);
+        for (const n of el.querySelectorAll("*")) {
+          if (!leafy(n)) continue;
+          const r = n.getBoundingClientRect();
+          if (r.width === 0 || r.height === 0) continue;
+          x1 = Math.min(x1, r.left); y1 = Math.min(y1, r.top); x2 = Math.max(x2, r.right); y2 = Math.max(y2, r.bottom);
+        }
+        if (!Number.isFinite(x1)) return null;
+        // 親要素の枠内に収める
+        x1 = Math.max(x1, r0.left); y1 = Math.max(y1, r0.top); x2 = Math.min(x2, r0.right); y2 = Math.min(y2, r0.bottom);
+        return { x: x1, y: y1, width: x2 - x1, height: y2 - y1 };
+      })) ?? rootBox;
+    const box = sc.crop === "content" ? contentBox : rootBox;
+    // 画面下端に固定のトースト（sonner）をデモの直下へ寄せる
+    if (sc.toaster === "near-demo") {
+      const bottom = Math.round((H - (box.y + box.height)) / ZOOM) - 120;
+      await page.addStyleTag({ content: `[data-sonner-toaster]{bottom:${bottom}px !important}` });
+    }
+    const title = (await page.locator("h1").first().textContent())?.trim() ?? sc.slug;
+    await page.mouse.move(W - 40, H - 40);
+    await page.waitForTimeout(300);
+    const ready = now();
+
+    const click = async (target, hoverOnly = false) => {
+      // 要素が無いときは 5 秒で諦めて台本側の問題として報告する（既定の 30 秒待ちにしない）
+      const b = await resolve(page, root, target)
+        .boundingBox({ timeout: 5000 })
+        .catch(() => null);
+      if (!b) throw new Error(`要素が見つからない: ${JSON.stringify(target)}`);
+      await page.mouse.move(b.x + b.width / 2, b.y + b.height / 2, { steps: 28 });
+      await page.waitForTimeout(180);
+      if (hoverOnly) return;
+      await page.mouse.down();
+      await page.waitForTimeout(90);
+      await page.mouse.up();
+    };
+    for (const st of sc.steps) {
+      if ("mark" in st) marks.push({ t: now(), caption: st.mark });
+      else if ("click" in st) await click(st.click);
+      else if ("hover" in st) await click(st.hover, true);
+      else if ("type" in st) await page.keyboard.type(st.type, { delay: st.delay ?? 140 });
+      else if ("press" in st) await page.keyboard.press(st.press);
+      else if ("wait" in st) await page.waitForTimeout(st.wait);
+      else if ("scroll" in st) await page.mouse.wheel(0, st.scroll);
+      // 操作の直後は少し間を置く（テロップ切替と重ならないように）
+      if (!("wait" in st) && !("mark" in st)) await page.waitForTimeout(st.after ?? 350);
+    }
+    await page.waitForTimeout(800);
+    const end = now();
+    await page.waitForTimeout(300);
+
+    const pad = sc.pad ?? 28;
+    let crop;
+    if (sc.crop === "viewport") crop = { x: 0, y: 0, w: W, h: H };
+    else {
+      crop = {
+        x: Math.max(0, Math.floor(box.x - pad)),
+        y: Math.max(0, Math.floor(box.y - pad)),
+        w: Math.ceil(box.width + pad * 2),
+        h: Math.ceil(box.height + pad * 2),
+      };
+      if (sc.extend) {
+        crop.x = Math.max(0, crop.x - (sc.extend.left ?? 0));
+        crop.y = Math.max(0, crop.y - (sc.extend.top ?? 0));
+        crop.w += (sc.extend.left ?? 0) + (sc.extend.right ?? 0);
+        crop.h += (sc.extend.top ?? 0) + (sc.extend.bottom ?? 0);
+      }
+    }
+    crop.w = Math.min(crop.w, W - crop.x);
+    crop.h = Math.min(crop.h, H - crop.y);
+    return { slug: sc.slug, title, video: null, ready, end, crop, marks, size: { w: W, h: H } };
+  }
 }
 
 export async function recordMany(slugs) {
@@ -176,7 +193,7 @@ export async function recordMany(slugs) {
   return results;
 }
 
-if (process.argv[1] && path.resolve(process.argv[1]) === new URL(import.meta.url).pathname) {
+if (isMain(import.meta.url)) {
   const slugs = process.argv.slice(2);
   if (!slugs.length) {
     console.error("使い方: node clips/record.mjs <slug> [slug ...]");

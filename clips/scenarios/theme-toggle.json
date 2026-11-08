@@ -1,0 +1,44 @@
+{
+  "slug": "theme-toggle",
+  "crop": "content",
+  "pad": 36,
+  "steps": [
+    {
+      "mark": "見やすい配色を本人が選ぶ"
+    },
+    {
+      "click": {
+        "role": "radio",
+        "name": "ダーク"
+      }
+    },
+    {
+      "wait": 1300
+    },
+    {
+      "click": {
+        "role": "radio",
+        "name": "ライト"
+      }
+    },
+    {
+      "wait": 1100
+    },
+    {
+      "mark": "端末の設定に任せる選択肢も"
+    },
+    {
+      "click": {
+        "role": "radio",
+        "name": "システム"
+      }
+    },
+    {
+      "wait": 1700
+    }
+  ],
+  "post": {
+    "ja": "ライト / ダーク / システムの 3 択。\n2 択にしないで、端末の設定に任せる道も残しておく",
+    "en": "light, dark, or just follow the os. three options, not two"
+  }
+}

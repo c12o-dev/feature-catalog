@@ -4,7 +4,7 @@ import { execFile } from "node:child_process";
 import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { promisify } from "node:util";
-import { OUT, RAW, ensureDirs } from "./lib.mjs";
+import { OUT, RAW, ensureDirs, isMain } from "./lib.mjs";
 
 const run = promisify(execFile);
 const SIZE = 1080;
@@ -54,8 +54,8 @@ export async function renderOne(slug) {
   await ensureDirs();
   const meta = JSON.parse(await readFile(path.join(RAW, `${slug}.json`), "utf8"));
   const dur = meta.end - meta.ready + 0.4;
-  const ass = path.join(RAW, `${slug}.ass`);
-  await writeFile(ass, buildAss(meta, dur));
+  const assName = `${slug}.ass`;
+  await writeFile(path.join(RAW, assName), buildAss(meta, dur));
   const { crop } = meta;
   // 切り出し → 幅 1000・高さ 820 に収める → 1080 角の暗い背景に中央配置 → テロップ
   const vf = [
@@ -63,7 +63,8 @@ export async function renderOne(slug) {
     "scale=w=1000:h=820:force_original_aspect_ratio=decrease:flags=lanczos",
     "pad=1080:1080:(ow-iw)/2:(oh-ih)/2+10:color=#0b0b0c",
     "format=yuv420p",
-    `ass=${ass.replace(/:/g, "\\:")}`,
+    // ffmpeg は RAW を cwd にして動かすので相対名で足りる（フィルタ引数は : \ ' , ; [ ] を特別扱いするため絶対パスを避ける）
+    `ass=${assName}`,
   ].join(",");
   const out = path.join(OUT, `${slug}.mp4`);
   await run("ffmpeg", [
@@ -75,14 +76,14 @@ export async function renderOne(slug) {
     "-c:v", "libx264", "-preset", "slow", "-crf", "19", "-profile:v", "high", "-pix_fmt", "yuv420p",
     "-c:a", "aac", "-b:a", "64k", "-shortest", "-movflags", "+faststart",
     out,
-  ]);
+  ], { cwd: RAW });
   const { stdout } = await run("ffprobe", ["-v", "error", "-show_entries", "format=duration,size", "-of", "csv=p=0", out]);
   const [d, size] = stdout.trim().split(",");
   console.log(`render ${slug}: ${path.relative(process.cwd(), out)} ${Number(d).toFixed(1)}s ${(Number(size) / 1024 / 1024).toFixed(2)}MB`);
   return { out, duration: Number(d) };
 }
 
-if (process.argv[1] && path.resolve(process.argv[1]) === new URL(import.meta.url).pathname) {
+if (isMain(import.meta.url)) {
   const slugs = process.argv.slice(2);
   if (!slugs.length) {
     console.error("使い方: node clips/render.mjs <slug> [slug ...]");

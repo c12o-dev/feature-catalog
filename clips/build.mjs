@@ -42,7 +42,8 @@ const skipExisting = args.includes("--skip-existing");
 const limitIdx = args.indexOf("--limit");
 const limit = limitIdx >= 0 ? Number(args[limitIdx + 1]) : Number.POSITIVE_INFINITY;
 let slugs = args.filter((a, i) => !a.startsWith("--") && args[i - 1] !== "--limit");
-if (all) slugs = [...(await loadCatalog()).keys()];
+// aliasOf 付きは別 slug で同じデモを指す（number-roll → counter-tick 等）ので、--all では元の方だけ作る
+if (all) slugs = [...(await loadCatalog()).values()].filter((p) => !p.aliasOf).map((p) => p.slug);
 if (skipExisting) {
   const kept = [];
   for (const s of slugs) {

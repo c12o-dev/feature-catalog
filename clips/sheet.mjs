@@ -3,7 +3,7 @@
 import { execFile } from "node:child_process";
 import path from "node:path";
 import { promisify } from "node:util";
-import { OUT, REVIEW, ensureDirs } from "./lib.mjs";
+import { OUT, REVIEW, ensureDirs, isMain } from "./lib.mjs";
 
 const run = promisify(execFile);
 
@@ -26,6 +26,6 @@ export async function sheetOne(slug) {
   return out;
 }
 
-if (process.argv[1] && path.resolve(process.argv[1]) === new URL(import.meta.url).pathname) {
+if (isMain(import.meta.url)) {
   for (const s of process.argv.slice(2)) await sheetOne(s);
 }
