@@ -23,6 +23,7 @@
     "e2e": "playwright test --project=smoke --project=a11y --project=stages --project=keyboard --project=mobile",
     "serve": "node scripts/serve-out.mjs",
     "shots": "playwright test --project=shots",
+    "clips": "node clips/build.mjs",
     "lhci": "lhci autorun",
     "checklist": "node scripts/demo-checklist.mjs",
     "check": "pnpm run lint && pnpm run typecheck && pnpm run test && pnpm run build && pnpm run e2e && pnpm run lhci",
