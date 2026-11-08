@@ -1,6 +1,7 @@
 // clips 共通: パス、台本の読み書き、カタログ（slug → 名前・デモ・メモ）の参照。
 // src/data の TS は Node 22 の型剥がし（type stripping）で直接 import する。
 // 正規表現で読むと手書きの categories.ts が折り返されたときに無言で脱落するため。
+import { realpathSync } from "node:fs";
 import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -12,20 +13,27 @@ export const RAW = path.join(TMP, "raw");
 export const OUT = path.join(TMP, "out");
 export const REVIEW = path.join(TMP, "review");
 
-/** `node clips/x.mjs` として直接実行されたか（import されただけなら false）。パスに空白や非 ASCII があっても壊れない */
-export const isMain = (importMetaUrl) => !!process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(importMetaUrl);
+/**
+ * `node clips/x.mjs` として直接実行されたか（import されただけなら false）。
+ * import.meta.url は realpath 済みなので argv[1] も realpath にそろえる（symlink 経由でも効く）。空白・非 ASCII も可
+ */
+export const isMain = (importMetaUrl) => {
+  if (!process.argv[1]) return false;
+  let argv;
+  try {
+    argv = realpathSync(path.resolve(process.argv[1]));
+  } catch {
+    return false;
+  }
+  return argv === fileURLToPath(importMetaUrl);
+};
 
 export async function ensureDirs() {
   for (const d of [SCENARIOS, RAW, OUT, REVIEW]) await mkdir(d, { recursive: true });
 }
 
-// package.json に "type": "module" が無い（Next.js の都合）ので、.ts を import すると
-// MODULE_TYPELESS_PACKAGE_JSON の警告が毎回出る。それだけ黙らせ、他の警告は従来どおり出す
-process.removeAllListeners("warning");
-process.on("warning", (w) => {
-  if (w.code !== "MODULE_TYPELESS_PACKAGE_JSON") console.error(`${w.name}: ${w.message}`);
-});
-
+// src/data/package.json の "type": "module" で、.ts を直接 import しても
+// MODULE_TYPELESS_PACKAGE_JSON の警告が出ないようにしてある（プロセス全体の警告処理には触らない）
 let dataCache;
 async function data() {
   if (!dataCache) {
