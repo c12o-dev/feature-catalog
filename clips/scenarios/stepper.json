@@ -1,0 +1,51 @@
+{
+  "slug": "stepper",
+  "crop": "content",
+  "pad": 36,
+  "steps": [
+    {
+      "mark": "小さな数はキーボードなしで"
+    },
+    {
+      "click": {
+        "role": "button",
+        "name": "数量を 1 増やす"
+      }
+    },
+    {
+      "wait": 900
+    },
+    {
+      "mark": "直接打つこともできる"
+    },
+    {
+      "click": {
+        "role": "spinbutton",
+        "name": "数量"
+      }
+    },
+    {
+      "press": "Control+a"
+    },
+    {
+      "type": "15",
+      "delay": 220
+    },
+    {
+      "wait": 500
+    },
+    {
+      "mark": "上限を超えたら 10 に戻す"
+    },
+    {
+      "press": "Enter"
+    },
+    {
+      "wait": 1700
+    }
+  ],
+  "post": {
+    "ja": "数量は +/− で一つずつ。\n直接 15 と打っても、上限の 10 に戻る",
+    "en": "tap +/− to step the quantity. type 15 and it clamps to 10"
+  }
+}
