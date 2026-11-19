@@ -1,0 +1,20 @@
+{
+  "slug": "command-palette",
+  "crop": "demo",
+  "pad": 28,
+  "steps": [
+    { "mark": "⌘K / Ctrl+K で開く" },
+    { "click": { "role": "button", "name": "/検索・コマンド/" } },
+    { "wait": 900 },
+    { "mark": "名前で絞り込む" },
+    { "type": "設定", "delay": 160 },
+    { "wait": 900 },
+    { "mark": "Enter で実行、Esc で閉じる" },
+    { "press": "Enter" },
+    { "wait": 1600 }
+  ],
+  "post": {
+    "ja": "メニューを辿らず、名前で呼ぶ。\n⌘K を付けると、慣れた人ほど速くなる",
+    "en": "stop digging through menus. ⌘K and type the name"
+  }
+}

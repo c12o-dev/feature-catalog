@@ -1,0 +1,35 @@
+{
+  "slug": "like-button",
+  "crop": "content",
+  "pad": 36,
+  "steps": [
+    {
+      "mark": "押した瞬間に件数へ反映"
+    },
+    {
+      "click": {
+        "role": "button",
+        "name": "/いいね/"
+      }
+    },
+    {
+      "wait": 1500
+    },
+    {
+      "mark": "もう一度押せば取り消し"
+    },
+    {
+      "click": {
+        "role": "button",
+        "name": "/いいね/"
+      }
+    },
+    {
+      "wait": 1600
+    }
+  ],
+  "post": {
+    "ja": "押した瞬間に 248。\nサーバーを待たずに数えて、失敗したら戻す",
+    "en": "the count moves the moment you tap. don't wait on the server, roll back if it fails"
+  }
+}

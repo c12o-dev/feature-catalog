@@ -1,0 +1,17 @@
+{
+  "slug": "otp-input",
+  "crop": "content",
+  "pad": 36,
+  "steps": [
+    { "mark": "1 桁ずつ、自動で次の欄へ" },
+    { "click": { "role": "textbox", "name": "1 桁目" } },
+    { "type": "2468", "delay": 280 },
+    { "mark": "6 桁そろった瞬間に判定" },
+    { "type": "10", "delay": 280 },
+    { "wait": 1800 }
+  ],
+  "post": {
+    "ja": "6 桁コードの入力欄。\n打つたびに次へ進んで、そろった瞬間に判定まで",
+    "en": "otp input: each digit moves on, the sixth one verifies"
+  }
+}

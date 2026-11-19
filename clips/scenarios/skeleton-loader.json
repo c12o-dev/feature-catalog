@@ -1,0 +1,38 @@
+{
+  "slug": "skeleton-loader",
+  "crop": "content",
+  "pad": 32,
+  "steps": [
+    {
+      "mark": "何がどこに出るか先に見せる"
+    },
+    {
+      "click": {
+        "role": "button",
+        "name": "再読み込み"
+      }
+    },
+    {
+      "wait": 2000
+    },
+    {
+      "mark": "同じ寸法で組めばずれない"
+    },
+    {
+      "click": {
+        "role": "button",
+        "name": "再読み込み"
+      }
+    },
+    {
+      "wait": 2000
+    },
+    {
+      "wait": 1400
+    }
+  ],
+  "post": {
+    "ja": "読み込み中は、スピナーより形を先に見せる。\n同じ寸法で組めば、中身が出てもずれない",
+    "en": "skeleton loader: show the shape first. same size, so nothing jumps when it loads"
+  }
+}

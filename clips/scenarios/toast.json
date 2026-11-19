@@ -1,0 +1,21 @@
+{
+  "slug": "toast",
+  "crop": "demo",
+  "pad": 24,
+  "extend": { "bottom": 240 },
+  "toaster": "near-demo",
+  "steps": [
+    { "mark": "作業を止めずに結果だけ伝える" },
+    { "click": { "role": "button", "name": "Success" } },
+    { "wait": 1700 },
+    { "mark": "Undo を添えると確認ダイアログを減らせる" },
+    { "click": { "role": "button", "name": "With Action" } },
+    { "wait": 1100 },
+    { "click": { "role": "button", "name": "Undo", "scope": "page" } },
+    { "wait": 1900 }
+  ],
+  "post": {
+    "ja": "「本当に削除しますか？」を減らす方法。\n消してから Undo を出す",
+    "en": "fewer \"are you sure?\" dialogs: delete first, offer undo"
+  }
+}
